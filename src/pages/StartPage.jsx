@@ -1,149 +1,154 @@
-import styled from "styled-components";
-import bg from "../assets/smart-inventory-management-system.jpg";
+import styled, { createGlobalStyle } from "styled-components";
+import bg from "../assets/startpage.png";
+
+/* RESET */
+const GlobalStyle = createGlobalStyle`
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    font-family: "Inter", sans-serif;
+    background: #000;
+    overflow: hidden;
+    color: white;
+  }
+`;
 
 export default function StartPage() {
   return (
-    <Wrapper>
-      <BackgroundImage src={bg} />
-      <BackgroundOverlay />
+    <>
+      <GlobalStyle />
 
-      <Content>
-        <Left>
-          <Title>SmartInventoryAI</Title>
-          <Subtitle>AI-powered inventory & warehouse management system.</Subtitle>
+      {/* TWOJE TLO - BEZ ZMIAN */}
+      <BackgroundImage />
+      <DarkLayer />
 
-          <FeatureList>
-            <li>✔ Track inventory in real time</li>
-            <li>✔ Predict shortages with AI</li>
-            <li>✔ Generate smart reports</li>
-          </FeatureList>
-        </Left>
+      <GlowOverlay />
 
-        <Right>
-          <Card>
-            <CardTitle>Welcome</CardTitle>
-            <CardText>Manage your warehouse with next-generation AI tools.</CardText>
+      <Center>
+        <Title>SmartInventoryAI</Title>
 
-            <ButtonRow>
-              <Button>Log In</Button>
-              <Button secondary>Register</Button>
-            </ButtonRow>
-          </Card>
-        </Right>
-      </Content>
-    </Wrapper>
+        <Subtitle>AI-powered inventory & warehouse management system.</Subtitle>
+
+        <FeatureList>
+          <li>✔ Track inventory in real time</li>
+          <li>✔ Predict shortages with AI</li>
+          <li>✔ Generate smart reports</li>
+        </FeatureList>
+
+        <ButtonRow>
+          <Button>Log In</Button>
+          <Button secondary>Register</Button>
+        </ButtonRow>
+      </Center>
+    </>
   );
 }
 
-/* ---------------- STYLES ---------------- */
+/* --------------------- STYLE ----------------------- */
 
-const Wrapper = styled.div`
-  width: 100%;
-  min-height: 100vh;
-  overflow-x: hidden;
-  padding: 0;
-`;
-
-const BackgroundImage = styled.img`
+const BackgroundImage = styled.div`
   position: fixed;
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  filter: blur(8px) brightness(0.45);
+
+  background-image: url(${bg});
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  filter: brightness(0.65);
+  z-index: -3;
+`;
+
+const DarkLayer = styled.div`
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 5, 15, 0.25);
   z-index: -2;
 `;
 
-const BackgroundOverlay = styled.div`
+const GlowOverlay = styled.div`
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.35);
-  backdrop-filter: blur(3px);
+  background: radial-gradient(
+    circle at 60% 25%,
+    rgba(0, 200, 255, 0.22),
+    transparent 60%
+  );
   z-index: -1;
 `;
 
-const Content = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding: 60px;
-  gap: 40px;
-  flex-wrap: wrap;
-`;
+const Center = styled.div`
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 
-const Left = styled.div`
-  color: #dff9ff;
-  max-width: 450px;
+  width: 480px;
+
+  padding: 40px 45px;
+  text-align: center;
+
+  background: rgba(0, 20, 40, 0.22);
+  backdrop-filter: blur(16px);
+
+  border: 1px solid rgba(0, 200, 255, 0.25);
+  border-radius: 20px;
+
+  box-shadow: 0 0 35px rgba(0, 180, 255, 0.25),
+    inset 0 0 28px rgba(0, 160, 255, 0.18);
 `;
 
 const Title = styled.h1`
-  font-size: 48px;
-  color: #4dddf7;
-  text-shadow: 0 0 18px #4dddf7;
+  font-size: 42px;
   margin-bottom: 10px;
+  font-weight: 800;
+  color: #4dddf7;
+
+  text-shadow: 0 0 25px #00cfff, 0 0 45px #009dff;
 `;
 
 const Subtitle = styled.p`
-  font-size: 16px;
-  opacity: 0.85;
-  margin-bottom: 20px;
+  font-size: 15px;
+  opacity: 0.9;
+  margin-bottom: 25px;
 `;
 
 const FeatureList = styled.ul`
   list-style: none;
-  padding-left: 0;
-  font-size: 16px;
+  color: #bfeaff;
+  margin-bottom: 30px;
   line-height: 1.8;
-`;
 
-const Right = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-grow: 1;
-`;
-
-const Card = styled.div`
-  background: rgba(0, 0, 0, 0.35);
-  border: 1px solid rgba(0, 255, 255, 0.2);
-  border-radius: 16px;
-  padding: 40px;
-  max-width: 380px;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 0 20px rgba(0, 255, 255, 0.15);
-`;
-
-const CardTitle = styled.h2`
-  font-size: 26px;
-  color: #4dddf7;
-  text-shadow: 0 0 12px #4dddf7;
-  margin-bottom: 15px;
-`;
-
-const CardText = styled.p`
-color: #4dddf7;
-  text-shadow: 0 0 12px #4dddf7;
-
-  font-size: 15px;
-  margin-bottom: 25px;
+  text-shadow: 0 0 12px rgba(0, 200, 255, 0.4);
 `;
 
 const ButtonRow = styled.div`
   display: flex;
-  gap: 20px;
+  gap: 18px;
 `;
 
-const Button = styled.button`
-  padding: 12px 22px;
-  border-radius: 8px;
-  border: 1px solid #4dddf7;
-  background: ${(p) => (p.secondary ? "transparent" : "rgba(0,255,255,0.15)")};
-  color: #4dddf7;
+const Button = styled.button.withConfig({
+  shouldForwardProp: (prop) => prop !== "secondary",
+})`
+  flex: 1;
+  padding: 12px 18px;
+  border-radius: 10px;
+
+  border: 1px solid rgba(0, 200, 255, 0.45);
+  background: ${(p) =>
+    p.secondary ? "rgba(0,0,0,0.3)" : "rgba(0,170,255,0.25)"};
+
+  color: #9deaff;
   cursor: pointer;
-  font-size: 15px;
-  transition: 0.2s;
+
+  text-shadow: 0 0 6px rgba(0, 200, 255, 0.5);
+
+  transition: 0.25s;
 
   &:hover {
-    background: rgba(0, 255, 255, 0.25);
-    box-shadow: 0 0 15px #4dddf7;
+    background: rgba(0, 180, 255, 0.55);
+    box-shadow: 0 0 22px #00baff;
   }
 `;
