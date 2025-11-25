@@ -38,7 +38,7 @@ export default function StartPage() {
           <Button>Log In</Button>
           <StyledLink to="/register">
             <Button secondary>Register</Button>
-          </StyledLink>{" "}
+          </StyledLink>
         </ButtonRow>
       </Center>
     </>
