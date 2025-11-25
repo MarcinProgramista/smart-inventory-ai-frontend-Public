@@ -1,5 +1,6 @@
 import styled, { createGlobalStyle } from "styled-components";
 import bg from "../assets/startpage.png";
+import { Link } from "react-router-dom";
 
 /* RESET */
 const GlobalStyle = createGlobalStyle`
@@ -18,10 +19,8 @@ export default function StartPage() {
     <>
       <GlobalStyle />
 
-      {/* TWOJE TLO - BEZ ZMIAN */}
       <BackgroundImage />
       <DarkLayer />
-
       <GlowOverlay />
 
       <Center>
@@ -37,7 +36,10 @@ export default function StartPage() {
 
         <ButtonRow>
           <Button>Log In</Button>
-          <Button secondary>Register</Button>
+
+          <StyledLink to="/register">
+            <Button secondary>Register</Button>
+          </StyledLink>
         </ButtonRow>
       </Center>
     </>
@@ -46,17 +48,18 @@ export default function StartPage() {
 
 /* --------------------- STYLE ----------------------- */
 
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  width: 100%;
+`;
+
+/* BACKGROUND */
 const BackgroundImage = styled.div`
   position: fixed;
   inset: 0;
-  width: 100%;
-  height: 100%;
-
   background-image: url(${bg});
   background-size: cover;
   background-position: center;
-  background-repeat: no-repeat;
-
   filter: brightness(0.65);
   z-index: -3;
 `;
@@ -84,7 +87,6 @@ const Center = styled.div`
   top: 30%;
   left: 50%;
   transform: translate(-50%, -50%);
-
   width: 480px;
 
   padding: 40px 45px;
@@ -105,7 +107,6 @@ const Title = styled.h1`
   margin-bottom: 10px;
   font-weight: 800;
   color: #4dddf7;
-
   text-shadow: 0 0 25px #00cfff, 0 0 45px #009dff;
 `;
 
@@ -120,7 +121,6 @@ const FeatureList = styled.ul`
   color: #bfeaff;
   margin-bottom: 30px;
   line-height: 1.8;
-
   text-shadow: 0 0 12px rgba(0, 200, 255, 0.4);
 `;
 
@@ -144,7 +144,6 @@ const Button = styled.button.withConfig({
   cursor: pointer;
 
   text-shadow: 0 0 6px rgba(0, 200, 255, 0.5);
-
   transition: 0.25s;
 
   &:hover {
