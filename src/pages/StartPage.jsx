@@ -2,23 +2,9 @@ import styled, { createGlobalStyle } from "styled-components";
 import bg from "../assets/startpage.png";
 import { Link } from "react-router-dom";
 
-/* RESET */
-const GlobalStyle = createGlobalStyle`
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  html, body {
-    font-family: "Inter", sans-serif;
-    background: #000;
-    overflow: hidden;
-    color: white;
-  }
-`;
-
 export default function StartPage() {
   return (
     <>
-      <GlobalStyle />
-
       <BackgroundImage />
       <DarkLayer />
       <GlowOverlay />
