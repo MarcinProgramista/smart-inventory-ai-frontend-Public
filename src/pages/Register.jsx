@@ -6,14 +6,6 @@ import {
   faInfoCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import bg from "../assets/startpage.png";
-import { useEffect, useRef, useState } from "react";
-import UsernameField from "../components/form/UsernameField";
-import Logo from "../components/ui/Logo";
-
-const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
-const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
-const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
 export default function Register() {
   const userRef = useRef();
   const emailRef = useRef();
@@ -95,47 +87,6 @@ export default function Register() {
 }
 
 /* ---------------- STYLES ---------------- */
-
-const Wrapper = styled.div`
-  width: 100%;
-  height: 100vh;
-  overflow: hidden;
-  position: relative;
-  background: #01060c;
-`;
-
-const BackgroundImage = styled.div`
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-
-  background-image: url(${bg});
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-
-  filter: brightness(0.65);
-  z-index: -3;
-`;
-
-const DarkLayer = styled.div`
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 5, 15, 0.25);
-  z-index: -2;
-`;
-
-const GlowOverlay = styled.div`
-  position: fixed;
-  inset: 0;
-  background: radial-gradient(
-    circle at 70% 25%,
-    rgba(0, 180, 255, 0.35),
-    transparent 55%
-  );
-  z-index: -1;
-`;
 
 /* CARD */
 
