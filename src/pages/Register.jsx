@@ -5,8 +5,13 @@ import {
   faTimes,
   faInfoCircle,
 } from "@fortawesome/free-solid-svg-icons";
-import bg from "../assets/startpage.png";
 import { useEffect, useRef, useState } from "react";
+import BackgroundImage from "../components/layout/BackgroundImage";
+import DarkLayer from "../components/layout/DarkLayer";
+import GlowOverler from "../components/layout/GlowOverlay";
+import NeonCard from "../components/ui/NeonCard";
+import Logo from "../components/ui/Logo";
+import UsernameField from "../components/form/UsernameField";
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -58,7 +63,7 @@ export default function Register() {
       <BackgroundImage />
       <DarkLayer />
 
-      <GlowOverlay />
+      <GlowOverler />
       <NeonCard>
         <Logo>SmartInventoryAI</Logo>
 
@@ -92,29 +97,6 @@ export default function Register() {
 }
 
 /* ---------------- STYLES ---------------- */
-
-/* CARD */
-
-const Card = styled.div`
-  position: absolute;
-  top: 52%;
-  left: 68%;
-  transform: translate(-50%, -50%);
-
-  width: 520px;
-  padding: 55px 55px;
-
-  background: rgba(0, 30, 60, 0.25);
-  backdrop-filter: blur(18px);
-
-  border: 1px solid rgba(0, 200, 255, 0.25);
-  border-radius: 20px;
-
-  box-shadow: 0 0 35px rgba(0, 180, 255, 0.3),
-    inset 0 0 30px rgba(0, 150, 255, 0.2);
-
-  color: #dff8ff;
-`;
 
 const Title = styled.h1`
   font-size: 42px;
