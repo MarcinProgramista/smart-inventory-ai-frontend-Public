@@ -1,6 +1,9 @@
-import styled, { createGlobalStyle } from "styled-components";
-import bg from "../assets/startpage.png";
+import styled from "styled-components";
 import { Link } from "react-router-dom";
+import BackgroundImage from "../components/layout/BackgroundImage";
+import DarkLayer from "../components/layout/DarkLayer";
+import GlowOverlay from "../components/layout/GlowOverlay";
+import StartPageCard from "../components/ui/StartPageCard";
 
 export default function StartPage() {
   return (
@@ -9,7 +12,7 @@ export default function StartPage() {
       <DarkLayer />
       <GlowOverlay />
 
-      <Center>
+      <StartPageCard>
         <Title>SmartInventoryAI</Title>
 
         <Subtitle>AI-powered inventory & warehouse management system.</Subtitle>
@@ -26,7 +29,7 @@ export default function StartPage() {
             <Button secondary>Register</Button>
           </StyledLink>
         </ButtonRow>
-      </Center>
+      </StartPageCard>
     </>
   );
 }
@@ -35,59 +38,6 @@ export default function StartPage() {
 const StyledLink = styled(Link)`
   text-decoration: none;
   width: 100%;
-`;
-const BackgroundImage = styled.div`
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-
-  background-image: url(${bg});
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-
-  filter: brightness(0.65);
-  z-index: -3;
-`;
-
-const DarkLayer = styled.div`
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 5, 15, 0.25);
-  z-index: -2;
-`;
-
-const GlowOverlay = styled.div`
-  position: fixed;
-  inset: 0;
-  background: radial-gradient(
-    circle at 60% 25%,
-    rgba(0, 200, 255, 0.22),
-    transparent 60%
-  );
-  z-index: -1;
-`;
-
-const Center = styled.div`
-  position: absolute;
-  top: 40%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-
-  width: 480px;
-  padding: 40px 45px;
-  text-align: center;
-
-  background: rgba(0, 20, 40, 0.22);
-  backdrop-filter: blur(12px);
-
-  border: 1px solid rgba(0, 200, 255, 0.18);
-  border-radius: 18px;
-
-  box-shadow: 0 0 35px rgba(0, 180, 255, 0.12),
-    inset 0 0 18px rgba(0, 160, 255, 0.06);
-  z-index: 0;
 `;
 
 const Title = styled.h1`
