@@ -1,10 +1,5 @@
 import styled from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCheck,
-  faTimes,
-  faInfoCircle,
-} from "@fortawesome/free-solid-svg-icons";
+
 import { useEffect, useRef, useState } from "react";
 import BackgroundImage from "../components/layout/BackgroundImage";
 import DarkLayer from "../components/layout/DarkLayer";
@@ -13,7 +8,7 @@ import NeonCard from "../components/ui/NeonCard";
 import Logo from "../components/ui/Logo";
 import UsernameField from "../components/form/UsernameField";
 import Input from "../components/common/Input";
-
+import EmailField from "../components/form/EmailField";
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -78,7 +73,15 @@ export default function Register() {
           setUserFocus={setUserFocus}
           userRef={userRef}
         />
-        <Input placeholder="Email" />
+        <EmailField
+          email={email}
+          setEmail={setEmail}
+          validEmail={validEmail}
+          setEmailFocus={setEmailFocus}
+          emailFocus={emailFocus}
+          emailRef={emailRef}
+        />
+
         <Input placeholder="Password" type="password" />
         <Input placeholder="Confirm Password" type="password" />
 
