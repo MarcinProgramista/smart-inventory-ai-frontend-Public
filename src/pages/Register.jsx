@@ -12,6 +12,8 @@ import GlowOverler from "../components/layout/GlowOverlay";
 import NeonCard from "../components/ui/NeonCard";
 import Logo from "../components/ui/Logo";
 import UsernameField from "../components/form/UsernameField";
+import Input from "../components/common/Input";
+
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -104,27 +106,6 @@ const Title = styled.h1`
   margin-bottom: 30px;
   line-height: 1.2;
   text-shadow: 0 0 18px rgba(0, 200, 255, 0.5);
-`;
-
-const Input = styled.input`
-  width: 100%;
-  padding: 14px;
-  margin-bottom: 18px;
-
-  border-radius: 10px;
-  border: 1px solid rgba(0, 200, 255, 0.25);
-  background: rgba(0, 0, 0, 0.25);
-
-  color: #c2f7ff;
-  font-size: 16px;
-
-  box-shadow: inset 0 0 15px rgba(0, 150, 255, 0.2);
-
-  &:focus {
-    outline: none;
-    border-color: #00c6ff;
-    box-shadow: 0 0 18px #00c6ff;
-  }
 `;
 
 const CreateButton = styled.button`
