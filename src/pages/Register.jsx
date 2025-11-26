@@ -6,6 +6,17 @@ import {
   faInfoCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import bg from "../assets/startpage.png";
+import { useEffect, useRef, useState } from "react";
+import BackgroundImage from "../components/layout/BackgroundImage";
+import DarkLayer from "../components/layout/DarkLayer";
+import GlowOverlay from "../components/layout/GlowOverlay";
+import Logo from "../components/ui/Logo";
+import UsernameField from "../components/form/UsernameField";
+
+const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
+const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
+const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
 export default function Register() {
   const userRef = useRef();
   const emailRef = useRef();
