@@ -7,9 +7,9 @@ import {
 
 import Input from "../common/Input";
 import LabelWrapper from "../ui/LabelWrapper";
-import StyledFontAwesomeIconHidePassword from "../ui/Password/StyledFontAwesomeIconHidePassword";
-import StyledFontAwesomeIconInvalidPassword from "../ui/Password/StyledFontAwesomeIconInvalidPassword";
-import ParagraphPassword from "../ui/Password/ParagraphPassword";
+import StyledFontAwesomeIconHidePassword from "../ui/password/StyledFontAwesomeIconHidePassword";
+import StyledFontAwesomeIconInvalidPassword from "../ui/password/StyledFontAwesomeIconInvalidPassword";
+import ParagraphPassword from "../ui/password/ParagraphPassword";
 
 const PasswordField = ({ validPwd, pwd, setPwd, setPwdFocus, pwdFocus }) => {
   return (
