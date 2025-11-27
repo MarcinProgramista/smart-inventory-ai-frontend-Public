@@ -85,6 +85,7 @@ export default function Register() {
         <PasswordField
           validPwd={validPwd}
           pwd={pwd}
+          setPwd={setPwd}
           setEmailFocus={setPwdFocus}
           pwdFocus={pwdFocus}
           setPwdFocus={setPwdFocus}

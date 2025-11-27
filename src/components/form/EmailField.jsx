@@ -1,4 +1,3 @@
-import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCheck,
@@ -7,6 +6,9 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Input from "../common/Input";
 import LabelWrapper from "../ui/LabelWrapper";
+import StyledFontAwesomeIconHideEmail from "../ui/email/StyledFontAwesomeIconHideEmail";
+import StyledFontAwesomeIconInvalidEmail from "../ui/email/StyledFontAwesomeIconInvalidEmail";
+import ParagraphEmail from "../ui/email/ParagraphEmail";
 
 export default function EmailField({
   email,
@@ -68,41 +70,3 @@ export default function EmailField({
     </>
   );
 }
-
-/* … styled-components bez zmian … */
-
-const StyledFontAwesomeIconHideEmail = styled(FontAwesomeIcon)`
-  color: ${({ $validEmail }) => ($validEmail ? "limegreen" : "")};
-  margin-left: ${({ $validEmail }) => ($validEmail ? "0.25rem" : "")};
-  display: ${({ $validEmail }) => ($validEmail ? "" : "none")};
-`;
-
-const StyledFontAwesomeIconInvalidEmail = styled(FontAwesomeIcon)`
-  display: ${({ $validEmail, $email }) =>
-    $validEmail || !$email ? "none" : ""};
-  color: ${({ $validEmail, $email }) => ($validEmail || !$email ? "" : "red")};
-  margin-left: ${({ $validEmail, $email }) =>
-    $validEmail || !$email ? "0.25rem" : ""};
-`;
-
-const ParagraphEmail = styled.p`
-  position: ${({ $validEmail, $email, $emailFocus }) =>
-    $emailFocus && $email && !$validEmail ? "relative" : "absolute"};
-  left: ${({ $validEmail, $email, $emailFocus }) =>
-    $emailFocus && $email && !$validEmail ? "" : "9999px"};
-  font-size: ${({ $validEmail, $email, $emailFocus }) =>
-    $emailFocus && $email && !$validEmail ? "0.75rem" : ""};
-  border-radius: ${({ $validEmail, $email, $emailFocus }) =>
-    $emailFocus && $email && !$validEmail ? "0.5rem" : ""};
-  background: ${({ $validEmail, $email, $emailFocus }) =>
-    $emailFocus && $email && !$validEmail ? "#000" : ""};
-  color: ${({ $validEmail, $email, $emailFocus }) =>
-    $emailFocus && $email && !$validEmail ? "#fff" : ""};
-  padding: ${({ $validEmail, $email, $emailFocus }) =>
-    $emailFocus && $email && !$validEmail ? "0.25rem" : ""};
-  bottom: ${({ $validEmail, $email, $emailFocus }) =>
-    $emailFocus && $email && !$validEmail ? "-10px" : ""};
-  svg {
-    margin-right: 0.25rem;
-  }
-`;
