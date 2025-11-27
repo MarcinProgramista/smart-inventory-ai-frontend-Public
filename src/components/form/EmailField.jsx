@@ -6,6 +6,7 @@ import {
   faInfoCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import Input from "../common/Input";
+import LabelWrapper from "../ui/LabelWrapper";
 
 export default function EmailField({
   email,
@@ -69,14 +70,6 @@ export default function EmailField({
 }
 
 /* … styled-components bez zmian … */
-
-const LabelWrapper = styled.label`
-  margin-top: 1rem;
-  font-family: "Dancing Script", cursive;
-  color: #6fe3ff;
-  font-size: 24px;
-  text-shadow: 0 0 20px #00baff;
-`;
 
 const StyledFontAwesomeIconHideEmail = styled(FontAwesomeIcon)`
   color: ${({ $validEmail }) => ($validEmail ? "limegreen" : "")};

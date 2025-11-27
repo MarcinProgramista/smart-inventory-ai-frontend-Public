@@ -3,7 +3,7 @@ import styled from "styled-components";
 const NeonCard = styled.div`
   position: absolute;
   top: 52%;
-  left: 68%;
+  left: 20%;
   transform: translate(-50%, -50%);
 
   width: 520px;
