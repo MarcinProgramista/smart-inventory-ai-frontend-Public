@@ -82,8 +82,13 @@ export default function Register() {
           emailFocus={emailFocus}
           emailRef={emailRef}
         />
-        <PasswordField />
-        <Input placeholder="Password" type="password" />
+        <PasswordField
+          validPwd={validPwd}
+          pwd={pwd}
+          setEmailFocus={setPwdFocus}
+          pwdFocus={pwdFocus}
+          setPwdFocus={setPwdFocus}
+        />
         <Input placeholder="Confirm Password" type="password" />
 
         <CreateButton>CREATE ACCOUNT</CreateButton>
