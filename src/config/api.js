@@ -1,5 +1,5 @@
 const API_CONFIG = {
-  BASE_URL: "http://localhost:3700",
+  BASE_URL: "http://localhost:5000",
   ENDPOINTS: {
     LOGIN: "/api/auth/login",
     REGISTER: "/api/register",
