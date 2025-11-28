@@ -1,9 +1,13 @@
-import styled from "styled-components";
-import { Link } from "react-router-dom";
 import BackgroundImage from "../components/layout/BackgroundImage";
 import DarkLayer from "../components/layout/DarkLayer";
 import GlowOverlay from "../components/layout/GlowOverlay";
 import StartPageCard from "../components/ui/StartPageCard";
+import StyledLink from "../components/ui/buttons/StyledLink";
+import Button from "../components/ui/buttons/Button";
+import Title from "../components/ui/typography/Title";
+import Subtitle from "../components/ui/typography/Subtitle";
+import FeatureList from "../components/ui/lists/FeatureList";
+import ButtonRow from "../components/layout/ButtonRow";
 
 export default function StartPage() {
   return (
@@ -24,7 +28,10 @@ export default function StartPage() {
         </FeatureList>
 
         <ButtonRow>
-          <Button>Log In</Button>
+          <StyledLink>
+            <Button>Log In</Button>
+          </StyledLink>
+
           <StyledLink to="/register">
             <Button secondary>Register</Button>
           </StyledLink>
@@ -33,58 +40,3 @@ export default function StartPage() {
     </>
   );
 }
-
-/* ---------------- STYLES ---------------- */
-const StyledLink = styled(Link)`
-  text-decoration: none;
-  width: 100%;
-`;
-
-const Title = styled.h1`
-  font-size: 42px;
-  margin-bottom: 8px;
-  font-weight: 800;
-  color: #4dddf7;
-  text-shadow: 0 0 18px rgba(0, 200, 255, 0.15);
-`;
-
-const Subtitle = styled.p`
-  font-size: 15px;
-  opacity: 0.95;
-  margin-bottom: 20px;
-  color: #dff8ff;
-`;
-
-const FeatureList = styled.ul`
-  list-style: none;
-  color: #bfeaff;
-  margin: 0 0 26px 0;
-  padding: 0;
-  line-height: 1.8;
-  text-shadow: 0 0 8px rgba(0, 200, 255, 0.12);
-`;
-
-const ButtonRow = styled.div`
-  display: flex;
-  gap: 14px;
-`;
-
-const Button = styled.button.withConfig({
-  shouldForwardProp: (prop) => prop !== "secondary",
-})`
-  flex: 1;
-  padding: 12px 16px;
-  border-radius: 10px;
-  border: 1px solid rgba(0, 200, 255, 0.35);
-  background: ${(p) =>
-    p.secondary ? "rgba(0,0,0,0.28)" : "rgba(0,170,255,0.18)"};
-  color: #9deaff;
-  cursor: pointer;
-  text-shadow: 0 0 6px rgba(0, 200, 255, 0.25);
-  transition: 0.18s ease-in-out;
-
-  &:hover {
-    background: rgba(0, 180, 255, 0.45);
-    box-shadow: 0 6px 18px rgba(0, 140, 255, 0.12);
-  }
-`;
