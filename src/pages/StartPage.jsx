@@ -28,7 +28,7 @@ export default function StartPage() {
         </FeatureList>
 
         <ButtonRow>
-          <StyledLink>
+          <StyledLink to="/login">
             <Button>Log In</Button>
           </StyledLink>
 
