@@ -8,14 +8,12 @@ import Title from "../components/ui/typography/Title";
 import Subtitle from "../components/ui/typography/Subtitle";
 import FeatureList from "../components/ui/lists/FeatureList";
 import ButtonRow from "../components/layout/ButtonRow";
+import Layout from "../components/layout/Layout";
 
 export default function StartPage() {
   return (
     <>
-      <BackgroundImage />
-      <DarkLayer />
-      <GlowOverlay />
-
+      {/* <Layout /> */}
       <StartPageCard>
         <Title>SmartInventoryAI</Title>
 

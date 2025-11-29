@@ -1,7 +1,6 @@
 import styled from "styled-components";
 
 const StartPageCard = styled.div`
-  position: absolute;
   top: 40%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -18,7 +17,9 @@ const StartPageCard = styled.div`
 
   box-shadow: 0 0 35px rgba(0, 180, 255, 0.12),
     inset 0 0 18px rgba(0, 160, 255, 0.06);
-  z-index: 0;
+
+  z-index: 2; /* <── POPRAWKA */
+  position: absolute;
 `;
 
 export default StartPageCard;

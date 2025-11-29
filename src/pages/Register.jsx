@@ -114,9 +114,9 @@ export default function Register() {
     <>
       {success ? (
         <>
-          <BackgroundImage />
+          {/* <BackgroundImage />
           <DarkLayer />
-          <GlowOverler />
+          <GlowOverler /> */}
           <NeonCard>
             <Title>Success!</Title>
             <StyledLink>
@@ -126,9 +126,9 @@ export default function Register() {
         </>
       ) : (
         <>
-          <BackgroundImage />
+          {/* <BackgroundImage />
           <DarkLayer />
-          <GlowOverler />
+          <GlowOverler /> */}
           <NeonCard>
             <ButtonRow>
               <NeonUserIcon />
