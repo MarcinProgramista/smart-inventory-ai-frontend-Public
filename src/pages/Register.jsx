@@ -119,7 +119,7 @@ export default function Register() {
           <GlowOverler /> */}
           <NeonCard>
             <Title>Success!</Title>
-            <StyledLink>
+            <StyledLink to="/login">
               <Button>Log In</Button>
             </StyledLink>
           </NeonCard>
