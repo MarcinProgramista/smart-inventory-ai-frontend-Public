@@ -156,6 +156,7 @@ export default function Register() {
                 emailFocus={emailFocus}
                 emailRef={emailRef}
               />
+
               <PasswordField
                 validPwd={validPwd}
                 pwd={pwd}
