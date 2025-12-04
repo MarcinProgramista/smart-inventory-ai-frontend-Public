@@ -48,7 +48,7 @@ const Login = () => {
           {errMsg}
         </ParagraphError>
         <Title>Log in</Title>
-        <from>
+        <form>
           <LabelWrapper htmlFor="email">Email:</LabelWrapper>
           <Input
             type="email"
@@ -70,7 +70,7 @@ const Login = () => {
             placeholder="put password"
           />
           <CreateButton>Log in</CreateButton>
-        </from>
+        </form>
         <SmallText>
           Need account?<a href="/register"> Register</a>
         </SmallText>
