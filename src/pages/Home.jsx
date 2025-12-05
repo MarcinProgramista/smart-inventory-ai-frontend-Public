@@ -20,6 +20,7 @@ import RecentActivity from "../components/dashboard/RecentActivity";
 import Alerts from "../components/dashboard/Alerts";
 import MiniCharts from "../components/dashboard/MiniCharts";
 import CategoryChart from "../components/dashboard/CategoryChart";
+import AIForecast from "../components/dashboard/AIForecast";
 
 export default function Home() {
   const { setAuth } = useContext(AuthContext);
@@ -77,6 +78,7 @@ export default function Home() {
         <Alerts />
         <MiniCharts />
         <CategoryChart />
+        <AIForecast />
       </DashboardWrapper>
     </>
   );
