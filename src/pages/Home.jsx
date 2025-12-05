@@ -15,6 +15,7 @@ import {
   Welcome,
 } from "../components/dashboard/DashboardStyles";
 import AIInsights from "../components/dashboard/AIInsights";
+import QuickActions from "../components/dashboard/QuickActions";
 
 export default function Home() {
   const { setAuth } = useContext(AuthContext);
@@ -67,6 +68,7 @@ export default function Home() {
           </Card>
         </SummaryGrid>
         <AIInsights />
+        <QuickActions />
       </DashboardWrapper>
     </>
   );
