@@ -17,6 +17,7 @@ import {
 import AIInsights from "../components/dashboard/AIInsights";
 import QuickActions from "../components/dashboard/QuickActions";
 import RecentActivity from "../components/dashboard/RecentActivity";
+import Alerts from "../components/dashboard/Alerts";
 
 export default function Home() {
   const { setAuth } = useContext(AuthContext);
@@ -71,6 +72,7 @@ export default function Home() {
         <AIInsights />
         <QuickActions />
         <RecentActivity />
+        <Alerts />
       </DashboardWrapper>
     </>
   );
