@@ -5,6 +5,8 @@ import GlobalStyle from "./styles/GlobalStyle";
 import Login from "./pages/Login";
 import Layout from "./components/layout/Layout";
 import RouteLoader from "./components/layout/RouteLoader";
+import Home from "./pages/Home";
+import RequireAuth from "./hooks/RequireAuth";
 
 function App() {
   return (
@@ -16,6 +18,9 @@ function App() {
         <Route path="/" element={<StartPage />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route element={<RequireAuth />}>
+          <Route path="/home" element={<Home />} />
+        </Route>
       </Routes>
     </>
   );

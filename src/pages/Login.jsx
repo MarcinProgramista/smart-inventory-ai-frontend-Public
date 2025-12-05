@@ -36,6 +36,54 @@ const Login = () => {
     setErrMsg("");
   }, [email, pwd]);
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(
+        `${API_CONFIG.BASE_URL + API_CONFIG.ENDPOINTS.LOGIN}`,
+        JSON.stringify({
+          email: email,
+          password: pwd,
+        }),
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+          signal: controller.signal,
+        }
+      );
+      // console.log(JSON.stringify(response?.data));
+      //console.log(JSON.stringify(response));
+      const accessToken = response?.data?.accessToken;
+
+      // const roles = response?.data?.roles;
+      //console.log(roles);
+      setId(JSON.stringify(response?.data.user_id));
+      setAuth({
+        id: JSON.stringify(response?.data.user_id),
+        email,
+        pwd,
+        accessToken,
+      });
+      setEmail("");
+      setPwd("");
+      controller.abort();
+      navigate("/home");
+    } catch (err) {
+      if (!err?.response) {
+        setErrMsg("No Server Response");
+      } else if (err.response?.status === 400) {
+        setErrMsg("Missing Username or Password");
+      } else if (err.response?.status === 401) {
+        console.log(err);
+
+        setErrMsg("Unauthorized");
+      } else {
+        setErrMsg("Login Failed");
+      }
+      errRef.current.focus();
+    }
+  };
+
   return (
     <>
       <BackgroundImage />
@@ -48,7 +96,7 @@ const Login = () => {
           {errMsg}
         </ParagraphError>
         <Title>Log in</Title>
-        <form>
+        <form onSubmit={handleSubmit}>
           <LabelWrapper htmlFor="email">Email:</LabelWrapper>
           <Input
             type="email"
