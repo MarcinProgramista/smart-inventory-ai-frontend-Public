@@ -22,6 +22,7 @@ import MiniCharts from "../components/dashboard/MiniCharts";
 import CategoryChart from "../components/dashboard/CategoryChart";
 import AIForecast from "../components/dashboard/AIForecast";
 import SectionNavigation from "../components/dashboard/SectionNavigation";
+import ScrollToTopButton from "../components/dashboard/ScrollToTopButton";
 
 export default function Home() {
   const { setAuth } = useContext(AuthContext);
@@ -93,6 +94,7 @@ export default function Home() {
           <AIForecast />
         </div>
       </DashboardWrapper>
+      <ScrollToTopButton />
     </>
   );
 }
