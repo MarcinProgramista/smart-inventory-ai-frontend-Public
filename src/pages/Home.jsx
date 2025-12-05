@@ -18,6 +18,7 @@ import AIInsights from "../components/dashboard/AIInsights";
 import QuickActions from "../components/dashboard/QuickActions";
 import RecentActivity from "../components/dashboard/RecentActivity";
 import Alerts from "../components/dashboard/Alerts";
+import MiniCharts from "../components/dashboard/MiniCharts";
 
 export default function Home() {
   const { setAuth } = useContext(AuthContext);
@@ -73,6 +74,7 @@ export default function Home() {
         <QuickActions />
         <RecentActivity />
         <Alerts />
+        <MiniCharts />
       </DashboardWrapper>
     </>
   );
