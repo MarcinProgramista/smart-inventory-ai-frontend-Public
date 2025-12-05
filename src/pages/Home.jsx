@@ -1,14 +1,72 @@
 import { useContext } from "react";
-import BackgroundImage from "../components/layout/BackgroundImage";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import AuthContext from "../context/AuthProvider";
+import API_CONFIG from "../config/api";
+import styled from "styled-components";
+import StyledLink from "../components/ui/buttons/StyledLink";
+import Button from "../components/ui/buttons/Button";
+import {
+  Card,
+  CardTitle,
+  CardValue,
+  DashboardWrapper,
+  LogoutContainer,
+  SummaryGrid,
+  Welcome,
+} from "../components/dashboard/DashboardStyles";
 
 export default function Home() {
-  const { auth, setAuth } = useContext(AuthContext);
-  console.log(auth);
+  const { setAuth } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await axios.delete(
+        `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.LOGOUT}`,
+        { withCredentials: true }
+      );
+    } catch (err) {
+      console.error("Logout request failed:", err);
+    }
+
+    setAuth({});
+    navigate("/login");
+  };
 
   return (
     <>
-      <BackgroundImage />
+      <LogoutContainer>
+        <StyledLink>
+          <Button onClick={handleLogout}>Log out</Button>
+        </StyledLink>
+      </LogoutContainer>
+
+      <DashboardWrapper>
+        <Welcome>Welcome to SmartInventoryAI 👋</Welcome>
+
+        <SummaryGrid>
+          <Card>
+            <CardTitle>Total Items</CardTitle>
+            <CardValue>124</CardValue>
+          </Card>
+
+          <Card>
+            <CardTitle>Low Stock Alerts</CardTitle>
+            <CardValue>5</CardValue>
+          </Card>
+
+          <Card>
+            <CardTitle>Incoming Stock</CardTitle>
+            <CardValue>12</CardValue>
+          </Card>
+
+          <Card>
+            <CardTitle>Outgoing Stock</CardTitle>
+            <CardValue>9</CardValue>
+          </Card>
+        </SummaryGrid>
+      </DashboardWrapper>
     </>
   );
 }

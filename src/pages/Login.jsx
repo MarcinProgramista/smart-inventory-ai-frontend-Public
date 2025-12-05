@@ -22,13 +22,12 @@ const Login = () => {
   const { setAuth } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const from = location.state?.from?.pathname || "/";
 
   const userRef = useRef();
   const errRef = useRef();
   const [id, setId] = useState("");
-  const [email, setEmail] = useState("");
-  const [pwd, setPwd] = useState("");
+  const [email, setEmail] = useState("marcin@gmail.com");
+  const [pwd, setPwd] = useState("123456Mm!");
   const [errMsg, setErrMsg] = useState("");
   const controller = new AbortController();
 

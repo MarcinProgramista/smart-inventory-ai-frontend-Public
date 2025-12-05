@@ -9,7 +9,7 @@ const GlobalStyle = createGlobalStyle`
 
   html, body {
     font-family: "Inter", sans-serif;
-    background: #000;
+    background: transparent;   /* 🔥 najważniejsza zmiana */
     overflow-x: hidden;
     color: white;
   }
