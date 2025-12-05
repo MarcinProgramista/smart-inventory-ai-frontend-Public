@@ -19,6 +19,7 @@ import QuickActions from "../components/dashboard/QuickActions";
 import RecentActivity from "../components/dashboard/RecentActivity";
 import Alerts from "../components/dashboard/Alerts";
 import MiniCharts from "../components/dashboard/MiniCharts";
+import CategoryChart from "../components/dashboard/CategoryChart";
 
 export default function Home() {
   const { setAuth } = useContext(AuthContext);
@@ -75,6 +76,7 @@ export default function Home() {
         <RecentActivity />
         <Alerts />
         <MiniCharts />
+        <CategoryChart />
       </DashboardWrapper>
     </>
   );
