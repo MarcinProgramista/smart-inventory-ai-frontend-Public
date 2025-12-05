@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import AuthContext from "../context/AuthProvider";
 import API_CONFIG from "../config/api";
-import styled from "styled-components";
 import StyledLink from "../components/ui/buttons/StyledLink";
 import Button from "../components/ui/buttons/Button";
 import {
@@ -15,6 +14,7 @@ import {
   SummaryGrid,
   Welcome,
 } from "../components/dashboard/DashboardStyles";
+import AIInsights from "../components/dashboard/AIInsights";
 
 export default function Home() {
   const { setAuth } = useContext(AuthContext);
@@ -66,6 +66,7 @@ export default function Home() {
             <CardValue>9</CardValue>
           </Card>
         </SummaryGrid>
+        <AIInsights />
       </DashboardWrapper>
     </>
   );
