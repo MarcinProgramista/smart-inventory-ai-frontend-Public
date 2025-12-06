@@ -23,6 +23,7 @@ import CategoryChart from "../components/dashboard/CategoryChart";
 import AIForecast from "../components/dashboard/AIForecast";
 import SectionNavigation from "../components/dashboard/SectionNavigation";
 import ScrollToTopButton from "../components/dashboard/ScrollToTopButton";
+import SearchBar from "../components/dashboard/SearchBar";
 
 export default function Home() {
   const { setAuth } = useContext(AuthContext);
@@ -52,6 +53,7 @@ export default function Home() {
 
       <DashboardWrapper>
         <Welcome>Welcome to SmartInventoryAI 👋</Welcome>
+        <SearchBar />
         <SectionNavigation />
         <div id="summary">
           <SummaryGrid>
