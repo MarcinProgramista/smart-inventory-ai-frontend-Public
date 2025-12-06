@@ -1,4 +1,13 @@
 import styled from "styled-components";
+import {
+  LayoutDashboard,
+  BrainCircuit,
+  Zap,
+  Activity as ActivityIcon,
+  BellRing,
+  BarChart3,
+  ZapIcon,
+} from "lucide-react";
 
 const NavWrapper = styled.div`
   margin-top: 1rem;
@@ -9,38 +18,61 @@ const NavWrapper = styled.div`
 
 const NavButton = styled.button`
   padding: 0.6rem 1.2rem;
-  border-radius: 10px;
+  border-radius: 12px;
   background: rgba(0, 0, 0, 0.35);
   border: 1px solid #9deaff;
   color: #9deaff;
   cursor: pointer;
   transition: 0.2s ease;
   backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
 
   &:hover {
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.55);
     transform: translateY(-2px);
+  }
+
+  svg {
+    width: 18px;
+    height: 18px;
+    stroke: #9deaff;
   }
 `;
 
 export default function SectionNavigation() {
   const scrollTo = (id) => {
     const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth" });
-    }
+    if (el) el.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
     <NavWrapper>
-      <NavButton onClick={() => scrollTo("summary")}>Summary</NavButton>
-      <NavButton onClick={() => scrollTo("ai-insights")}>AI Insights</NavButton>
-      <NavButton onClick={() => scrollTo("quick-actions")}>
-        Quick Actions
+      <NavButton onClick={() => scrollTo("summary")}>
+        <LayoutDashboard /> Summary
       </NavButton>
-      <NavButton onClick={() => scrollTo("activity")}>Activity</NavButton>
-      <NavButton onClick={() => scrollTo("alerts")}>Alerts</NavButton>
-      <NavButton onClick={() => scrollTo("charts")}>Charts</NavButton>
+
+      <NavButton onClick={() => scrollTo("ai-insights")}>
+        <BrainCircuit /> AI Insights
+      </NavButton>
+
+      <NavButton onClick={() => scrollTo("quick-actions")}>
+        <ZapIcon /> Quick Actions
+      </NavButton>
+
+      <NavButton onClick={() => scrollTo("activity")}>
+        <ActivityIcon /> Activity
+      </NavButton>
+
+      <NavButton onClick={() => scrollTo("alerts")}>
+        <BellRing /> Alerts
+      </NavButton>
+
+      <NavButton onClick={() => scrollTo("charts")}>
+        <BarChart3 /> Charts
+      </NavButton>
     </NavWrapper>
   );
 }
