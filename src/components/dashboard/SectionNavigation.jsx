@@ -6,7 +6,7 @@ import {
   Activity as ActivityIcon,
   BellRing,
   BarChart3,
-  ZapIcon,
+  LineChart, // ⭐ NOWA IKONA
 } from "lucide-react";
 
 const NavWrapper = styled.div`
@@ -59,7 +59,7 @@ export default function SectionNavigation() {
       </NavButton>
 
       <NavButton onClick={() => scrollTo("quick-actions")}>
-        <ZapIcon /> Quick Actions
+        <Zap /> Quick Actions
       </NavButton>
 
       <NavButton onClick={() => scrollTo("activity")}>
@@ -72,6 +72,9 @@ export default function SectionNavigation() {
 
       <NavButton onClick={() => scrollTo("charts")}>
         <BarChart3 /> Charts
+      </NavButton>
+      <NavButton onClick={() => scrollTo("forecast")}>
+        <LineChart /> AI Forecast
       </NavButton>
     </NavWrapper>
   );

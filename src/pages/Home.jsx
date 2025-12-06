@@ -91,6 +91,8 @@ export default function Home() {
         <div id="charts">
           <MiniCharts />
           <CategoryChart />
+        </div>
+        <div id="forecast">
           <AIForecast />
         </div>
       </DashboardWrapper>
