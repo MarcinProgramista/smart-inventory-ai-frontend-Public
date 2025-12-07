@@ -1,75 +1,95 @@
 import styled from "styled-components";
+import { Pencil, Trash2 } from "lucide-react";
 
-const ListWrapper = styled.div`
+const Table = styled.table`
+  width: 100%;
+  border-collapse: collapse;
   margin-top: 2rem;
-`;
-
-const ItemCard = styled.div`
-  background: rgba(0, 0, 0, 0.35);
-  border: 1px solid #9deaff;
-  border-radius: 10px;
-  padding: 1rem 1.5rem;
-  margin-bottom: 1rem;
-  backdrop-filter: blur(6px);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const Info = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const Name = styled.h3`
   color: #9deaff;
-  margin: 0;
+  font-size: 0.95rem;
 `;
 
-const Supplier = styled.p`
-  opacity: 0.8;
-  margin: 0;
+const Th = styled.th`
+  text-align: left;
+  padding: 12px;
+  border-bottom: 1px solid rgba(157, 234, 255, 0.3);
 `;
 
-const Controls = styled.div`
-  display: flex;
-  gap: 0.75rem;
+const Td = styled.td`
+  padding: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 `;
 
-const Button = styled.button`
-  padding: 0.4rem 0.8rem;
-  background: transparent;
-  border: 1px solid #9deaff;
-  color: #9deaff;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: 0.2s;
+const Row = styled.tr`
+  transition: 0.15s ease;
 
   &:hover {
-    background: rgba(157, 234, 255, 0.1);
+    background: rgba(0, 0, 0, 0.35);
+  }
+`;
+
+const LowStock = styled.span`
+  color: #ff6b6b;
+  font-weight: bold;
+`;
+
+const ActionButton = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+
+  svg {
+    stroke: #9deaff;
+  }
+
+  &:hover svg {
+    stroke: white;
   }
 `;
 
 export default function ItemsList({ items }) {
-  if (items.length === 0)
-    return <p style={{ marginTop: "1rem" }}>No items found.</p>;
-
   return (
-    <ListWrapper>
-      {items.map((item) => (
-        <ItemCard key={item.id}>
-          <Info>
-            <Name>{item.name}</Name>
-            <Supplier>Supplier: {item.supplier}</Supplier>
-            <Supplier>Quantity: {item.quantity}</Supplier>
-          </Info>
+    <Table>
+      <thead>
+        <tr>
+          <Th>Name</Th>
+          <Th>Quantity</Th>
+          <Th>Min</Th>
+          <Th>Supplier</Th>
+          <Th>Price</Th>
+          <Th>Actions</Th>
+        </tr>
+      </thead>
 
-          <Controls>
-            <Button>✏️ Edit</Button>
-            <Button>🗑 Delete</Button>
-          </Controls>
-        </ItemCard>
-      ))}
-    </ListWrapper>
+      <tbody>
+        {items.map((item) => (
+          <Row key={item.id}>
+            <Td>{item.name}</Td>
+
+            <Td>
+              {item.quantity < item.min_quantity ? (
+                <LowStock>{item.quantity} ⚠ LOW</LowStock>
+              ) : (
+                item.quantity
+              )}
+            </Td>
+
+            <Td>{item.min_quantity}</Td>
+            <Td>{item.supplier}</Td>
+            <Td>${item.price}</Td>
+
+            <Td>
+              <ActionButton onClick={() => alert("Edit modal TODO")}>
+                <Pencil size={18} />
+              </ActionButton>
+
+              <ActionButton onClick={() => alert("Delete confirm TODO")}>
+                <Trash2 size={18} />
+              </ActionButton>
+            </Td>
+          </Row>
+        ))}
+      </tbody>
+    </Table>
   );
 }

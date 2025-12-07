@@ -1,26 +1,31 @@
 import { useEffect, useState } from "react";
-import ItemsList from "../components/items/ItemsList";
-import API_CONFIG from "../config/api";
 import axios from "axios";
+import API_CONFIG from "../config/api";
+import ItemsList from "../components/items/ItemsList";
 
 export default function Items() {
   const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Pobieranie itemów z backendu
   const fetchItems = async () => {
     try {
-      const res = await axios.get(
-        `${API_CONFIG.BASE_URL + API_CONFIG.ENDPOINTS.ITEMS}`
+      const response = await axios.get(
+        `${API_CONFIG.BASE_URL + API_CONFIG.ENDPOINTS.ITEMS}`,
+        { withCredentials: true }
       );
-      setItems(res.data);
-    } catch (err) {
-      console.error("Error fetching items:", err);
+      setItems(response.data);
+    } catch (error) {
+      console.error("Failed to load items:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     fetchItems();
   }, []);
+
+  if (loading) return <h2 style={{ color: "#9deaff" }}>Loading items...</h2>;
 
   return (
     <div style={{ padding: "2rem", color: "#9deaff" }}>
