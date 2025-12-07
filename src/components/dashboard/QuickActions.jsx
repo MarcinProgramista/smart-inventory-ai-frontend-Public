@@ -36,6 +36,8 @@ export default function QuickActions() {
 
   return (
     <ActionsWrapper>
+      <ActionCard onClick={() => navigate("/items")}>📋 View Items</ActionCard>
+
       <ActionCard onClick={() => navigate("/items/add")}>
         ➕ Add Item
       </ActionCard>

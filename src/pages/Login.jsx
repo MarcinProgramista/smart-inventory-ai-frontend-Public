@@ -57,12 +57,15 @@ const Login = () => {
       // const roles = response?.data?.roles;
       //console.log(roles);
       setId(JSON.stringify(response?.data.user_id));
-      setAuth({
-        id: JSON.stringify(response?.data.user_id),
+      const authData = {
+        id: response?.data.user_id,
         email,
-        pwd,
         accessToken,
-      });
+      };
+
+      setAuth(authData);
+      localStorage.setItem("auth", JSON.stringify(authData));
+
       setEmail("");
       setPwd("");
       controller.abort();

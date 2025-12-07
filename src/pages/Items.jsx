@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import API_CONFIG from "../config/api";
 import ItemsList from "../components/items/ItemsList";
+import ItemsSearchBar from "../components/items/ItemsSearchBar";
 
 export default function Items() {
   const [items, setItems] = useState([]);
@@ -30,6 +31,7 @@ export default function Items() {
   return (
     <div style={{ padding: "2rem", color: "#9deaff" }}>
       <h1>Items</h1>
+      <ItemsSearchBar onResults={setItems} />
       <ItemsList items={items} />
     </div>
   );

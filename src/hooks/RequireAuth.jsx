@@ -3,13 +3,8 @@ import useAuth from "./useAuth";
 
 const RequireAuth = () => {
   const { auth } = useAuth();
-  const location = useLocation();
 
-  return auth?.email ? (
-    <Outlet />
-  ) : (
-    <Navigate to="/login" state={{ from: location }} replace />
-  );
+  return auth?.accessToken ? <Outlet /> : <Navigate to="/login" replace />;
 };
 
 export default RequireAuth;
