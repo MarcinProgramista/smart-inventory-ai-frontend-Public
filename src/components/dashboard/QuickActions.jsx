@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 const ActionsWrapper = styled.div`
   margin-top: 3rem;
@@ -31,11 +32,21 @@ const ActionCard = styled.button`
 `;
 
 export default function QuickActions() {
+  const navigate = useNavigate();
+
   return (
     <ActionsWrapper>
-      <ActionCard>➕ Add Item</ActionCard>
-      <ActionCard>📦 Add Stock</ActionCard>
-      <ActionCard>📤 Remove Stock</ActionCard>
+      <ActionCard onClick={() => navigate("/items/add")}>
+        ➕ Add Item
+      </ActionCard>
+
+      <ActionCard onClick={() => navigate("/items/incoming")}>
+        📦 Add Stock
+      </ActionCard>
+
+      <ActionCard onClick={() => navigate("/items/outgoing")}>
+        📤 Remove Stock
+      </ActionCard>
     </ActionsWrapper>
   );
 }
