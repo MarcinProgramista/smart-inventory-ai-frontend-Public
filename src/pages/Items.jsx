@@ -7,6 +7,7 @@ import ItemsSearchBar from "../components/items/ItemsSearchBar";
 export default function Items() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showAddModal, setShowAddModal] = useState(false);
 
   const fetchItems = async () => {
     try {
@@ -33,6 +34,12 @@ export default function Items() {
       <h1>Items</h1>
       <ItemsSearchBar onResults={setItems} />
       <ItemsList items={items} />
+      {showAddModal && (
+        <AddItemModal
+          onClose={() => setShowAddModal(false)}
+          onCreated={fetchItems}
+        />
+      )}
     </div>
   );
 }

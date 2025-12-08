@@ -8,6 +8,7 @@ import RouteLoader from "./components/layout/RouteLoader";
 import Home from "./pages/Home";
 import RequireAuth from "./hooks/RequireAuth";
 import Items from "./pages/Items";
+import AddItemModal from "./components/items/AddItemModal";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route element={<RequireAuth />}>
           <Route path="/home" element={<Home />} />
           <Route path="/items" element={<Items />} />
+          <Route path="/items/add" element={<AddItemModal />} />
         </Route>
       </Routes>
     </>

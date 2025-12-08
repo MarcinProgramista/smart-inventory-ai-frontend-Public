@@ -37,7 +37,7 @@ const ActionButton = styled.button`
   background: none;
   border: none;
   cursor: pointer;
-
+  padding: 5px;
   svg {
     stroke: #9deaff;
   }

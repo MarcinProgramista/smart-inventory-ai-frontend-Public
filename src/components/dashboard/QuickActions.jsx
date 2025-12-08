@@ -1,5 +1,7 @@
 import styled from "styled-components";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import AddItemModal from "../items/AddItemModal";
 
 const ActionsWrapper = styled.div`
   margin-top: 3rem;
@@ -33,22 +35,27 @@ const ActionCard = styled.button`
 
 export default function QuickActions() {
   const navigate = useNavigate();
+  const [openModal, setOpenModal] = useState(false);
 
   return (
-    <ActionsWrapper>
-      <ActionCard onClick={() => navigate("/items")}>📋 View Items</ActionCard>
+    <>
+      <ActionsWrapper>
+        <ActionCard onClick={() => navigate("/items")}>
+          📋 View Items
+        </ActionCard>
 
-      <ActionCard onClick={() => navigate("/items/add")}>
-        ➕ Add Item
-      </ActionCard>
+        <ActionCard onClick={() => setOpenModal(true)}>➕ Add Item</ActionCard>
 
-      <ActionCard onClick={() => navigate("/items/incoming")}>
-        📦 Add Stock
-      </ActionCard>
+        <ActionCard onClick={() => navigate("/items/incoming")}>
+          📦 Add Stock
+        </ActionCard>
 
-      <ActionCard onClick={() => navigate("/items/outgoing")}>
-        📤 Remove Stock
-      </ActionCard>
-    </ActionsWrapper>
+        <ActionCard onClick={() => navigate("/items/outgoing")}>
+          📤 Remove Stock
+        </ActionCard>
+      </ActionsWrapper>
+
+      {openModal && <AddItemModal onClose={() => setOpenModal(false)} />}
+    </>
   );
 }
