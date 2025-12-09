@@ -8,24 +8,26 @@ import RouteLoader from "./components/layout/RouteLoader";
 import Home from "./pages/Home";
 import RequireAuth from "./hooks/RequireAuth";
 import Items from "./pages/Items";
-import AddItemModal from "./components/items/AddItemModal";
+
+import { ToastProvider } from "./context/ToastContext";
 
 function App() {
   return (
     <>
-      <GlobalStyle />
-      <RouteLoader />
-      <Layout />
-      <Routes>
-        <Route path="/" element={<StartPage />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
-        <Route element={<RequireAuth />}>
-          <Route path="/home" element={<Home />} />
-          <Route path="/items" element={<Items />} />
-          <Route path="/items/add" element={<AddItemModal />} />
-        </Route>
-      </Routes>
+      <ToastProvider>
+        <GlobalStyle />
+        <RouteLoader />
+
+        <Routes>
+          <Route path="/" element={<StartPage />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route element={<RequireAuth />}>
+            <Route path="/home" element={<Home />} />
+            <Route path="/items" element={<Items />} />
+          </Route>
+        </Routes>
+      </ToastProvider>
     </>
   );
 }

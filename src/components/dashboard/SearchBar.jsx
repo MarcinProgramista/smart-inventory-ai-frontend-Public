@@ -21,10 +21,10 @@ const SearchBox = styled.div`
 
   box-shadow: 0 0 10px rgba(157, 234, 255, 0.25);
 
-  svg {
-    stroke: #9deaff;
-    width: 20px;
-    height: 20px;
+  /* 🔥 Podświetlenie gdy input ma focus */
+  &:focus-within {
+    border-color: #00c6ff;
+    box-shadow: 0 0 18px #00c6ff;
   }
 `;
 
@@ -35,6 +35,9 @@ const Input = styled.input`
   color: #9deaff;
   font-size: 1rem;
   outline: none;
+  border-radius: 12px;
+  height: 40px;
+  padding: 12px 13px 12px 12px;
 
   &::placeholder {
     color: #9deaff99;

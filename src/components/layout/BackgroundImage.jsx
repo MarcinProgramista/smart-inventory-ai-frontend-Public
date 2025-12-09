@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import bg from "../../assets/startpage.png";
+import bg from "../../assets/tapeta.png";
 
 const BackgroundImage = styled.div`
   position: fixed;
