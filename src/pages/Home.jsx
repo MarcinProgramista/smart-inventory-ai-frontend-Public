@@ -27,19 +27,6 @@ import SearchBar from "../components/dashboard/SearchBar";
 import { ArrowUp } from "lucide-react";
 import styled from "styled-components";
 
-const TestScrollButton = styled.button`
-  position: fixed;
-  bottom: 2rem;
-  right: 2rem;
-  z-index: 99999;
-  padding: 1rem;
-  font-size: 2rem;
-  border-radius: 50%;
-  background: red;
-  color: white;
-  border: none;
-`;
-
 export default function Home() {
   const { setAuth } = useContext(AuthContext);
   const navigate = useNavigate();

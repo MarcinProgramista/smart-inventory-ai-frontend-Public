@@ -2,6 +2,9 @@ import styled from "styled-components";
 import { Pencil, Trash2 } from "lucide-react";
 import ItemsHeader from "./ItemsHeader";
 import ItemsSearchBar from "./ItemsSearchBar";
+
+/* ----------------- STYLES ----------------- */
+
 const PageWrapper = styled.div`
   padding: 2rem;
   color: #9deaff;
@@ -9,18 +12,18 @@ const PageWrapper = styled.div`
   max-width: 1200px;
   margin: 0 auto;
 `;
+
 const Header = styled.div`
   display: flex;
   align-items: center;
   gap: 1rem;
 `;
+
 const TableWrapper = styled.div`
   width: 100%;
   margin-top: 1.5rem;
   overflow-y: auto;
-  max-height: calc(100vh - 250px); /* dopasuj jeśli chcesz */
-
-  /* Aby sticky działało wewnątrz scrolla */
+  max-height: calc(100vh - 250px);
   position: relative;
 `;
 
@@ -32,19 +35,16 @@ const Table = styled.table`
 
 const Th = styled.th`
   padding: 12px 16px;
-  text-align: left;
+  text-align: ${(p) => (p.$right ? "right" : "left")};
   font-weight: 600;
   color: #9deaff;
-
   border-bottom: 1px solid rgba(0, 200, 255, 0.15);
 
   position: sticky;
   top: 0;
   z-index: 10;
-
-  /* 🟦 Neon blur background jak reszta UI */
-  backdrop-filter: blur(10px);
   background: rgba(0, 20, 40, 0.75);
+  backdrop-filter: blur(10px);
 `;
 
 const Td = styled.td`
@@ -52,6 +52,7 @@ const Td = styled.td`
   color: #c9eaff;
   border-bottom: 1px solid rgba(0, 200, 255, 0.08);
   white-space: nowrap;
+  text-align: ${(p) => (p.$right ? "right" : "left")};
 `;
 
 const Tr = styled.tr`
@@ -68,7 +69,7 @@ const ActionButton = styled.button`
   border: 1px solid
     ${(p) => (p.$delete ? "rgba(255,80,80,0.6)" : "rgba(0,200,255,0.6)")};
   background: rgba(0, 0, 0, 0.2);
-  color: ${(p) => (p.delete ? "#ff6b6b" : "#9deaff")};
+  color: ${(p) => (p.$delete ? "#ff6b6b" : "#9deaff")};
   cursor: pointer;
   transition: 0.2s ease;
 
@@ -89,6 +90,8 @@ const ActionButton = styled.button`
   }
 `;
 
+/* ----------------- COMPONENT ----------------- */
+
 export default function ItemsList({
   items,
   onDelete,
@@ -96,10 +99,20 @@ export default function ItemsList({
   onAdd,
   onResults,
 }) {
+  const formatPLN = (value) =>
+    new Intl.NumberFormat("pl-PL", {
+      style: "currency",
+      currency: "PLN",
+      minimumFractionDigits: 2,
+    }).format(value);
+
+  const toBrutto = (netto) => netto * 1.23;
+
   return (
     <PageWrapper>
       <ItemsHeader onAdd={onAdd} />
       <ItemsSearchBar onResults={onResults} />
+
       <TableWrapper>
         <Table>
           <thead>
@@ -108,7 +121,8 @@ export default function ItemsList({
               <Th>Quantity</Th>
               <Th>Min</Th>
               <Th>Supplier</Th>
-              <Th>Price</Th>
+              <Th $right>Netto</Th>
+              <Th $right>Brutto</Th>
               <Th>Actions</Th>
             </Tr>
           </thead>
@@ -120,7 +134,13 @@ export default function ItemsList({
                 <Td>{item.quantity}</Td>
                 <Td>{item.min_quantity}</Td>
                 <Td>{item.supplier_name || "-"}</Td>
-                <Td>${item.price}</Td>
+
+                {/* NETTO */}
+                <Td $right>{formatPLN(item.price)}</Td>
+
+                {/* BRUTTO */}
+                <Td $right>{formatPLN(toBrutto(item.price))}</Td>
+
                 <Td>
                   <ActionButton onClick={() => onEdit?.(item)}>
                     <Pencil size={16} />
