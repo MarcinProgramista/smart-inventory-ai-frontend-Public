@@ -7,10 +7,9 @@ import useAuth from "../../hooks/useAuth";
 import API_CONFIG from "../../config/api";
 
 import NeonCard from "../ui/NeonCardBright";
-import Input from "../common/Input";
-import CreateButton from "../ui/buttons/CreateButton";
 import Logo from "../ui/Logo";
-import NeonDropdown from "../ui/NeonDropdown";
+
+import ItemForm from "./ItemForm";
 
 /* -------------------------- TOASTY -------------------------- */
 
@@ -53,38 +52,6 @@ const SuccessToast = styled(ErrorToast)`
   }
 `;
 
-/* -------------------------- INPUT Z BŁĘDEM -------------------------- */
-
-const FieldWrapper = styled.div`
-  margin-top: 0.9rem;
-
-  input,
-  & > div {
-    border: ${(p) =>
-      p.$error
-        ? "1px solid rgba(255, 80, 80, 0.9) !important"
-        : "1px solid rgba(0, 200, 255, 0.35) !important"};
-
-    box-shadow: ${(p) =>
-      p.$error
-        ? `0 0 12px rgba(255, 60, 60, 0.9),
-           inset 0 0 10px rgba(255, 60, 60, 0.35)`
-        : "none"} !important;
-
-    border-radius: 12px;
-  }
-`;
-
-const ErrorMessage = styled.div`
-  margin-top: 4px;
-  margin-left: 4px;
-  padding: 5px;
-  font-size: 0.9rem;
-  color: #ff6b6b;
-
-  text-shadow: 0 0 6px rgba(255, 40, 40, 0.9);
-`;
-
 /* -------------------------- BACKDROP -------------------------- */
 
 const Backdrop = styled.div`
@@ -122,8 +89,6 @@ const CloseBtn = styled.button`
     stroke: #9deaff;
   }
 `;
-
-/* -------------------------- KOMPONENT -------------------------- */
 
 export default function AddItemModal({ open, onClose, onSubmit }) {
   const { auth } = useAuth();
@@ -262,100 +227,14 @@ export default function AddItemModal({ open, onClose, onSubmit }) {
 
           <Logo style={{ marginBottom: "1rem" }}>Add New Item</Logo>
 
-          <form onSubmit={handleSubmit}>
-            {/* NAME */}
-            <FieldWrapper $error={errors.name}>
-              <Input
-                name="name"
-                value={form.name}
-                onChange={handleChange}
-                placeholder="Put name of product"
-              />
-              {errors.name && <ErrorMessage>Name is required</ErrorMessage>}
-            </FieldWrapper>
-
-            {/* CATEGORY */}
-            <FieldWrapper $error={errors.category_id}>
-              <NeonDropdown
-                value={form.category_id}
-                onChange={(val) => setForm((f) => ({ ...f, category_id: val }))}
-                options={categories.map((c) => ({
-                  value: c.id,
-                  label: c.name,
-                }))}
-                placeholder="Select category…"
-              />
-              {errors.category_id && (
-                <ErrorMessage>Category is required</ErrorMessage>
-              )}
-            </FieldWrapper>
-
-            {/* QUANTITY */}
-            <FieldWrapper $error={errors.quantity}>
-              <Input
-                type="number"
-                name="quantity"
-                value={form.quantity}
-                onChange={handleChange}
-                placeholder="Put quantity"
-              />
-              {errors.quantity && (
-                <ErrorMessage>Quantity is required</ErrorMessage>
-              )}
-            </FieldWrapper>
-
-            {/* MIN QUANTITY */}
-            <FieldWrapper $error={errors.min_quantity}>
-              <Input
-                type="number"
-                name="min_quantity"
-                value={form.min_quantity}
-                onChange={handleChange}
-                placeholder="Put min quantity"
-              />
-              {errors.min_quantity && (
-                <ErrorMessage>Min quantity is required</ErrorMessage>
-              )}
-            </FieldWrapper>
-
-            {/* PRICE */}
-            <FieldWrapper $error={errors.price}>
-              <Input
-                type="number"
-                name="price"
-                value={form.price}
-                onChange={handleChange}
-                placeholder="Put price"
-              />
-              {errors.price && <ErrorMessage>Price is required</ErrorMessage>}
-            </FieldWrapper>
-
-            {/* SUPPLIER */}
-            <FieldWrapper $error={errors.supplier_id}>
-              <NeonDropdown
-                value={form.supplier_id}
-                onChange={(val) => setForm((f) => ({ ...f, supplier_id: val }))}
-                options={suppliers.map((s) => ({
-                  value: s.id,
-                  label: s.name,
-                }))}
-                placeholder="Select supplier…"
-              />
-              {errors.supplier_id && <ErrorMessage>S is required</ErrorMessage>}
-            </FieldWrapper>
-
-            {/* DESCRIPTION */}
-            <FieldWrapper>
-              <Input
-                name="description"
-                value={form.description}
-                onChange={handleChange}
-                placeholder="Description (optional)"
-              />
-            </FieldWrapper>
-
-            <CreateButton style={{ marginTop: "1.8rem" }}>Save</CreateButton>
-          </form>
+          <ItemForm
+            form={form}
+            errors={errors}
+            categories={categories}
+            suppliers={suppliers}
+            onChange={handleChange}
+            onSubmit={handleSubmit}
+          />
         </ModalBox>
       </Backdrop>
     </>
