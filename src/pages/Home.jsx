@@ -24,6 +24,21 @@ import AIForecast from "../components/dashboard/AIForecast";
 import SectionNavigation from "../components/dashboard/SectionNavigation";
 import ScrollToTopButton from "../components/dashboard/ScrollToTopButton";
 import SearchBar from "../components/dashboard/SearchBar";
+import { ArrowUp } from "lucide-react";
+import styled from "styled-components";
+
+const TestScrollButton = styled.button`
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 99999;
+  padding: 1rem;
+  font-size: 2rem;
+  border-radius: 50%;
+  background: red;
+  color: white;
+  border: none;
+`;
 
 export default function Home() {
   const { setAuth } = useContext(AuthContext);
@@ -51,6 +66,7 @@ export default function Home() {
         </StyledLink>
       </LogoutContainer>
 
+      <ScrollToTopButton />
       <DashboardWrapper>
         <Welcome>Welcome to SmartInventoryAI 👋</Welcome>
         <SearchBar />
@@ -98,7 +114,6 @@ export default function Home() {
           <AIForecast />
         </div>
       </DashboardWrapper>
-      <ScrollToTopButton />
     </>
   );
 }

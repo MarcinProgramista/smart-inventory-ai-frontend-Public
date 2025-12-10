@@ -1,24 +1,28 @@
+// src/styles/GlobalStyle.js
 import { createGlobalStyle } from "styled-components";
 import bg from "../assets/tapeta.png";
+
 const GlobalStyle = createGlobalStyle`
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  html, body {
+    font-family: "Inter", sans-serif;
+    background: none;
+    min-height: 100vh;
+    overflow-x: hidden;
+    color: white;
+    position: relative;   /* 👈 BYŁO BRAK! */
   }
 
-html, body {
-  font-family: "Inter", sans-serif;
-  background-image: url(${bg});
-  background-repeat: no-repeat;
-  background-size: cover;      /* obraz przykrywa całość */
-  background-position: center;
-  background-attachment: fixed; /* 🔥 obraz zostaje na miejscu */
-  min-height: 100vh;           /* tło wys. min. 100% ekranu */
-  color: white;
-  overflow-x: hidden;
-}
-
+  body::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;          /* teraz działa prawidłowo */
+    background-image: url(${bg});
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    pointer-events: none;
+  }
 `;
 
 export default GlobalStyle;

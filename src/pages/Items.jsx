@@ -1,25 +1,27 @@
-// pages/Items.jsx
+// --- IMPORTY ---
 import { useEffect, useState, useContext } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import API_CONFIG from "../config/api";
 import useAuth from "../hooks/useAuth";
-import ItemsSearchBar from "../components/items/ItemsSearchBar";
 import ItemsList from "../components/items/ItemsList";
 import AddItemModal from "../components/items/AddItemModal";
+
 import ToastContext from "../context/ToastContext";
 
+// --- KOMPONENT Items ---
 export default function Items() {
   const [items, setItems] = useState([]);
   const { auth } = useAuth();
-
   const navigate = useNavigate();
+
   const [searchParams, setSearchParams] = useSearchParams();
   const { showToast } = useContext(ToastContext);
 
-  // 🔥 drawerOpen zależy TYLKO od URL
+  // Modal kontroluje WYŁĄCZNIE parametr w URL
   const drawerOpen = searchParams.get("add") === "true";
 
+  // Pobieranie itemsów
   const fetchItems = async () => {
     try {
       const res = await axios.get(
@@ -36,25 +38,16 @@ export default function Items() {
     fetchItems();
   }, []);
 
-  // 🔥 usuń parametr add=true
-  const clearAddParam = () => {
+  // Otwieranie/zamykanie modala
+  const openModal = () => setSearchParams({ add: "true" });
+  const closeModal = () =>
     setSearchParams((prev) => {
       const p = new URLSearchParams(prev);
       p.delete("add");
       return p;
     });
-  };
 
-  // 🔥 otwieramy modal – TYLKO zmieniając URL
-  const handleOpen = () => {
-    setSearchParams({ add: "true" });
-  };
-
-  // 🔥 zamykamy modal – TYLKO zmieniając URL
-  const handleClose = () => {
-    clearAddParam();
-  };
-
+  // Obsługa dodania itemu
   const handleSubmitItem = async (itemData) => {
     try {
       const res = await axios.post(
@@ -64,7 +57,7 @@ export default function Items() {
       );
 
       await fetchItems();
-      clearAddParam();
+      closeModal();
 
       showToast(
         res.data.updated ? "Item exists — quantity increased!" : "Item added!",
@@ -76,6 +69,7 @@ export default function Items() {
     }
   };
 
+  // Usuwanie
   const handleDelete = async (id) => {
     try {
       await axios.delete(
@@ -91,29 +85,19 @@ export default function Items() {
   };
 
   return (
-    <div style={{ padding: "2rem", color: "#9deaff", width: "100%" }}>
-      <h1>Items</h1>
+    <>
+      <ItemsList
+        items={items}
+        onDelete={handleDelete}
+        onAdd={openModal}
+        onResults={setItems}
+      />
 
-      <button
-        onClick={() => navigate("/home")}
-        className="btn btn-secondary mb-3"
-      >
-        ← Back
-      </button>
-
-      <button className="btn btn-info mb-4" onClick={handleOpen}>
-        ➕ Add Item
-      </button>
-
-      <ItemsSearchBar onResults={setItems} />
-      <ItemsList items={items} onDelete={handleDelete} />
-
-      {/* modal otwiera się wyłącznie gdy ?add=true */}
       <AddItemModal
         open={drawerOpen}
-        onClose={handleClose}
+        onClose={closeModal}
         onSubmit={handleSubmitItem}
       />
-    </div>
+    </>
   );
 }

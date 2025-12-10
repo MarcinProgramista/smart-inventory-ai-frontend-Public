@@ -14,6 +14,9 @@ export const DashboardWrapper = styled.div`
   z-index: 2;
   padding: 4rem 2rem 2rem 2rem;
   color: #9deaff;
+
+  height: auto !important;
+  min-height: 1500vh !important; /* 💥 wymusza scroll */
 `;
 
 export const Welcome = styled.h1`
