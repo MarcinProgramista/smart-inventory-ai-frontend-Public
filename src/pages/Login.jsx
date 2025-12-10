@@ -88,7 +88,6 @@ const Login = () => {
 
   return (
     <>
-      <BackgroundImage />
       <NeonCard>
         <ButtonRow>
           <NeonUserIcon />

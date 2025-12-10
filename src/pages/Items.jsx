@@ -6,17 +6,19 @@ import API_CONFIG from "../config/api";
 import useAuth from "../hooks/useAuth";
 import ItemsSearchBar from "../components/items/ItemsSearchBar";
 import ItemsList from "../components/items/ItemsList";
-import AddItemDrawer from "../components/items/AddItemDrawer";
+import AddItemModal from "../components/items/AddItemModal";
 import ToastContext from "../context/ToastContext";
 
 export default function Items() {
   const [items, setItems] = useState([]);
-  const [drawerOpen, setDrawerOpen] = useState(false);
   const { auth } = useAuth();
 
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const { showToast } = useContext(ToastContext);
+
+  // 🔥 drawerOpen zależy TYLKO od URL
+  const drawerOpen = searchParams.get("add") === "true";
 
   const fetchItems = async () => {
     try {
@@ -24,7 +26,6 @@ export default function Items() {
         `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.ITEMS}?user_id=${auth.id}`,
         { withCredentials: true }
       );
-
       setItems(res.data);
     } catch (err) {
       console.error("Failed fetching items:", err);
@@ -35,27 +36,22 @@ export default function Items() {
     fetchItems();
   }, []);
 
-  // Otwieramy drawer jeśli w URL jest ?add=true
-  useEffect(() => {
-    const add = searchParams.get("add");
-    setDrawerOpen(add === "true");
-  }, [searchParams]);
-
-  // funkcja do usuwania parametru `add`
+  // 🔥 usuń parametr add=true
   const clearAddParam = () => {
-    const newParams = new URLSearchParams(searchParams);
-    newParams.delete("add");
-    setSearchParams(newParams);
+    setSearchParams((prev) => {
+      const p = new URLSearchParams(prev);
+      p.delete("add");
+      return p;
+    });
   };
 
+  // 🔥 otwieramy modal – TYLKO zmieniając URL
   const handleOpen = () => {
-    // otwieramy drawer i ustawiamy parametr w URL
     setSearchParams({ add: "true" });
-    setDrawerOpen(true);
   };
 
+  // 🔥 zamykamy modal – TYLKO zmieniając URL
   const handleClose = () => {
-    setDrawerOpen(false);
     clearAddParam();
   };
 
@@ -67,16 +63,11 @@ export default function Items() {
         { withCredentials: true }
       );
 
-      const newItem = res.data;
-
-      // dodajemy item lokalnie (identycznie jak w Notes)
       await fetchItems();
-      // zamykamy drawer i usuwamy parametr
-      setDrawerOpen(false);
       clearAddParam();
 
       showToast(
-        newItem.updated ? "Item exists — quantity increased!" : "Item added!",
+        res.data.updated ? "Item exists — quantity increased!" : "Item added!",
         "success"
       );
     } catch (err) {
@@ -91,21 +82,13 @@ export default function Items() {
         `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.ITEMS}/${id}`,
         { withCredentials: true }
       );
-      setItems((prev) => prev.filter((it) => it.id !== id));
+      setItems((prev) => prev.filter((i) => i.id !== id));
       showToast("Item deleted", "success");
     } catch (err) {
       console.error("Failed delete:", err);
       showToast("Failed to delete item", "error");
     }
   };
-
-  // blokujemy przewijanie tła gdy drawer jest otwarty
-  useEffect(() => {
-    document.body.style.overflow = drawerOpen ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [drawerOpen]);
 
   return (
     <div style={{ padding: "2rem", color: "#9deaff", width: "100%" }}>
@@ -118,7 +101,6 @@ export default function Items() {
         ← Back
       </button>
 
-      {/* jeśli ActionCard jest tutaj - użyj handleOpen */}
       <button className="btn btn-info mb-4" onClick={handleOpen}>
         ➕ Add Item
       </button>
@@ -126,13 +108,12 @@ export default function Items() {
       <ItemsSearchBar onResults={setItems} />
       <ItemsList items={items} onDelete={handleDelete} />
 
-      {drawerOpen && (
-        <AddItemDrawer
-          open={drawerOpen}
-          onClose={handleClose}
-          onSubmit={handleSubmitItem}
-        />
-      )}
+      {/* modal otwiera się wyłącznie gdy ?add=true */}
+      <AddItemModal
+        open={drawerOpen}
+        onClose={handleClose}
+        onSubmit={handleSubmitItem}
+      />
     </div>
   );
 }
