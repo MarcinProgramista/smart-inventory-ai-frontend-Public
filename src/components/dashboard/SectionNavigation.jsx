@@ -6,7 +6,7 @@ import {
   Activity as ActivityIcon,
   BellRing,
   BarChart3,
-  LineChart, // ⭐ NOWA IKONA
+  LineChart,
 } from "lucide-react";
 
 const NavWrapper = styled.div`
@@ -16,29 +16,51 @@ const NavWrapper = styled.div`
   flex-wrap: wrap;
 `;
 
+/* 🔥 NEONOWY PRZYCISK — wygląd spójny z loginem i modalem */
 const NavButton = styled.button`
-  padding: 0.6rem 1.2rem;
-  border-radius: 12px;
-  background: rgba(0, 0, 0, 0.35);
-  border: 1px solid #9deaff;
+  padding: 0.7rem 1.4rem;
+  border-radius: 14px;
+
+  background: rgba(0, 30, 50, 0.45);
+  border: 1px solid rgba(0, 200, 255, 0.6);
   color: #9deaff;
-  cursor: pointer;
-  transition: 0.2s ease;
-  backdrop-filter: blur(6px);
+
+  font-size: 1rem;
+  font-weight: 500;
+
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 0.95rem;
+  gap: 0.6rem;
 
-  &:hover {
-    background: rgba(0, 0, 0, 0.55);
-    transform: translateY(-2px);
-  }
+  cursor: pointer;
+  transition: 0.25s ease;
+  backdrop-filter: blur(8px);
+
+  /* NEON glow */
+  box-shadow:
+    0 0 12px rgba(0, 200, 255, 0.45),
+    inset 0 0 10px rgba(0, 200, 255, 0.2);
 
   svg {
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
     stroke: #9deaff;
+    filter: drop-shadow(0 0 4px rgba(0, 200, 255, 0.8));
+  }
+
+  &:hover {
+    background: rgba(0, 40, 70, 0.65);
+    transform: translateY(-3px);
+    box-shadow:
+      0 0 18px rgba(0, 200, 255, 0.8),
+      inset 0 0 14px rgba(0, 200, 255, 0.35);
+  }
+
+  &:active {
+    transform: translateY(-1px);
+    box-shadow:
+      0 0 10px rgba(0, 150, 255, 0.6),
+      inset 0 0 8px rgba(0, 150, 255, 0.25);
   }
 `;
 
@@ -73,6 +95,7 @@ export default function SectionNavigation() {
       <NavButton onClick={() => scrollTo("charts")}>
         <BarChart3 /> Charts
       </NavButton>
+
       <NavButton onClick={() => scrollTo("forecast")}>
         <LineChart /> AI Forecast
       </NavButton>
