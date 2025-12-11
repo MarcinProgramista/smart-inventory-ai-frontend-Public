@@ -24,8 +24,6 @@ import AIForecast from "../components/dashboard/AIForecast";
 import SectionNavigation from "../components/dashboard/SectionNavigation";
 import ScrollToTopButton from "../components/dashboard/ScrollToTopButton";
 import SearchBar from "../components/dashboard/SearchBar";
-import { ArrowUp } from "lucide-react";
-import styled from "styled-components";
 
 export default function Home() {
   const { setAuth } = useContext(AuthContext);

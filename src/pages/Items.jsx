@@ -8,11 +8,14 @@ import ItemsList from "../components/items/ItemsList";
 import AddItemModal from "../components/items/AddItemModal";
 
 import ToastContext from "../context/ToastContext";
+import EditItemModal from "../components/items/EditItemModal";
 
 // --- KOMPONENT Items ---
 export default function Items() {
   const [items, setItems] = useState([]);
   const { auth } = useAuth();
+  const [editingItem, setEditingItem] = useState(null);
+
   const navigate = useNavigate();
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -46,6 +49,8 @@ export default function Items() {
       p.delete("add");
       return p;
     });
+  const openEditModal = (item) => setEditingItem(item);
+  const closeEditModal = () => setEditingItem(null);
 
   // Obsługa dodania itemu
   const handleSubmitItem = async (itemData) => {
@@ -66,6 +71,26 @@ export default function Items() {
     } catch (err) {
       console.error("Failed adding item:", err);
       showToast("Failed to save item", "error");
+    }
+  };
+
+  const handleEditSubmit = async (e, updatedItem) => {
+    e.preventDefault();
+
+    try {
+      await axios.patch(
+        `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.ITEMS}/${editingItem.id}`,
+        updatedItem,
+        { withCredentials: true }
+      );
+
+      await fetchItems();
+      closeEditModal();
+
+      showToast("Item updated", "success");
+    } catch (err) {
+      console.error("Failed updating item:", err);
+      showToast("Failed to update item", "error");
     }
   };
 
@@ -91,12 +116,19 @@ export default function Items() {
         onDelete={handleDelete}
         onAdd={openModal}
         onResults={setItems}
+        onEdit={openEditModal} // ➜ NOWE
       />
 
       <AddItemModal
         open={drawerOpen}
         onClose={closeModal}
         onSubmit={handleSubmitItem}
+      />
+      <EditItemModal
+        open={!!editingItem}
+        item={editingItem}
+        onClose={closeEditModal}
+        onSubmit={handleEditSubmit}
       />
     </>
   );

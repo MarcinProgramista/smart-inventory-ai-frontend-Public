@@ -40,13 +40,24 @@ export default function ItemForm({
   onChange,
   onSubmit,
 }) {
+  // Bezpieczne wartości domyślne
+  const safe = {
+    name: form.name ?? "",
+    category_id: form.category_id ?? "",
+    quantity: form.quantity ?? "",
+    min_quantity: form.min_quantity ?? "",
+    price: form.price ?? "",
+    supplier_id: form.supplier_id ?? "",
+    description: form.description ?? "",
+  };
+
   return (
     <form onSubmit={onSubmit}>
       {/* NAME */}
       <FieldWrapper $error={errors.name}>
         <Input
           name="name"
-          value={form.name}
+          value={safe.name}
           onChange={onChange}
           placeholder="Put name of product"
         />
@@ -56,7 +67,7 @@ export default function ItemForm({
       {/* CATEGORY */}
       <FieldWrapper $error={errors.category_id}>
         <NeonDropdown
-          value={form.category_id}
+          value={safe.category_id}
           onChange={(val) =>
             onChange({ target: { name: "category_id", value: val } })
           }
@@ -76,7 +87,7 @@ export default function ItemForm({
         <Input
           type="number"
           name="quantity"
-          value={form.quantity}
+          value={safe.quantity}
           onChange={onChange}
           placeholder="Put quantity"
         />
@@ -88,7 +99,7 @@ export default function ItemForm({
         <Input
           type="number"
           name="min_quantity"
-          value={form.min_quantity}
+          value={safe.min_quantity}
           onChange={onChange}
           placeholder="Put min quantity"
         />
@@ -102,7 +113,7 @@ export default function ItemForm({
         <Input
           type="number"
           name="price"
-          value={form.price}
+          value={safe.price}
           onChange={onChange}
           placeholder="Put price"
         />
@@ -112,7 +123,7 @@ export default function ItemForm({
       {/* SUPPLIER */}
       <FieldWrapper $error={errors.supplier_id}>
         <NeonDropdown
-          value={form.supplier_id}
+          value={safe.supplier_id}
           onChange={(val) =>
             onChange({ target: { name: "supplier_id", value: val } })
           }
@@ -131,7 +142,7 @@ export default function ItemForm({
       <FieldWrapper>
         <Input
           name="description"
-          value={form.description}
+          value={safe.description}
           onChange={onChange}
           placeholder="Description (optional)"
         />
