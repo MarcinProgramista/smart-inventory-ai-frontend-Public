@@ -1,6 +1,6 @@
 // components/items/AddItemModal.jsx
 import styled from "styled-components";
-import { X, AlertTriangle, CheckCircle } from "lucide-react";
+import { X } from "lucide-react";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import useAuth from "../../hooks/useAuth";
@@ -8,49 +8,7 @@ import API_CONFIG from "../../config/api";
 
 import NeonCard from "../ui/NeonCardBright";
 import Logo from "../ui/Logo";
-
 import ItemForm from "./ItemForm";
-
-/* -------------------------- TOASTY -------------------------- */
-
-const ErrorToast = styled.div`
-  position: fixed;
-  top: 20px;
-  z-index: 10000;
-  display: flex;
-  align-items: center;
-  gap: 0.7rem;
-
-  background: rgba(70, 0, 0, 0.85);
-  color: #ff6b6b;
-  padding: 1rem 1.6rem;
-  border-radius: 12px;
-  border: 1px solid rgba(255, 80, 80, 0.6);
-
-  box-shadow:
-    0 0 12px rgba(255, 60, 60, 0.8),
-    inset 0 0 10px rgba(255, 60, 60, 0.35);
-  backdrop-filter: blur(6px);
-
-  opacity: ${(p) => (p.$show ? 1 : 0)};
-  transform: translateY(${(p) => (p.$show ? "0" : "-15px")});
-  transition:
-    opacity 0.35s ease,
-    transform 0.35s ease;
-`;
-
-const SuccessToast = styled(ErrorToast)`
-  background: rgba(0, 60, 0, 0.85);
-  color: #8aff8a;
-  border: 1px solid rgba(80, 255, 80, 0.6);
-  box-shadow:
-    0 0 12px rgba(80, 255, 80, 0.8),
-    inset 0 0 10px rgba(80, 255, 80, 0.35);
-
-  svg {
-    stroke: #8aff8a;
-  }
-`;
 
 /* -------------------------- BACKDROP -------------------------- */
 
@@ -96,9 +54,6 @@ export default function AddItemModal({ open, onClose, onSubmit }) {
 
   const [categories, setCategories] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
-
-  const [toast, setToast] = useState(null);
-  const [success, setSuccess] = useState(null);
   const [errors, setErrors] = useState({});
 
   const [form, setForm] = useState({
@@ -111,17 +66,17 @@ export default function AddItemModal({ open, onClose, onSubmit }) {
     description: "",
   });
 
-  const showToast = (msg) => {
-    setToast(msg);
-    setTimeout(() => setToast(null), 2600);
+  // REQUIRED FIELDS (musi być zdefiniowane)
+  const requiredFields = {
+    name: "Name",
+    category_id: "Category",
+    quantity: "Quantity",
+    min_quantity: "Minimum quantity",
+    price: "Price",
+    supplier_id: "Supplier",
   };
 
-  const showSuccess = (msg) => {
-    setSuccess(msg);
-    setTimeout(() => setSuccess(null), 2600);
-  };
-
-  /* RESET FORMULARZA PRZY OTWARCIU */
+  /* RESET FORMULARZA PO OTWARCIU */
   useEffect(() => {
     if (open) {
       setForm({
@@ -159,36 +114,46 @@ export default function AddItemModal({ open, onClose, onSubmit }) {
   /* OBSŁUGA POLA */
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm((f) => ({ ...f, [name]: value }));
+
+    setForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    // usuń błędy na bieżąco dla tego pola
+    if (errors[name]) {
+      setErrors((prev) => {
+        const next = { ...prev };
+        delete next[name];
+        return next;
+      });
+    }
   };
 
-  /* WALIDACJA */
-  const requiredFields = {
-    name: "Name",
-    category_id: "Category",
-    quantity: "Quantity",
-    min_quantity: "Minimum quantity",
-    price: "Price",
-    supplier_id: "Supplier",
-  };
-
-  const handleSubmit = (e) => {
+  /* SUBMIT */
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const newErrors = {};
+
+    // FRONTEND VALIDATION: required
     Object.entries(requiredFields).forEach(([key]) => {
-      if (!form[key] || form[key] === "") newErrors[key] = true;
+      if (!form[key] || form[key].toString().trim() === "") {
+        newErrors[key] = `${requiredFields[key]} is required`;
+      }
     });
+
+    // Przykladowa reguła: nazwa nie może być tylko cyfrą
+    if (form.name && /^[0-9]+$/.test(form.name.trim())) {
+      newErrors.name = "Invalid item name";
+    }
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
-      const firstKey = Object.keys(newErrors)[0];
-      showToast(`${requiredFields[firstKey]} is required`);
       return;
     }
 
-    setErrors({});
-
+    // Przygotuj payload (konwersje)
     const payload = {
       ...form,
       quantity: Number(form.quantity),
@@ -199,44 +164,57 @@ export default function AddItemModal({ open, onClose, onSubmit }) {
       user_id: userId,
     };
 
-    onSubmit(payload);
-    showSuccess("Item successfully added!");
+    try {
+      setErrors({});
+      // onSubmit powinien zwracać promise i RZUCać błąd jeśli backend zwraca 400
+      await onSubmit(payload);
+    } catch (err) {
+      // jeśli backend zwraca obiekt errors -> ustaw pod inputami
+      if (err?.response?.status === 400 && err.response.data?.errors) {
+        const apiErrors = err.response.data?.errors;
+
+        // backend może zwrócić tablicę lub obiekt:
+        if (Array.isArray(apiErrors)) {
+          // np. ["Invalid item name"]
+          if (apiErrors.includes("Invalid item name")) {
+            setErrors((prev) => ({ ...prev, name: "Invalid item name" }));
+          } else {
+            // inne tablice - umieść ogólny komunikat w name (albo na górze)
+            setErrors((prev) => ({ ...prev, name: apiErrors.join(", ") }));
+          }
+        } else if (typeof apiErrors === "object") {
+          // { name: "Item with this name already exists" }
+          setErrors(apiErrors);
+        } else {
+          // fallback
+          setErrors({ name: String(apiErrors) });
+        }
+        return;
+      }
+
+      // niewalidacyjny błąd serwera
+      console.error("Unexpected add error:", err);
+    }
   };
 
   return (
-    <>
-      {toast && (
-        <ErrorToast $show={!!toast}>
-          <AlertTriangle />
-          {toast}
-        </ErrorToast>
-      )}
+    <Backdrop open={open} onClick={onClose}>
+      <ModalBox onClick={(e) => e.stopPropagation()}>
+        <CloseBtn onClick={onClose}>
+          <X />
+        </CloseBtn>
 
-      {success && (
-        <SuccessToast $show={!!success}>
-          <CheckCircle />
-          {success}
-        </SuccessToast>
-      )}
+        <Logo style={{ marginBottom: "1rem" }}>Add New Item</Logo>
 
-      <Backdrop open={open} onClick={onClose}>
-        <ModalBox onClick={(e) => e.stopPropagation()}>
-          <CloseBtn onClick={onClose}>
-            <X />
-          </CloseBtn>
-
-          <Logo style={{ marginBottom: "1rem" }}>Add New Item</Logo>
-
-          <ItemForm
-            form={form}
-            errors={errors}
-            categories={categories}
-            suppliers={suppliers}
-            onChange={handleChange}
-            onSubmit={handleSubmit}
-          />
-        </ModalBox>
-      </Backdrop>
-    </>
+        <ItemForm
+          form={form}
+          errors={errors}
+          categories={categories}
+          suppliers={suppliers}
+          onChange={handleChange}
+          onSubmit={handleSubmit}
+        />
+      </ModalBox>
+    </Backdrop>
   );
 }

@@ -1,30 +1,29 @@
-// --- IMPORTY ---
+// Items.jsx
 import { useEffect, useState, useContext } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import axios from "axios";
 import API_CONFIG from "../config/api";
+
 import useAuth from "../hooks/useAuth";
 import ItemsList from "../components/items/ItemsList";
 import AddItemModal from "../components/items/AddItemModal";
-
-import ToastContext from "../context/ToastContext";
 import EditItemModal from "../components/items/EditItemModal";
 
-// --- KOMPONENT Items ---
+import ToastContext from "../context/ToastContext";
+
 export default function Items() {
   const [items, setItems] = useState([]);
-  const { auth } = useAuth();
   const [editingItem, setEditingItem] = useState(null);
 
-  const navigate = useNavigate();
-
-  const [searchParams, setSearchParams] = useSearchParams();
+  const { auth } = useAuth();
   const { showToast } = useContext(ToastContext);
 
-  // Modal kontroluje WYŁĄCZNIE parametr w URL
+  const [searchParams, setSearchParams] = useSearchParams();
   const drawerOpen = searchParams.get("add") === "true";
 
-  // Pobieranie itemsów
+  /* ---------------------------------------------------
+     FETCH ITEMS
+  --------------------------------------------------- */
   const fetchItems = async () => {
     try {
       const res = await axios.get(
@@ -33,7 +32,8 @@ export default function Items() {
       );
       setItems(res.data);
     } catch (err) {
-      console.error("Failed fetching items:", err);
+      console.error("Fetch items error:", err);
+      showToast("Failed loading items", "error");
     }
   };
 
@@ -41,18 +41,12 @@ export default function Items() {
     fetchItems();
   }, []);
 
-  // Otwieranie/zamykanie modala
+  /* ---------------------------------------------------
+     ADD MODAL
+  --------------------------------------------------- */
   const openModal = () => setSearchParams({ add: "true" });
-  const closeModal = () =>
-    setSearchParams((prev) => {
-      const p = new URLSearchParams(prev);
-      p.delete("add");
-      return p;
-    });
-  const openEditModal = (item) => setEditingItem(item);
-  const closeEditModal = () => setEditingItem(null);
+  const closeModal = () => setSearchParams({});
 
-  // Obsługa dodania itemu
   const handleSubmitItem = async (itemData) => {
     try {
       const res = await axios.post(
@@ -65,17 +59,24 @@ export default function Items() {
       closeModal();
 
       showToast(
-        res.data.updated ? "Item exists — quantity increased!" : "Item added!",
+        res.data.updated ? "Quantity updated!" : "Item added!",
         "success"
       );
     } catch (err) {
-      console.error("Failed adding item:", err);
-      showToast("Failed to save item", "error");
+      console.error("Add error:", err);
+      throw err; // <-- WAŻNE: pozwalamy AddItemModal pokazać błędy pod inputami
     }
   };
 
+  /* ---------------------------------------------------
+     EDIT MODAL
+  --------------------------------------------------- */
+  const openEditModal = (item) => setEditingItem({ ...item });
+  const closeEditModal = () => setEditingItem(null);
+
   const handleEditSubmit = async (e, updatedItem) => {
     e.preventDefault();
+    if (!editingItem) return;
 
     try {
       await axios.patch(
@@ -86,25 +87,31 @@ export default function Items() {
 
       await fetchItems();
       closeEditModal();
-
       showToast("Item updated", "success");
     } catch (err) {
-      console.error("Failed updating item:", err);
-      showToast("Failed to update item", "error");
+      console.error("Edit error:", err);
+      throw err;
+      // 🔥 WAŻNE: EditItemModal musi przejąć błąd i wyświetlić go pod inputem
     }
   };
 
-  // Usuwanie
+  /* ---------------------------------------------------
+     DELETE ITEM
+  --------------------------------------------------- */
   const handleDelete = async (id) => {
     try {
       await axios.delete(
         `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.ITEMS}/${id}`,
         { withCredentials: true }
       );
+
       setItems((prev) => prev.filter((i) => i.id !== id));
+
+      if (editingItem?.id === id) closeEditModal();
+
       showToast("Item deleted", "success");
     } catch (err) {
-      console.error("Failed delete:", err);
+      console.error("Delete failed:", err);
       showToast("Failed to delete item", "error");
     }
   };
@@ -116,7 +123,7 @@ export default function Items() {
         onDelete={handleDelete}
         onAdd={openModal}
         onResults={setItems}
-        onEdit={openEditModal} // ➜ NOWE
+        onEdit={openEditModal}
       />
 
       <AddItemModal
@@ -124,6 +131,7 @@ export default function Items() {
         onClose={closeModal}
         onSubmit={handleSubmitItem}
       />
+
       <EditItemModal
         open={!!editingItem}
         item={editingItem}

@@ -1,3 +1,4 @@
+// ItemForm.jsx
 import styled from "styled-components";
 import Input from "../common/Input";
 import NeonDropdown from "../ui/NeonDropdown";
@@ -24,12 +25,31 @@ const FieldWrapper = styled.div`
 `;
 
 const ErrorMessage = styled.div`
-  margin-top: 4px;
+  margin-top: 6px;
   margin-left: 4px;
-  padding: 5px;
+  padding: 6px 10px;
   font-size: 0.9rem;
-  color: #ff6b6b;
-  text-shadow: 0 0 6px rgba(255, 40, 40, 0.9);
+  font-weight: 500;
+
+  color: #ff4d6d;
+  background: rgba(255, 50, 70, 0.12);
+
+  border-left: 3px solid rgba(255, 60, 80, 0.9);
+  border-radius: 6px;
+
+  text-shadow: 0 0 6px rgba(255, 40, 40, 0.8);
+  box-shadow: 0 0 10px rgba(255, 40, 40, 0.45);
+
+  animation: glowPulse 1.4s ease-in-out infinite alternate;
+
+  @keyframes glowPulse {
+    from {
+      box-shadow: 0 0 6px rgba(255, 40, 40, 0.4);
+    }
+    to {
+      box-shadow: 0 0 14px rgba(255, 40, 40, 0.9);
+    }
+  }
 `;
 
 export default function ItemForm({
@@ -40,34 +60,27 @@ export default function ItemForm({
   onChange,
   onSubmit,
 }) {
-  // Bezpieczne wartości domyślne
-  const safe = {
-    name: form.name ?? "",
-    category_id: form.category_id ?? "",
-    quantity: form.quantity ?? "",
-    min_quantity: form.min_quantity ?? "",
-    price: form.price ?? "",
-    supplier_id: form.supplier_id ?? "",
-    description: form.description ?? "",
-  };
-
   return (
     <form onSubmit={onSubmit}>
       {/* NAME */}
       <FieldWrapper $error={errors.name}>
         <Input
           name="name"
-          value={safe.name}
+          value={form.name ?? ""}
           onChange={onChange}
           placeholder="Put name of product"
         />
-        {errors.name && <ErrorMessage>Name is required</ErrorMessage>}
+        {errors.name && (
+          <ErrorMessage>
+            {Array.isArray(errors.name) ? errors.name[0] : errors.name}
+          </ErrorMessage>
+        )}
       </FieldWrapper>
 
       {/* CATEGORY */}
       <FieldWrapper $error={errors.category_id}>
         <NeonDropdown
-          value={safe.category_id}
+          value={form.category_id ?? ""}
           onChange={(val) =>
             onChange({ target: { name: "category_id", value: val } })
           }
@@ -87,7 +100,7 @@ export default function ItemForm({
         <Input
           type="number"
           name="quantity"
-          value={safe.quantity}
+          value={form.quantity ?? ""}
           onChange={onChange}
           placeholder="Put quantity"
         />
@@ -99,7 +112,7 @@ export default function ItemForm({
         <Input
           type="number"
           name="min_quantity"
-          value={safe.min_quantity}
+          value={form.min_quantity ?? ""}
           onChange={onChange}
           placeholder="Put min quantity"
         />
@@ -113,7 +126,7 @@ export default function ItemForm({
         <Input
           type="number"
           name="price"
-          value={safe.price}
+          value={form.price ?? ""}
           onChange={onChange}
           placeholder="Put price"
         />
@@ -123,7 +136,7 @@ export default function ItemForm({
       {/* SUPPLIER */}
       <FieldWrapper $error={errors.supplier_id}>
         <NeonDropdown
-          value={safe.supplier_id}
+          value={form.supplier_id ?? ""}
           onChange={(val) =>
             onChange({ target: { name: "supplier_id", value: val } })
           }
@@ -142,7 +155,7 @@ export default function ItemForm({
       <FieldWrapper>
         <Input
           name="description"
-          value={safe.description}
+          value={form.description ?? ""}
           onChange={onChange}
           placeholder="Description (optional)"
         />
