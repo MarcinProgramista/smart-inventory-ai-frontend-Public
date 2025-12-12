@@ -36,7 +36,7 @@ export default function Items() {
   const openModal = () => setSearchParams({ add: "true" });
   const closeModal = () => setSearchParams({});
 
-  const { addItem } = useItemActions({
+  const { addItem, editItem } = useItemActions({
     setItems,
     closeModal,
     showToast,
@@ -56,25 +56,9 @@ export default function Items() {
 
   const handleEditSubmit = async (e, updatedItem) => {
     e.preventDefault();
-    if (!editingItem) return;
-
-    try {
-      await axios.patch(
-        `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.ITEMS}/${editingItem.id}`,
-        updatedItem,
-        { withCredentials: true }
-      );
-
-      await fetchItems(auth.id);
-      closeEditModal();
-      showToast("Item updated", "success");
-    } catch (err) {
-      console.error("Edit error:", err);
-      throw err;
-      // 🔥 WAŻNE: EditItemModal musi przejąć błąd i wyświetlić go pod inputem
-    }
+    await editItem(editingItem.id, updatedItem);
+    closeEditModal();
   };
-
   /* ---------------------------------------------------
      DELETE ITEM
   --------------------------------------------------- */

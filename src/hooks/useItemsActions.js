@@ -27,8 +27,30 @@ export default function useItemActions({ setItems, closeModal, showToast }) {
       throw error;
     }
   };
+  /**
+   * Edite Item
+   */
+  const editItem = async (id, updatedItem) => {
+    try {
+      const res = await axios.patch(
+        `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.ITEMS}/${id}`,
+        updatedItem,
+        { withCredentials: true }
+      );
+      const fullItem = res.data.item;
+      setItems((prev) =>
+        prev.map((i) => (i.id === fullItem.id ? fullItem : i))
+      );
+      showToast("Item udated", "succes");
+      return fullItem;
+    } catch (error) {
+      console.log("EditItem error:", error);
+      throw error;
+    }
+  };
 
   return {
     addItem,
+    editItem,
   };
 }
