@@ -49,7 +49,7 @@ const Input = styled.input`
   }
 `;
 
-export default function ItemsSearchBar({ onResults }) {
+export default function ItemsSearchBar({ onResults, userId }) {
   const [query, setQuery] = useState("");
 
   const handleSearch = async (value) => {
@@ -57,7 +57,7 @@ export default function ItemsSearchBar({ onResults }) {
 
     if (value.trim() === "") {
       const res = await axios.get(
-        `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.ITEMS}`
+        `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.ITEMS}?user_id=${userId}`
       );
       onResults(res.data);
       return;

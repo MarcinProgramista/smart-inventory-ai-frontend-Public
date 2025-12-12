@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { Pencil, Trash2 } from "lucide-react";
 import ItemsHeader from "./ItemsHeader";
 import ItemsSearchBar from "./ItemsSearchBar";
-
+import useAuth from "../../hooks/useAuth";
 const PageWrapper = styled.div`
   padding: 2rem;
   color: #9deaff;
@@ -69,6 +69,7 @@ export default function ItemsList({
   onAdd,
   onResults,
 }) {
+  const { auth } = useAuth();
   const formatPLN = (v) =>
     new Intl.NumberFormat("pl-PL", {
       style: "currency",
@@ -78,7 +79,7 @@ export default function ItemsList({
   return (
     <PageWrapper>
       <ItemsHeader onAdd={onAdd} />
-      <ItemsSearchBar onResults={onResults} />
+      <ItemsSearchBar onResults={onResults} userId={auth.id} />
 
       <TableWrapper>
         <Table>
