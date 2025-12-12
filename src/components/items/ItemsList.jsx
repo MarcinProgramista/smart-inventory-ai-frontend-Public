@@ -3,6 +3,8 @@ import { Pencil, Trash2 } from "lucide-react";
 import ItemsHeader from "./ItemsHeader";
 import ItemsSearchBar from "./ItemsSearchBar";
 import useAuth from "../../hooks/useAuth";
+import useExportItems from "../../hooks/useExportItems";
+
 const PageWrapper = styled.div`
   padding: 2rem;
   color: #9deaff;
@@ -75,10 +77,14 @@ export default function ItemsList({
       style: "currency",
       currency: "PLN",
     }).format(v);
-
+  const { exportCSV, exportPDF } = useExportItems();
   return (
     <PageWrapper>
-      <ItemsHeader onAdd={onAdd} />
+      <ItemsHeader
+        onAdd={onAdd}
+        onExportCSV={() => exportCSV(items)}
+        onExportPDF={() => exportPDF(items)}
+      />
       <ItemsSearchBar onResults={onResults} userId={auth.id} />
 
       <TableWrapper>
