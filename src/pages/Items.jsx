@@ -3,16 +3,15 @@ import { useEffect, useState, useContext } from "react";
 import { useSearchParams } from "react-router-dom";
 import axios from "axios";
 import API_CONFIG from "../config/api";
-
 import useAuth from "../hooks/useAuth";
 import ItemsList from "../components/items/ItemsList";
 import AddItemModal from "../components/items/AddItemModal";
 import EditItemModal from "../components/items/EditItemModal";
 
 import ToastContext from "../context/ToastContext";
+import useFetchItems from "../hooks/useFetchItems";
 
 export default function Items() {
-  const [items, setItems] = useState([]);
   const [editingItem, setEditingItem] = useState(null);
 
   const { auth } = useAuth();
@@ -24,22 +23,11 @@ export default function Items() {
   /* ---------------------------------------------------
      FETCH ITEMS
   --------------------------------------------------- */
-  const fetchItems = async () => {
-    try {
-      const res = await axios.get(
-        `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.ITEMS}?user_id=${auth.id}`,
-        { withCredentials: true }
-      );
-      setItems(res.data);
-    } catch (err) {
-      console.error("Fetch items error:", err);
-      showToast("Failed loading items", "error");
-    }
-  };
+  const { items, setItems, fetchItems } = useFetchItems(showToast);
 
   useEffect(() => {
-    fetchItems();
-  }, []);
+    fetchItems(auth.id);
+  }, [auth.id]);
 
   /* ---------------------------------------------------
      ADD MODAL
@@ -55,7 +43,19 @@ export default function Items() {
         { withCredentials: true }
       );
 
-      await fetchItems();
+      // pełne dane z backendu (z category_name, supplier_name)
+      const fullItem = res.data.item;
+
+      // jeżeli backend zwiększył ilość istniejącego itemu → zaktualizuj w state
+      if (res.data.updated) {
+        setItems((prev) =>
+          prev.map((i) => (i.id === fullItem.id ? fullItem : i))
+        );
+      } else {
+        // jeżeli nowy item → dodaj do listy
+        setItems((prev) => [fullItem, ...prev]);
+      }
+
       closeModal();
 
       showToast(
@@ -64,7 +64,7 @@ export default function Items() {
       );
     } catch (err) {
       console.error("Add error:", err);
-      throw err; // <-- WAŻNE: pozwalamy AddItemModal pokazać błędy pod inputami
+      throw err; // pozwala modalowi pokazać błędy
     }
   };
 
@@ -85,7 +85,7 @@ export default function Items() {
         { withCredentials: true }
       );
 
-      await fetchItems();
+      await fetchItems(auth.id);
       closeEditModal();
       showToast("Item updated", "success");
     } catch (err) {

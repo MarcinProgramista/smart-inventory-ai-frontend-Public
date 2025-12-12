@@ -167,6 +167,15 @@ export default function AddItemModal({ open, onClose, onSubmit }) {
     try {
       setErrors({});
       // onSubmit powinien zwracać promise i RZUCać błąd jeśli backend zwraca 400
+      const supplierObj = suppliers.find(
+        (s) => s.id === Number(form.supplier_id)
+      );
+      const categoryObj = categories.find(
+        (c) => c.id === Number(form.category_id)
+      );
+
+      payload.supplier_name = supplierObj?.name ?? "-";
+      payload.category_name = categoryObj?.name ?? "-";
       await onSubmit(payload);
     } catch (err) {
       // jeśli backend zwraca obiekt errors -> ustaw pod inputami
