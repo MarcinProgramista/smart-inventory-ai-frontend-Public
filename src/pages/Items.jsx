@@ -10,6 +10,7 @@ import EditItemModal from "../components/items/EditItemModal";
 
 import ToastContext from "../context/ToastContext";
 import useFetchItems from "../hooks/useFetchItems";
+import useItemActions from "../hooks/useItemsActions";
 
 export default function Items() {
   const [editingItem, setEditingItem] = useState(null);
@@ -35,43 +36,22 @@ export default function Items() {
   const openModal = () => setSearchParams({ add: "true" });
   const closeModal = () => setSearchParams({});
 
-  const handleSubmitItem = async (itemData) => {
-    try {
-      const res = await axios.post(
-        `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.ITEMS}`,
-        itemData,
-        { withCredentials: true }
-      );
-
-      // pełne dane z backendu (z category_name, supplier_name)
-      const fullItem = res.data.item;
-
-      // jeżeli backend zwiększył ilość istniejącego itemu → zaktualizuj w state
-      if (res.data.updated) {
-        setItems((prev) =>
-          prev.map((i) => (i.id === fullItem.id ? fullItem : i))
-        );
-      } else {
-        // jeżeli nowy item → dodaj do listy
-        setItems((prev) => [fullItem, ...prev]);
-      }
-
-      closeModal();
-
-      showToast(
-        res.data.updated ? "Quantity updated!" : "Item added!",
-        "success"
-      );
-    } catch (err) {
-      console.error("Add error:", err);
-      throw err; // pozwala modalowi pokazać błędy
-    }
-  };
+  const { addItem } = useItemActions({
+    setItems,
+    closeModal,
+    showToast,
+  });
+  /* ---------------------------------------------------
+      REALNE SUBMIT Z MODALA
+  --------------------------------------------------- */
+  const handleSubmitItem = (payload) => addItem(payload);
 
   /* ---------------------------------------------------
      EDIT MODAL
   --------------------------------------------------- */
-  const openEditModal = (item) => setEditingItem({ ...item });
+  function openEditModal(item) {
+    return setEditingItem({ ...item });
+  }
   const closeEditModal = () => setEditingItem(null);
 
   const handleEditSubmit = async (e, updatedItem) => {
