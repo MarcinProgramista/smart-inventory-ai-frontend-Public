@@ -1,7 +1,14 @@
+// src/hooks/useItemsActions.js
 import axios from "axios";
 import API_CONFIG from "../config/api";
 
-export default function useItemActions({ setItems, closeModal, showToast }) {
+export default function useItemActions({
+  setItems,
+  closeModal,
+  closeEditModal,
+  showToast,
+}) {
+  /* ADD ITEM */
   const addItem = async (itemData) => {
     try {
       const res = await axios.post(
@@ -9,6 +16,7 @@ export default function useItemActions({ setItems, closeModal, showToast }) {
         itemData,
         { withCredentials: true }
       );
+
       const fullItem = res.data.item;
 
       if (res.data.updated) {
@@ -18,18 +26,21 @@ export default function useItemActions({ setItems, closeModal, showToast }) {
       } else {
         setItems((prev) => [fullItem, ...prev]);
       }
+
       closeModal?.();
-      (showToast?.(res.data.updated ? "Quantity updated!" : "Item added!"),
-        "success");
+      showToast?.(
+        res.data.updated ? "Quantity updated!" : "Item added!",
+        "success"
+      );
+
       return fullItem;
     } catch (error) {
-      console.log("AddItem error:", error);
+      console.error("AddItem error:", error);
       throw error;
     }
   };
-  /**
-   * Edite Item
-   */
+
+  /* EDIT ITEM */
   const editItem = async (id, updatedItem) => {
     try {
       const res = await axios.patch(
@@ -37,20 +48,46 @@ export default function useItemActions({ setItems, closeModal, showToast }) {
         updatedItem,
         { withCredentials: true }
       );
+
       const fullItem = res.data.item;
+
       setItems((prev) =>
         prev.map((i) => (i.id === fullItem.id ? fullItem : i))
       );
-      showToast("Item udated", "succes");
+
+      showToast?.("Item updated", "success");
+
       return fullItem;
     } catch (error) {
-      console.log("EditItem error:", error);
+      console.error("EditItem error:", error);
       throw error;
+    }
+  };
+
+  /* DELETE ITEM */
+  const deleteItem = async (id, editingItem) => {
+    try {
+      await axios.delete(
+        `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.ITEMS}/${id}`,
+        { withCredentials: true }
+      );
+
+      setItems((prev) => prev.filter((i) => i.id !== id));
+
+      if (editingItem?.id === id) {
+        closeEditModal?.();
+      }
+
+      showToast?.("Item deleted", "success");
+    } catch (error) {
+      console.error("DeleteItem error:", error);
+      showToast?.("Failed to delete item", "error");
     }
   };
 
   return {
     addItem,
     editItem,
+    deleteItem,
   };
 }

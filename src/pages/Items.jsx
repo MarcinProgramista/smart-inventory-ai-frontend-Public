@@ -1,8 +1,6 @@
 // Items.jsx
 import { useEffect, useState, useContext } from "react";
 import { useSearchParams } from "react-router-dom";
-import axios from "axios";
-import API_CONFIG from "../config/api";
 import useAuth from "../hooks/useAuth";
 import ItemsList from "../components/items/ItemsList";
 import AddItemModal from "../components/items/AddItemModal";
@@ -21,34 +19,23 @@ export default function Items() {
   const [searchParams, setSearchParams] = useSearchParams();
   const drawerOpen = searchParams.get("add") === "true";
 
-  /* ---------------------------------------------------
-     FETCH ITEMS
-  --------------------------------------------------- */
   const { items, setItems, fetchItems } = useFetchItems(showToast);
 
   useEffect(() => {
     fetchItems(auth.id);
   }, [auth.id]);
 
-  /* ---------------------------------------------------
-     ADD MODAL
-  --------------------------------------------------- */
   const openModal = () => setSearchParams({ add: "true" });
   const closeModal = () => setSearchParams({});
 
-  const { addItem, editItem } = useItemActions({
+  const { addItem, editItem, deleteItem } = useItemActions({
     setItems,
     closeModal,
     showToast,
   });
-  /* ---------------------------------------------------
-      REALNE SUBMIT Z MODALA
-  --------------------------------------------------- */
+
   const handleSubmitItem = (payload) => addItem(payload);
 
-  /* ---------------------------------------------------
-     EDIT MODAL
-  --------------------------------------------------- */
   function openEditModal(item) {
     return setEditingItem({ ...item });
   }
@@ -59,27 +46,8 @@ export default function Items() {
     await editItem(editingItem.id, updatedItem);
     closeEditModal();
   };
-  /* ---------------------------------------------------
-     DELETE ITEM
-  --------------------------------------------------- */
-  const handleDelete = async (id) => {
-    try {
-      await axios.delete(
-        `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.ITEMS}/${id}`,
-        { withCredentials: true }
-      );
 
-      setItems((prev) => prev.filter((i) => i.id !== id));
-
-      if (editingItem?.id === id) closeEditModal();
-
-      showToast("Item deleted", "success");
-    } catch (err) {
-      console.error("Delete failed:", err);
-      showToast("Failed to delete item", "error");
-    }
-  };
-
+  const handleDelete = async (id) => deleteItem(id, editingItem);
   return (
     <>
       <ItemsList
