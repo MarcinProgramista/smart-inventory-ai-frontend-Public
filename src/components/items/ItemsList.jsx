@@ -4,14 +4,7 @@ import ItemsHeader from "./ItemsHeader";
 import ItemsSearchBar from "./ItemsSearchBar";
 import useAuth from "../../hooks/useAuth";
 import useExportItems from "../../hooks/useExportItems";
-
-const PageWrapper = styled.div`
-  padding: 2rem;
-  color: #9deaff;
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-`;
+import { PageWrapper } from "../table/Table.styles";
 
 const TableWrapper = styled.div`
   width: 100%;

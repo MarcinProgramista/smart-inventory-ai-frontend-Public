@@ -41,10 +41,15 @@ export default function Items() {
   }
   const closeEditModal = () => setEditingItem(null);
 
-  const handleEditSubmit = async (e, updatedItem) => {
-    e.preventDefault();
-    await editItem(editingItem.id, updatedItem);
+  const handleEditSubmit = async (updatedItem) => {
+    const result = await editItem(editingItem.id, updatedItem);
+
+    if (result?.validationErrors) {
+      return result;
+    }
+
     closeEditModal();
+    return result;
   };
 
   const handleDelete = async (id) => deleteItem(id, editingItem);

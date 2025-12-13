@@ -59,6 +59,14 @@ export default function useItemActions({
 
       return fullItem;
     } catch (error) {
+      // 🔴 TO JEST KLUCZ
+      if (error.response?.status === 400 && error.response.data?.errors) {
+        return {
+          validationErrors: error.response.data.errors,
+        };
+      }
+
+      // ❌ tylko PRAWDZIWE błędy
       console.error("EditItem error:", error);
       throw error;
     }

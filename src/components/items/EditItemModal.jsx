@@ -1,4 +1,3 @@
-// EditItemModal.jsx
 import styled from "styled-components";
 import { X } from "lucide-react";
 import { useState, useEffect } from "react";
@@ -78,23 +77,24 @@ export default function EditItemModal({ open, item, onClose, onSubmit }) {
   const [categories, setCategories] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
 
-  /* Wczytanie danych itemu */
+  /* LOAD ITEM DATA */
   useEffect(() => {
-    if (item) {
-      setForm({
-        name: item.name,
-        category_id: item.category_id,
-        quantity: item.quantity,
-        min_quantity: item.min_quantity,
-        price: item.price,
-        supplier_id: item.supplier_id,
-        description: item.description ?? "",
-      });
-      setErrors({});
-    }
+    if (!item) return;
+
+    setForm({
+      name: item.name ?? "",
+      category_id: item.category_id ?? "",
+      quantity: item.quantity ?? "",
+      min_quantity: item.min_quantity ?? "",
+      price: item.price ?? "",
+      supplier_id: item.supplier_id ?? "",
+      description: item.description ?? "",
+    });
+
+    setErrors({});
   }, [item]);
 
-  /* Pobranie kategorii + dostawców */
+  /* LOAD CATEGORIES + SUPPLIERS */
   useEffect(() => {
     if (!open) return;
 
@@ -109,56 +109,49 @@ export default function EditItemModal({ open, item, onClose, onSubmit }) {
         `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.SUPPLIERS}?user_id=${userId}`
       )
       .then((r) => setSuppliers(r.data));
-  }, [open]);
+  }, [open, userId]);
 
-  /* ---------------------- ON SUBMIT ---------------------- */
+  /* ---------------------- SUBMIT ---------------------- */
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const newErrors = {};
 
-    // REQUIRED VALIDATION
-    Object.entries(requiredFields).forEach(([key]) => {
+    // required fields
+    Object.entries(requiredFields).forEach(([key, label]) => {
       if (!form[key] || form[key].toString().trim() === "") {
-        newErrors[key] = `${requiredFields[key]} is required`;
+        newErrors[key] = `${label} is required`;
       }
     });
 
-    // NAME VALIDATION (jak w AddItemModal)
+    // name validation
     if (form.name && /^[0-9]+$/.test(form.name.trim())) {
       newErrors.name = "Invalid item name";
     }
-
+    if (form.name && form.name.trim().length < 2) {
+      newErrors.name = "Name must be at least 2 characters";
+    }
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
 
-    try {
-      setErrors({});
-      await onSubmit(e, form); // ← to może rzucić err — o to chodzi!
-    } catch (err) {
-      // backend validation
-      const apiErrors = err?.response?.data?.errors;
+    // 🔥 NORMALIZACJA CENY (PL → backend)
+    const payload = {
+      ...form,
+      price: Number(String(form.price).replace(",", ".")),
+    };
 
-      if (apiErrors) {
-        // jeśli tablica np.: ["Invalid item name"]
-        if (Array.isArray(apiErrors)) {
-          if (apiErrors.includes("Invalid item name")) {
-            setErrors({ name: "Invalid item name" });
-          }
-        }
+    setErrors({});
 
-        // jeśli obiekt: { name: "Item with this name already exists" }
-        if (typeof apiErrors === "object") {
-          setErrors(apiErrors);
-        }
+    const result = await onSubmit(payload);
 
-        return;
-      }
-
-      alert("Unexpected server error.");
+    if (result?.validationErrors) {
+      setErrors(result.validationErrors);
+      return;
     }
+
+    // sukces → modal zamyka rodzic
   };
 
   /* CLEAR ERROR ON CHANGE */
@@ -167,12 +160,11 @@ export default function EditItemModal({ open, item, onClose, onSubmit }) {
 
     setForm((prev) => ({ ...prev, [name]: value }));
 
-    // usuwa błąd pod inputem po edycji
     if (errors[name]) {
       setErrors((prev) => {
-        const obj = { ...prev };
-        delete obj[name];
-        return obj;
+        const copy = { ...prev };
+        delete copy[name];
+        return copy;
       });
     }
   };
