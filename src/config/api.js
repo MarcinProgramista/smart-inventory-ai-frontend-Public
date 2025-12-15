@@ -7,7 +7,7 @@ const API_CONFIG = {
     LOGOUT: "/api/auth/logout",
 
     ITEMS: "/api/items",
-    SEARCH: "/api/items/search?q=",
+    SEARCH: "/api/items/search",
 
     CATEGORIES: "/api/categories",
     SUPPLIERS: "/api/suppliers",

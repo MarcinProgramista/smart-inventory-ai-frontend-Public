@@ -14,19 +14,17 @@ export default function ItemsSearchBar({ onResults, userId }) {
   const handleSearch = async (value) => {
     setQuery(value);
 
-    if (value.trim() === "") {
-      const res = await axios.get(
-        `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.ITEMS}?user_id=${userId}`
-      );
-      onResults(res.data);
-      return;
-    }
-
     try {
-      const res = await axios.get(
-        `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.SEARCH}${value}`
-      );
-      onResults(res.data);
+      // 🔹 ZAWSZE używamy advanced search
+      const res = await axios.get(`${API_CONFIG.BASE_URL}/api/items/search`, {
+        params: {
+          q: value,
+          page: 1,
+          limit: 50,
+        },
+      });
+
+      onResults(res.data.items);
     } catch (err) {
       console.error("Search error:", err);
     }
