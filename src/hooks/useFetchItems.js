@@ -11,7 +11,7 @@ export default function useFetchItems(showThoast) {
         `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.ITEMS}?user_id=${userId}`,
         { withCredentials: true }
       );
-      setItems(res.data);
+      setItems(res.data.items ?? res.data);
     } catch (error) {
       console.log("Fetch items error:", error);
       showThoast?.("Faliled loading items", "errorS");

@@ -1,6 +1,6 @@
 import { Search } from "lucide-react";
 import axios from "axios";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import API_CONFIG from "../../config/api";
 import {
   Input,
@@ -8,8 +8,9 @@ import {
   SearchWrapper,
 } from "../shared/search/SearchBar.styles";
 
-export default function ItemsSearchBar({ onResults, userId }) {
+export default function ItemsSearchBar({ onResults }) {
   const [query, setQuery] = useState("");
+  const debounceRef = useRef(null);
 
   const handleSearch = async (value) => {
     setQuery(value);
@@ -22,6 +23,7 @@ export default function ItemsSearchBar({ onResults, userId }) {
           page: 1,
           limit: 50,
         },
+        withCredentials: true,
       });
 
       onResults(res.data.items);
@@ -30,13 +32,27 @@ export default function ItemsSearchBar({ onResults, userId }) {
     }
   };
 
+  const handleChange = (value) => {
+    setQuery(value);
+
+    // ❌ kasujemy poprzedni timer
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+    }
+
+    // ⏳ ustawiamy nowy
+    debounceRef.current = setTimeout(() => {
+      handleSearch(value);
+    }, 300);
+  };
+
   return (
     <SearchWrapper>
       <SearchBox>
         <Search />
         <Input
           value={query}
-          onChange={(e) => handleSearch(e.target.value)}
+          onChange={(e) => handleChange(e.target.value)}
           placeholder="Search inventory..."
           type="text"
         />
