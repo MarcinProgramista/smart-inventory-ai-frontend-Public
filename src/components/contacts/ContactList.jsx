@@ -20,11 +20,12 @@ export default function ContactList({
   onEdit,
   onAdd,
 }) {
+  const { auth } = useAuth();
   return (
     <PageWrapper>
       <ListHeader onAdd={onAdd} heading="Contacts" addTitle="Add Contact" />
 
-      <ContactsSearchBar onResult={onResult} />
+      <ContactsSearchBar onResult={onResult} userId={auth.id} />
 
       <TableWrapper>
         <Table>

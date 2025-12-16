@@ -1,9 +1,17 @@
+import { useEffect } from "react";
+import useAuth from "../hooks/useAuth";
 import ContactList from "../components/contacts/ContactList";
+import useFetchContacts from "../hooks/useFetchContacts";
 
 export default function Contacts() {
-  return (
-    <>
-      <ContactList />
-    </>
-  );
+  const { auth } = useAuth();
+  const { contacts, fetchContacts } = useFetchContacts();
+
+  useEffect(() => {
+    if (auth?.id) {
+      fetchContacts(auth.id);
+    }
+  }, [auth?.id]);
+
+  return <ContactList contacts={contacts} />;
 }
