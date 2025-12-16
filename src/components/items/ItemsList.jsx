@@ -1,5 +1,5 @@
 import { Pencil, Trash2 } from "lucide-react";
-import ItemsHeader from "./ItemsHeader";
+import ListHeader from "../shared/header/ListHeader";
 import ItemsSearchBar from "./ItemsSearchBar";
 import useAuth from "../../hooks/useAuth";
 import useExportItems from "../../hooks/useExportItems";
@@ -29,10 +29,12 @@ export default function ItemsList({
   const { exportCSV, exportPDF } = useExportItems();
   return (
     <PageWrapper>
-      <ItemsHeader
+      <ListHeader
         onAdd={onAdd}
         onExportCSV={() => exportCSV(items)}
         onExportPDF={() => exportPDF(items)}
+        heading="Items"
+        addTitle="Add Item"
       />
       <ItemsSearchBar onResults={onResults} userId={auth.id} />
 

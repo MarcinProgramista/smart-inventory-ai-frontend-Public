@@ -1,10 +1,10 @@
 import { ArrowLeft, PlusCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import NeonButton from "../ui/buttons/NeonButton";
 
-import { Header, ButtonsRow } from "./ItemsHeader.styles";
+import { Header, ButtonsRow } from "../header/ListHeader.styes";
+import NeonButton from "../../ui/buttons/NeonButton";
 
-export default function ItemsHeader({
+export default function ListHeader({
   onAdd,
   onExportCSV,
   onExportPDF,
