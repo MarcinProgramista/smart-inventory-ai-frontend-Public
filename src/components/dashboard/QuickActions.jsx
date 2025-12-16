@@ -68,7 +68,7 @@ export default function QuickActions() {
       <ActionCard onClick={() => navigate("/items/incoming")}>
         📦 Add Stock
       </ActionCard>
-
+      <ActionCard onClick={() => navigate("/contacts")}>👤 Contacts</ActionCard>
       <ActionCard onClick={() => navigate("/items/outgoing")}>
         📤 Remove Stock
       </ActionCard>
