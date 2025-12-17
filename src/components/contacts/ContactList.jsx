@@ -15,17 +15,28 @@ import ListHeader from "../shared/header/ListHeader";
 // const { exportCSV, exportPDF } = useExportItems();
 export default function ContactList({
   contacts = [],
-  onResult,
+  filters,
+  setFilters,
   onDelete,
   onEdit,
   onAdd,
-  userId,
 }) {
+  console.log(contacts);
+
   return (
     <PageWrapper>
       <ListHeader onAdd={onAdd} heading="Contacts" addTitle="Add Contact" />
 
-      <ContactsSearchBar onResults={onResult} userId={userId} />
+      <ContactsSearchBar
+        value={filters.q}
+        onChange={(value) =>
+          setFilters((prev) => ({
+            ...prev,
+            q: value,
+            page: 1,
+          }))
+        }
+      />
 
       <TableWrapper>
         <Table>

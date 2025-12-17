@@ -25,34 +25,51 @@ export default function Contacts() {
   const { showToast } = useContext(ToastContext);
 
   const [contacts, setContacts] = useState([]);
-
+  const [filters, setFilters] = useState({
+    q: "",
+    role: "",
+    page: 1,
+    limit: 20,
+  });
   useEffect(() => {
     const fetchContacts = async () => {
-      const res = await axios.get(`${API_CONFIG.BASE_URL}/api/contacts`, {
-        params: { user_id: auth?.id },
-        withCredentials: true,
-      });
+      const res = await axios.get(
+        `${API_CONFIG.BASE_URL}/api/contacts/search`,
+        {
+          params: {
+            q: filters.q,
+            role: filters.role,
+            page: filters.page,
+            limit: filters.limit,
+            user_id: auth?.id,
+          },
+          withCredentials: true,
+        }
+      );
 
-      setContacts(res.data);
+      setContacts(res.data.items || []);
     };
 
     if (auth?.id) {
       fetchContacts();
     }
-  }, [auth?.id]);
+  }, [auth?.id, filters]);
+
+  console.log("contacts is array?", Array.isArray(contacts), contacts);
 
   return (
     <Layout>
       {/* 🟦 LEWA KOLUMNA – FILTRY (PLACEHOLDER) */}
       <LeftColumn>
         <h4>Filters</h4>
-        <p>🔧 Tu będą filtry</p>
+        <pre>{JSON.stringify(filters, null, 2)}</pre>
       </LeftColumn>
 
       {/* 🟩 PRAWA KOLUMNA – LISTA + SEARCH */}
       <ContactList
         contacts={contacts}
-        onResult={setContacts}
+        filters={filters}
+        setFilters={setFilters}
         userId={auth?.id}
       />
     </Layout>
