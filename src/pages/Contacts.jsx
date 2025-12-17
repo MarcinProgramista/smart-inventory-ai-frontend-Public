@@ -62,7 +62,33 @@ export default function Contacts() {
       {/* 🟦 LEWA KOLUMNA – FILTRY (PLACEHOLDER) */}
       <LeftColumn>
         <h4>Filters</h4>
-        <pre>{JSON.stringify(filters, null, 2)}</pre>
+
+        <label style={{ display: "block", marginBottom: "0.5rem" }}>Role</label>
+
+        <select
+          value={filters.role}
+          onChange={(e) =>
+            setFilters((prev) => ({
+              ...prev,
+              role: e.target.value,
+              page: 1,
+            }))
+          }
+          style={{
+            width: "100%",
+            padding: "0.5rem",
+            borderRadius: "8px",
+          }}
+        >
+          <option value="">All roles</option>
+          <option value="manager">Manager</option>
+          <option value="client">Client</option>
+          <option value="supplier">Supplier</option>
+        </select>
+
+        <pre style={{ marginTop: "1rem", fontSize: "12px" }}>
+          {JSON.stringify(filters, null, 2)}
+        </pre>
       </LeftColumn>
 
       {/* 🟩 PRAWA KOLUMNA – LISTA + SEARCH */}
