@@ -5,6 +5,7 @@ import ToastContext from "../context/ToastContext";
 import axios from "axios";
 import API_CONFIG from "../config/api";
 import styled from "styled-components";
+import { useMemo } from "react";
 
 const Layout = styled.div`
   display: grid;
@@ -31,6 +32,13 @@ export default function Contacts() {
     page: 1,
     limit: 20,
   });
+
+  const availableRoles = useMemo(() => {
+    const roles = contacts.map((c) => c.role).filter(Boolean);
+
+    return Array.from(new Set(roles));
+  }, [contacts]);
+
   useEffect(() => {
     const fetchContacts = async () => {
       const res = await axios.get(
@@ -81,9 +89,12 @@ export default function Contacts() {
           }}
         >
           <option value="">All roles</option>
-          <option value="manager">Manager</option>
-          <option value="client">Client</option>
-          <option value="supplier">Supplier</option>
+
+          {availableRoles.map((role) => (
+            <option key={role} value={role}>
+              {role}
+            </option>
+          ))}
         </select>
 
         <pre style={{ marginTop: "1rem", fontSize: "12px" }}>
