@@ -6,6 +6,7 @@ import axios from "axios";
 import API_CONFIG from "../config/api";
 import styled from "styled-components";
 import { useMemo } from "react";
+import NeonDropdown from "../components/ui/NeonDropdown";
 
 const Layout = styled.div`
   display: grid;
@@ -63,8 +64,6 @@ export default function Contacts() {
     }
   }, [auth?.id, filters]);
 
-  console.log("contacts is array?", Array.isArray(contacts), contacts);
-
   return (
     <Layout>
       {/* 🟦 LEWA KOLUMNA – FILTRY (PLACEHOLDER) */}
@@ -72,30 +71,24 @@ export default function Contacts() {
         <h4>Filters</h4>
 
         <label style={{ display: "block", marginBottom: "0.5rem" }}>Role</label>
-
-        <select
+        <NeonDropdown
           value={filters.role}
-          onChange={(e) =>
+          onChange={(value) =>
             setFilters((prev) => ({
               ...prev,
-              role: e.target.value,
+              role: value,
               page: 1,
             }))
           }
-          style={{
-            width: "100%",
-            padding: "0.5rem",
-            borderRadius: "8px",
-          }}
-        >
-          <option value="">All roles</option>
-
-          {availableRoles.map((role) => (
-            <option key={role} value={role}>
-              {role}
-            </option>
-          ))}
-        </select>
+          placeholder="All roles"
+          options={[
+            { value: "", label: "All roles" },
+            ...availableRoles.map((role) => ({
+              value: role,
+              label: role,
+            })),
+          ]}
+        />
 
         <pre style={{ marginTop: "1rem", fontSize: "12px" }}>
           {JSON.stringify(filters, null, 2)}
