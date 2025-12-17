@@ -1,11 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useAuth from "../hooks/useAuth";
 import ContactList from "../components/contacts/ContactList";
 import useFetchContacts from "../hooks/useFetchContacts";
 
 export default function Contacts() {
   const { auth } = useAuth();
-  const { contacts, fetchContacts } = useFetchContacts();
+  const { contacts, setContacts, fetchContacts } = useFetchContacts();
 
   useEffect(() => {
     if (auth?.id) {
@@ -13,5 +13,11 @@ export default function Contacts() {
     }
   }, [auth?.id]);
 
-  return <ContactList contacts={contacts} />;
+  return (
+    <ContactList
+      contacts={contacts}
+      onResult={setContacts} // ✅ FUNKCJA
+      userId={auth?.id} // ✅ ID
+    />
+  );
 }

@@ -8,7 +8,7 @@ import {
   Th,
   Tr,
 } from "../shared/table/Table.styles";
-import useAuth from "../../hooks/useAuth";
+
 import ContactsSearchBar from "./ContactsSearchBar";
 import { Pencil, Trash2 } from "lucide-react";
 import ListHeader from "../shared/header/ListHeader";
@@ -19,13 +19,13 @@ export default function ContactList({
   onDelete,
   onEdit,
   onAdd,
+  userId,
 }) {
-  const { auth } = useAuth();
   return (
     <PageWrapper>
       <ListHeader onAdd={onAdd} heading="Contacts" addTitle="Add Contact" />
 
-      <ContactsSearchBar onResult={onResult} userId={auth.id} />
+      <ContactsSearchBar onResults={onResult} userId={userId} />
 
       <TableWrapper>
         <Table>
