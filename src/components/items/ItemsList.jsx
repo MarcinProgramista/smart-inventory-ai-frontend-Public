@@ -12,6 +12,8 @@ import {
   ActionButton,
 } from "../shared/table/Table.styles";
 import Pagination from "../shared/Pagination";
+import useCategories from "../../hooks/useCategories";
+import CategoryFilter from "./CategoryFilter";
 
 export default function ItemsList({
   items,
@@ -20,6 +22,8 @@ export default function ItemsList({
   total,
   query,
   onQueryChange,
+  categoryId,
+  onCategoryChange,
   onPrev,
   onNext,
   onDelete,
@@ -33,7 +37,7 @@ export default function ItemsList({
     }).format(v);
 
   const { exportCSV, exportPDF } = useExportItems();
-  console.log(items);
+  const categories = useCategories();
 
   return (
     <PageWrapper>
@@ -46,6 +50,12 @@ export default function ItemsList({
       />
 
       <ItemsSearchBar value={query} onChange={onQueryChange} />
+
+      <CategoryFilter
+        categories={categories}
+        value={categoryId}
+        onChange={onCategoryChange}
+      />
 
       <TableWrapper>
         <Table>
@@ -70,15 +80,12 @@ export default function ItemsList({
                 <Td>{item.quantity}</Td>
                 <Td>{item.min_quantity}</Td>
                 <Td>{item.supplier_name || "-"}</Td>
-
                 <Td $right>{formatPLN(item.price)}</Td>
                 <Td $right>{formatPLN(item.price * 1.23)}</Td>
-
                 <Td>
                   <ActionButton onClick={() => onEdit(item)}>
                     <Pencil size={16} />
                   </ActionButton>
-
                   <ActionButton $delete onClick={() => onDelete(item.id)}>
                     <Trash2 size={16} />
                   </ActionButton>

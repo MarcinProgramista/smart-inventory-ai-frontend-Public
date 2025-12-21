@@ -11,6 +11,7 @@ import useItemActions from "../hooks/useItemsActions";
 export default function Items() {
   const { auth } = useAuth();
   const { showToast } = useContext(ToastContext);
+
   const [editingItem, setEditingItem] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -18,19 +19,47 @@ export default function Items() {
 
   const [page, setPage] = useState(1);
   const limit = 5;
+
   const [query, setQuery] = useState("");
+  const [categoryId, setCategoryId] = useState("");
 
   const drawerOpen = searchParams.get("add") === "true";
 
-  useEffect(() => {
-    if (!auth?.id) return;
-    fetchItems(auth.id, { page, limit, q: query });
-  }, [auth.id, page, query]);
+  const openModal = () => setSearchParams({ add: "true" });
+  const closeModal = () => setSearchParams({});
 
   const { addItem, editItem, deleteItem } = useItemActions({
-    closeModal: () => setSearchParams({}),
+    closeModal,
     showToast,
   });
+
+  useEffect(() => {
+    if (!auth?.id) return;
+
+    fetchItems(auth.id, {
+      page,
+      limit,
+      q: query,
+      categoryId,
+    });
+  }, [auth?.id, page, query, categoryId]);
+
+  const openEditModal = (item) => setEditingItem(item);
+
+  const handleDelete = async (id) => {
+    await deleteItem(id);
+    fetchItems(auth.id, { page, limit, q: query, categoryId });
+  };
+
+  const handleQueryChange = (v) => {
+    setPage(1);
+    setQuery(v);
+  };
+
+  const handleCategoryChange = (id) => {
+    setPage(1);
+    setCategoryId(id);
+  };
 
   return (
     <>
@@ -40,26 +69,22 @@ export default function Items() {
         limit={limit}
         total={total}
         query={query}
-        onQueryChange={(v) => {
-          setPage(1);
-          setQuery(v);
-        }}
+        categoryId={categoryId}
+        onQueryChange={handleQueryChange}
+        onCategoryChange={handleCategoryChange}
         onPrev={() => setPage((p) => Math.max(1, p - 1))}
         onNext={() => setPage((p) => p + 1)}
-        onAdd={() => setSearchParams({ add: "true" })}
-        onEdit={setEditingItem}
-        onDelete={async (id) => {
-          await deleteItem(id);
-          fetchItems(auth.id, { page, limit, q: query });
-        }}
+        onAdd={openModal}
+        onEdit={openEditModal}
+        onDelete={handleDelete}
       />
 
       <AddItemModal
         open={drawerOpen}
-        onClose={() => setSearchParams({})}
-        onSubmit={async (p) => {
-          await addItem(p);
-          fetchItems(auth.id, { page, limit, q: query });
+        onClose={closeModal}
+        onSubmit={async (payload) => {
+          await addItem(payload);
+          fetchItems(auth.id, { page, limit, q: query, categoryId });
         }}
       />
 
@@ -67,10 +92,10 @@ export default function Items() {
         open={!!editingItem}
         item={editingItem}
         onClose={() => setEditingItem(null)}
-        onSubmit={async (p) => {
-          await editItem(editingItem.id, p);
+        onSubmit={async (payload) => {
+          await editItem(editingItem.id, payload);
           setEditingItem(null);
-          fetchItems(auth.id, { page, limit, q: query });
+          fetchItems(auth.id, { page, limit, q: query, categoryId });
         }}
       />
     </>
