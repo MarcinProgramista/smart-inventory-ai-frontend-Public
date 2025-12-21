@@ -16,15 +16,15 @@ export default function Items() {
   const { showToast } = useContext(ToastContext);
   const [searchParams, setSearchParams] = useSearchParams();
   const drawerOpen = searchParams.get("add") === "true";
-  const { items, setItems, fetchItems } = useFetchItems(showToast);
+  const { items, total, setItems, fetchItems } = useFetchItems(showToast);
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(20);
-  const [total, setTotal] = useState(0);
+  const [limit] = useState(20);
+  const [query, setQuery] = useState("");
 
   useEffect(() => {
     if (!auth?.id) return;
-    fetchItems(auth.id, { page, limit });
-  }, [auth.id, page, limit]);
+    fetchItems(auth.id, { page, limit, q: query });
+  }, [auth.id, page, limit, query]);
 
   const openModal = () => setSearchParams({ add: "true" });
   const closeModal = () => setSearchParams({});
@@ -34,8 +34,18 @@ export default function Items() {
     closeModal,
     showToast,
   });
+  const handleQueryChange = (q) => {
+    setPage(1);
+    setQuery(q);
+  };
+  const handleSubmitItem = async (payload) => {
+    const result = await addItem(payload);
 
-  const handleSubmitItem = (payload) => addItem(payload);
+    // 🔥 KLUCZOWE
+    await fetchItems(auth.id, { page, limit });
+
+    return result;
+  };
 
   function openEditModal(item) {
     return setEditingItem({ ...item });
@@ -53,7 +63,13 @@ export default function Items() {
     return result;
   };
 
-  const handleDelete = async (id) => deleteItem(id, editingItem);
+  const handleDelete = async (id) => {
+    await deleteItem(id, editingItem);
+
+    // 🔥 ZAWSZE odśwież
+    await fetchItems(auth.id, { page, limit });
+  };
+
   return (
     <>
       <ItemsList
@@ -61,6 +77,7 @@ export default function Items() {
         page={page}
         limit={limit}
         total={total}
+        onQueryChange={handleQueryChange}
         onPrev={() => setPage((p) => Math.max(1, p - 1))}
         onNext={() => setPage((p) => p + 1)}
         onDelete={handleDelete}

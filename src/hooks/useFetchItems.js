@@ -2,42 +2,27 @@ import axios from "axios";
 import API_CONFIG from "../config/api";
 import { useState } from "react";
 
+// useFetchItems.js
 export default function useFetchItems(showToast) {
   const [items, setItems] = useState([]);
   const [total, setTotal] = useState(0);
-  const fetchItems = async (userId, { page = 1, limit = 10 } = {}) => {
-    console.log("FETCH ITEMS", { page, limit }); // 👈 KROK 1
 
+  const fetchItems = async (userId, { page = 1, limit = 20, q = "" } = {}) => {
     try {
       const res = await axios.get(
         `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.ITEMS_SEARCH}`,
-
         {
-          params: {
-            user_id: userId,
-            page,
-            limit,
-          },
+          params: { user_id: userId, page, limit, q },
           withCredentials: true,
         }
       );
 
-      setItems(res.data.items ?? []);
-      setTotal(res.data.total ?? 0);
-
-      console.log("FETCH ITEMS RESULT", {
-        itemsCount: res.data.items?.length,
-        total: res.data.total,
-      });
-    } catch (error) {
-      console.log("Fetch items error:", error);
+      setItems(res.data.items);
+      setTotal(res.data.total);
+    } catch (err) {
       showToast?.("Failed loading items", "error");
     }
   };
 
-  return {
-    items,
-    setItems,
-    fetchItems,
-  };
+  return { items, total, fetchItems };
 }

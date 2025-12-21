@@ -19,7 +19,7 @@ export default function ItemsList({
   onDelete,
   onEdit,
   onAdd,
-  onResults,
+  onQueryChange,
   page,
   limit,
   total,
@@ -33,6 +33,8 @@ export default function ItemsList({
       currency: "PLN",
     }).format(v);
   const { exportCSV, exportPDF } = useExportItems();
+  console.log(items);
+
   return (
     <PageWrapper>
       <ListHeader
@@ -42,7 +44,7 @@ export default function ItemsList({
         heading="Items"
         addTitle="Add Item"
       />
-      <ItemsSearchBar onResults={onResults} userId={auth.id} />
+      <ItemsSearchBar onQueryChange={onQueryChange} />
 
       <TableWrapper>
         <Table>
