@@ -2,100 +2,52 @@
 import axios from "axios";
 import API_CONFIG from "../config/api";
 
-export default function useItemActions({
-  setItems,
-  closeModal,
-  closeEditModal,
-  showToast,
-}) {
-  /* ADD ITEM */
-  const addItem = async (itemData) => {
+export default function useItemActions({ closeModal, showToast }) {
+  const addItem = async (payload) => {
     try {
       const res = await axios.post(
         `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.ITEMS}`,
-        itemData,
+        payload,
         { withCredentials: true }
       );
 
-      const fullItem = res.data.item;
-
-      if (res.data.updated) {
-        setItems((prev) =>
-          prev.map((i) => (i.id === fullItem.id ? fullItem : i))
-        );
-      } else {
-        setItems((prev) => [fullItem, ...prev]);
-      }
-
-      closeModal?.();
-      showToast?.(
-        res.data.updated ? "Quantity updated!" : "Item added!",
-        "success"
-      );
-
-      return fullItem;
-    } catch (error) {
-      console.error("AddItem error:", error);
-      throw error;
+      closeModal();
+      return res.data;
+    } catch (err) {
+      console.error("AddItem error:", err);
+      showToast?.("Failed to add item", "error");
+      throw err;
     }
   };
 
-  /* EDIT ITEM */
-  const editItem = async (id, updatedItem) => {
-    try {
-      const res = await axios.patch(
-        `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.ITEMS}/${id}`,
-        updatedItem,
-        { withCredentials: true }
-      );
-
-      const fullItem = res.data.item;
-
-      setItems((prev) =>
-        prev.map((i) => (i.id === fullItem.id ? fullItem : i))
-      );
-
-      showToast?.("Item updated", "success");
-
-      return fullItem;
-    } catch (error) {
-      // 🔴 TO JEST KLUCZ
-      if (error.response?.status === 400 && error.response.data?.errors) {
-        return {
-          validationErrors: error.response.data.errors,
-        };
-      }
-
-      // ❌ tylko PRAWDZIWE błędy
-      console.error("EditItem error:", error);
-      throw error;
-    }
-  };
-
-  /* DELETE ITEM */
-  const deleteItem = async (id, editingItem) => {
+  const deleteItem = async (id) => {
     try {
       await axios.delete(
         `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.ITEMS}/${id}`,
         { withCredentials: true }
       );
-
-      setItems((prev) => prev.filter((i) => i.id !== id));
-
-      if (editingItem?.id === id) {
-        closeEditModal?.();
-      }
-
-      showToast?.("Item deleted", "success");
-    } catch (error) {
-      console.error("DeleteItem error:", error);
+    } catch (err) {
+      console.error("DeleteItem error:", err);
       showToast?.("Failed to delete item", "error");
+      throw err;
     }
   };
 
-  return {
-    addItem,
-    editItem,
-    deleteItem,
+  const editItem = async (id, payload) => {
+    try {
+      const res = await axios.patch(
+        `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.ITEMS}/${id}`,
+        payload,
+        { withCredentials: true }
+      );
+
+      return res.data;
+    } catch (err) {
+      console.error("EditItem error:", err);
+      showToast?.("Failed to edit item", "error");
+      throw err;
+    }
   };
+
+  return { addItem, deleteItem, editItem };
 }

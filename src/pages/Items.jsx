@@ -12,30 +12,37 @@ import useItemActions from "../hooks/useItemsActions";
 
 export default function Items() {
   const [editingItem, setEditingItem] = useState(null);
-
   const { auth } = useAuth();
   const { showToast } = useContext(ToastContext);
-
   const [searchParams, setSearchParams] = useSearchParams();
   const drawerOpen = searchParams.get("add") === "true";
-
-  const { items, setItems, fetchItems } = useFetchItems(showToast);
+  const { items, fetchItems, total } = useFetchItems(showToast);
+  const [page, setPage] = useState(1);
+  const limit = 5;
+  const [query, setQuery] = useState("");
 
   useEffect(() => {
-    fetchItems(auth.id);
-  }, [auth.id]);
+    if (!auth?.id) return;
+
+    fetchItems(auth.id, {
+      page,
+      limit,
+      q: query,
+    });
+  }, [auth.id, page, query]);
 
   const openModal = () => setSearchParams({ add: "true" });
   const closeModal = () => setSearchParams({});
 
   const { addItem, editItem, deleteItem } = useItemActions({
-    setItems,
     closeModal,
     showToast,
   });
 
-  const handleSubmitItem = (payload) => addItem(payload);
-
+  const handleSubmitItem = async (payload) => {
+    await addItem(payload);
+    await fetchItems(auth.id, { page, limit });
+  };
   function openEditModal(item) {
     return setEditingItem({ ...item });
   }
@@ -47,20 +54,33 @@ export default function Items() {
     if (result?.validationErrors) {
       return result;
     }
-
+    await fetchItems(auth.id, { page, limit });
     closeEditModal();
     return result;
   };
 
-  const handleDelete = async (id) => deleteItem(id, editingItem);
+  const handleDelete = async (id) => {
+    await deleteItem(id, editingItem);
+    await fetchItems(auth.id, { page, limit });
+  };
+
   return (
     <>
       <ItemsList
         items={items}
-        onDelete={handleDelete}
+        page={page}
+        limit={limit}
+        total={total}
+        query={query}
+        onQueryChange={(value) => {
+          setPage(1); // ✅ TU JEST OK
+          setQuery(value);
+        }}
+        onPrev={() => setPage((p) => Math.max(1, p - 1))}
+        onNext={() => setPage((p) => p + 1)}
         onAdd={openModal}
-        onResults={setItems}
         onEdit={openEditModal}
+        onDelete={handleDelete}
       />
 
       <AddItemModal

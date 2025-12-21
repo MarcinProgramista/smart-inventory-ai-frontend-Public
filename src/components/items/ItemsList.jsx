@@ -12,15 +12,21 @@ import {
   Tr,
   ActionButton,
 } from "../shared/table/Table.styles";
+import Pagination from "../shared/Pagination";
 
 export default function ItemsList({
   items,
+  page,
+  limit,
+  total,
+  onPrev,
+  onNext,
   onDelete,
   onEdit,
   onAdd,
-  onResults,
+  query,
+  onQueryChange,
 }) {
-  const { auth } = useAuth();
   const formatPLN = (v) =>
     new Intl.NumberFormat("pl-PL", {
       style: "currency",
@@ -36,7 +42,7 @@ export default function ItemsList({
         heading="Items"
         addTitle="Add Item"
       />
-      <ItemsSearchBar onResults={onResults} userId={auth.id} />
+      <ItemsSearchBar value={query} onChange={onQueryChange} />
 
       <TableWrapper>
         <Table>
@@ -77,6 +83,14 @@ export default function ItemsList({
           </tbody>
         </Table>
       </TableWrapper>
+      <Pagination
+        page={page}
+        totalPages={Math.ceil(total / limit)}
+        canPrev={page > 1}
+        canNext={page < Math.ceil(total / limit)}
+        onPrev={onPrev}
+        onNext={onNext}
+      />
     </PageWrapper>
   );
 }
