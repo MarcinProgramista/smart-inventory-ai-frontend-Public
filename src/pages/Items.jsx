@@ -12,17 +12,17 @@ import useItemActions from "../hooks/useItemsActions";
 
 export default function Items() {
   const [editingItem, setEditingItem] = useState(null);
-
   const { auth } = useAuth();
   const { showToast } = useContext(ToastContext);
-
   const [searchParams, setSearchParams] = useSearchParams();
   const drawerOpen = searchParams.get("add") === "true";
-
   const { items, setItems, fetchItems } = useFetchItems(showToast);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(20);
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
-    fetchItems(auth.id);
+    fetchItems(auth.id, { page, limit });
   }, [auth.id]);
 
   const openModal = () => setSearchParams({ add: "true" });
