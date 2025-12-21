@@ -33,6 +33,7 @@ export default function ItemsList({
     }).format(v);
 
   const { exportCSV, exportPDF } = useExportItems();
+  console.log(items);
 
   return (
     <PageWrapper>
@@ -51,6 +52,7 @@ export default function ItemsList({
           <thead>
             <Tr>
               <Th>Name</Th>
+              <Th>Category</Th>
               <Th>Quantity</Th>
               <Th>Min</Th>
               <Th>Supplier</Th>
@@ -64,6 +66,7 @@ export default function ItemsList({
             {items.map((item) => (
               <Tr key={item.id}>
                 <Td>{item.name}</Td>
+                <Td>{item.category_name || "-"}</Td>
                 <Td>{item.quantity}</Td>
                 <Td>{item.min_quantity}</Td>
                 <Td>{item.supplier_name || "-"}</Td>
