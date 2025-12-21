@@ -6,6 +6,7 @@ const API_CONFIG = {
     REFRESH_TOKEN: "/api/auth/refresh_token",
     LOGOUT: "/api/auth/logout",
     ITEMS_SEARCH: "/api/items/search",
+
     ITEMS: "/api/items",
     SEARCH: "/api/items/search",
 

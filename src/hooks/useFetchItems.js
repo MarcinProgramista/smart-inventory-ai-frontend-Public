@@ -17,10 +17,11 @@ export default function useFetchItems(showToast) {
         }
       );
 
-      setItems(res.data.items);
-      setTotal(res.data.total);
+      setItems(res.data.items ?? []);
+      setTotal(res.data.total ?? 0);
     } catch (err) {
-      showToast?.("Failed loading items", "error");
+      console.error("Fetch items error:", err);
+      showToast?.("Failed to load items", "error");
     }
   };
 

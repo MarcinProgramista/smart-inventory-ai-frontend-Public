@@ -1,7 +1,6 @@
 import { Pencil, Trash2 } from "lucide-react";
 import ListHeader from "../shared/header/ListHeader";
 import ItemsSearchBar from "./ItemsSearchBar";
-import useAuth from "../../hooks/useAuth";
 import useExportItems from "../../hooks/useExportItems";
 import {
   TableWrapper,
@@ -16,24 +15,24 @@ import Pagination from "../shared/Pagination";
 
 export default function ItemsList({
   items,
-  onDelete,
-  onEdit,
-  onAdd,
-  onQueryChange,
   page,
   limit,
   total,
+  query,
+  onQueryChange,
   onPrev,
   onNext,
+  onDelete,
+  onEdit,
+  onAdd,
 }) {
-  const { auth } = useAuth();
   const formatPLN = (v) =>
     new Intl.NumberFormat("pl-PL", {
       style: "currency",
       currency: "PLN",
     }).format(v);
+
   const { exportCSV, exportPDF } = useExportItems();
-  console.log(items);
 
   return (
     <PageWrapper>
@@ -44,7 +43,8 @@ export default function ItemsList({
         heading="Items"
         addTitle="Add Item"
       />
-      <ItemsSearchBar onQueryChange={onQueryChange} />
+
+      <ItemsSearchBar value={query} onChange={onQueryChange} />
 
       <TableWrapper>
         <Table>
@@ -85,6 +85,7 @@ export default function ItemsList({
           </tbody>
         </Table>
       </TableWrapper>
+
       <Pagination
         page={page}
         totalPages={Math.ceil(total / limit)}
