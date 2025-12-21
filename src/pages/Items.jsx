@@ -58,12 +58,15 @@ export default function Items() {
     <>
       <ItemsList
         items={items}
+        page={page}
+        limit={limit}
+        total={total}
+        onPrev={() => setPage((p) => Math.max(1, p - 1))}
+        onNext={() => setPage((p) => p + 1)}
         onDelete={handleDelete}
         onAdd={openModal}
-        onResults={setItems}
         onEdit={openEditModal}
       />
-      <button onClick={() => setPage((p) => p + 1)}>TEST NEXT</button>
 
       <AddItemModal
         open={drawerOpen}

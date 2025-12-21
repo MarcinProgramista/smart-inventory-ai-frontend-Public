@@ -12,6 +12,7 @@ import {
   Tr,
   ActionButton,
 } from "../shared/table/Table.styles";
+import Pagination from "../shared/Pagination";
 
 export default function ItemsList({
   items,
@@ -19,6 +20,11 @@ export default function ItemsList({
   onEdit,
   onAdd,
   onResults,
+  page,
+  limit,
+  total,
+  onPrev,
+  onNext,
 }) {
   const { auth } = useAuth();
   const formatPLN = (v) =>
@@ -77,6 +83,14 @@ export default function ItemsList({
           </tbody>
         </Table>
       </TableWrapper>
+      <Pagination
+        page={page}
+        totalPages={Math.ceil(total / limit)}
+        canPrev={page > 1}
+        canNext={page < Math.ceil(total / limit)}
+        onPrev={onPrev}
+        onNext={onNext}
+      />
     </PageWrapper>
   );
 }
