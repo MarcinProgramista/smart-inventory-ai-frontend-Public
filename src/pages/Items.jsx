@@ -22,8 +22,9 @@ export default function Items() {
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
+    if (!auth?.id) return;
     fetchItems(auth.id, { page, limit });
-  }, [auth.id]);
+  }, [auth.id, page, limit]);
 
   const openModal = () => setSearchParams({ add: "true" });
   const closeModal = () => setSearchParams({});
@@ -62,6 +63,7 @@ export default function Items() {
         onResults={setItems}
         onEdit={openEditModal}
       />
+      <button onClick={() => setPage((p) => p + 1)}>TEST NEXT</button>
 
       <AddItemModal
         open={drawerOpen}
