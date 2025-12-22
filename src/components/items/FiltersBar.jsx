@@ -18,6 +18,7 @@ const Bar = styled.div`
 
 export default function FiltersBar({
   query,
+  categories,
   onQueryChange,
   categoryId,
   onCategoryChange,
@@ -26,7 +27,11 @@ export default function FiltersBar({
     <Bar>
       <ItemsSearchBar value={query} onChange={onQueryChange} />
 
-      <CategoryFilter value={categoryId} onChange={onCategoryChange} />
+      <CategoryFilter
+        value={categoryId}
+        onChange={onCategoryChange}
+        categories={categories}
+      />
 
       {/* 🔜 */}
       {/* <StockFilter value={stock} onChange={onStockChange} /> */}

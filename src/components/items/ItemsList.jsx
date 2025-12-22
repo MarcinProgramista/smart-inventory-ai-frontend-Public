@@ -52,6 +52,7 @@ export default function ItemsList({
 
       <FiltersBar
         query={query}
+        categories={categories}
         onQueryChange={onQueryChange}
         categoryId={categoryId}
         onCategoryChange={onCategoryChange}
