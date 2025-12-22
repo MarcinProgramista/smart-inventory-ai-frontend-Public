@@ -1,8 +1,5 @@
-// src/components/items/CategoryFilter.jsx
-import { useState } from "react";
 import styled from "styled-components";
-import { ChevronDown } from "lucide-react";
-import NeonButton from "../ui/buttons/NeonButton";
+import NeonSelect from "../ui/selects/NeonSelect";
 
 const Wrapper = styled.div`
   position: relative;
@@ -44,35 +41,20 @@ const Item = styled.li`
 `;
 
 export default function CategoryFilter({ categories = [], value, onChange }) {
-  const [open, setOpen] = useState(false);
-
-  const selected =
-    categories.find((c) => String(c.id) === String(value))?.name ||
-    "ALL CATEGORIES";
-
-  const select = (id) => {
-    onChange(id);
-    setOpen(false);
-  };
-
+  const options = [
+    { value: "", label: "ALL CATEGORIES" },
+    ...categories.map((c) => ({
+      value: c.id,
+      label: c.name,
+    })),
+  ];
   return (
-    <Wrapper>
-      <NeonButton size="sm" onClick={() => setOpen((o) => !o)}>
-        {selected}
-        <ChevronDown size={16} />
-      </NeonButton>
-
-      {open && (
-        <Menu>
-          <Item onClick={() => select("")}>ALL CATEGORIES</Item>
-
-          {categories.map((c) => (
-            <Item key={c.id} onClick={() => select(c.id)}>
-              {c.name}
-            </Item>
-          ))}
-        </Menu>
-      )}
-    </Wrapper>
+    <NeonSelect
+      options={options}
+      value={value}
+      onChange={onChange}
+      width="200px"
+      size="sm"
+    />
   );
 }
