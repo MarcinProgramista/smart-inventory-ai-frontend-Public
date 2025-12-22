@@ -28,7 +28,7 @@ export default function Pagination({
 
   return (
     <Wrapper>
-      <NeonButton width="120px" disabled={!canPrev} onClick={onPrev}>
+      <NeonButton size="sm" width="120px" disabled={!canPrev} onClick={onPrev}>
         ◀ PREV
       </NeonButton>
 
@@ -36,7 +36,7 @@ export default function Pagination({
         PAGE {page} / {totalPages}
       </Info>
 
-      <NeonButton width="120px" disabled={!canNext} onClick={onNext}>
+      <NeonButton size="sm" width="120px" disabled={!canNext} onClick={onNext}>
         NEXT ▶
       </NeonButton>
     </Wrapper>

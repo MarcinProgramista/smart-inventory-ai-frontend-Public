@@ -57,7 +57,7 @@ export default function CategoryFilter({ categories = [], value, onChange }) {
 
   return (
     <Wrapper>
-      <NeonButton onClick={() => setOpen((o) => !o)}>
+      <NeonButton size="sm" onClick={() => setOpen((o) => !o)}>
         {selected}
         <ChevronDown size={16} />
       </NeonButton>

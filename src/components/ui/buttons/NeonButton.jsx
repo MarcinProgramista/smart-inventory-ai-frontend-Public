@@ -1,16 +1,34 @@
-import styled from "styled-components";
+// src/components/ui/buttons/NeonButton.jsx
+import styled, { css } from "styled-components";
+
+const sizeStyles = {
+  sm: css`
+    padding: 8px 12px;
+    font-size: 0.8rem;
+    border-radius: 8px;
+  `,
+  md: css`
+    padding: 12px 16px;
+    font-size: 0.95rem;
+    border-radius: 10px;
+  `,
+  lg: css`
+    padding: 14px 20px;
+    font-size: 1.05rem;
+    border-radius: 12px;
+  `,
+};
 
 const NeonButton = styled.button.withConfig({
-  shouldForwardProp: (prop) => !["secondary", "width"].includes(prop),
+  shouldForwardProp: (prop) => !["secondary", "width", "size"].includes(prop),
 })`
   &&& {
     width: ${(p) => p.width || "auto"};
     flex: ${(p) => (p.width ? "0 0 auto" : "1")};
 
-    padding: 12px 16px;
-    border-radius: 10px;
-    border: 1px solid rgba(0, 200, 255, 0.35);
+    ${(p) => sizeStyles[p.size || "md"]};
 
+    border: 1px solid rgba(0, 200, 255, 0.35);
     background: ${(p) =>
       p.secondary ? "rgba(0, 0, 0, 0.35)" : "rgba(0, 170, 255, 0.22)"};
 
@@ -32,13 +50,12 @@ const NeonButton = styled.button.withConfig({
       inset 0 0 8px rgba(0, 200, 255, 0.25);
 
     svg {
-      width: 20px;
-      height: 20px;
+      width: 18px;
+      height: 18px;
       stroke: #9deaff;
       filter: drop-shadow(0 0 4px rgba(0, 200, 255, 0.9));
     }
 
-    /* 🔥 HOVER tylko gdy aktywny */
     &:hover:not(:disabled) {
       background: rgba(0, 180, 255, 0.45);
       box-shadow:
@@ -51,7 +68,6 @@ const NeonButton = styled.button.withConfig({
       transform: translateY(0);
     }
 
-    /* ❌ DISABLED – prawdziwie nieaktywny */
     &:disabled {
       cursor: not-allowed;
       opacity: 0.35;
