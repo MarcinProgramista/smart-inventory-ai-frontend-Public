@@ -14,6 +14,7 @@ import {
 import Pagination from "../shared/Pagination";
 import useCategories from "../../hooks/useCategories";
 import CategoryFilter from "./CategoryFilter";
+import FiltersBar from "./FiltersBar";
 
 export default function ItemsList({
   items,
@@ -49,14 +50,12 @@ export default function ItemsList({
         addTitle="Add Item"
       />
 
-      <ItemsSearchBar value={query} onChange={onQueryChange} />
-
-      <CategoryFilter
-        categories={categories}
-        value={categoryId}
-        onChange={onCategoryChange}
+      <FiltersBar
+        query={query}
+        onQueryChange={onQueryChange}
+        categoryId={categoryId}
+        onCategoryChange={onCategoryChange}
       />
-
       <TableWrapper>
         <Table>
           <thead>
