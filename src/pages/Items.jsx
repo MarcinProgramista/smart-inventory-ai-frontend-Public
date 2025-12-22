@@ -43,7 +43,7 @@ export default function Items() {
       categoryId,
       stock,
     });
-  }, [auth?.id, page, query, categoryId]);
+  }, [auth?.id, page, query, categoryId, stock]);
 
   const openEditModal = (item) => setEditingItem(item);
 
@@ -82,6 +82,7 @@ export default function Items() {
           setPage(1);
           setStock(v);
         }}
+        stock={stock}
       />
 
       <AddItemModal
