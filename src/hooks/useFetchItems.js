@@ -9,7 +9,16 @@ export default function useFetchItems(showToast) {
 
   const fetchItems = async (
     userId,
-    { page = 1, limit = 20, q = "", categoryId = "", stock = "" } = {}
+    {
+      page = 1,
+      limit = 20,
+      q = "",
+      categoryId = "",
+      stock = "",
+      supplierId = "",
+      sort = "name",
+      order = "asc",
+    } = {}
   ) => {
     const res = await axios.get(
       `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.ITEMS_SEARCH}`,
@@ -20,7 +29,10 @@ export default function useFetchItems(showToast) {
           limit,
           q,
           category_id: categoryId || undefined,
+          supplier_id: supplierId || undefined,
           stock,
+          sort,
+          order,
         },
         withCredentials: true,
       }

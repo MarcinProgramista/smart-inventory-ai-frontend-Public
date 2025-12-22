@@ -22,7 +22,9 @@ export default function Items() {
 
   const [query, setQuery] = useState("");
   const [categoryId, setCategoryId] = useState("");
-
+  const [supplierId, setSupplierId] = useState("");
+  const [sortBy, setSortBy] = useState("name");
+  const [sortOrder, setSortOrder] = useState("asc");
   const drawerOpen = searchParams.get("add") === "true";
 
   const openModal = () => setSearchParams({ add: "true" });
@@ -42,8 +44,11 @@ export default function Items() {
       q: query,
       categoryId,
       stock,
+      supplierId,
+      sort: sortBy,
+      order: sortOrder,
     });
-  }, [auth?.id, page, query, categoryId, stock]);
+  }, [auth?.id, page, query, categoryId, stock, supplierId, sortBy, sortOrder]);
 
   const openEditModal = (item) => setEditingItem(item);
 
@@ -56,7 +61,11 @@ export default function Items() {
     setPage(1);
     setQuery(v);
   };
-
+  const handleSortChange = (by, order) => {
+    setPage(1);
+    setSortBy(by);
+    setSortOrder(order);
+  };
   const handleCategoryChange = (id) => {
     setPage(1);
     setCategoryId(id);
@@ -83,6 +92,14 @@ export default function Items() {
           setStock(v);
         }}
         stock={stock}
+        supplierId={supplierId}
+        onSupplierChange={(v) => {
+          setPage(1);
+          setSupplierId(v);
+        }}
+        sortBy={sortBy}
+        sortOrder={sortOrder}
+        onSortChange={handleSortChange}
       />
 
       <AddItemModal

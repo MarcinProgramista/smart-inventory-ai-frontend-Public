@@ -13,9 +13,10 @@ import {
 } from "../shared/table/Table.styles";
 import Pagination from "../shared/Pagination";
 import useCategories from "../../hooks/useCategories";
-import CategoryFilter from "./CategoryFilter";
+import CategoryFilter from "./EntityFilter";
 import FiltersBar from "./FiltersBar";
 import StockBadge from "./StockBadge";
+import useSuppliers from "../../hooks/useSuppliers";
 
 export default function ItemsList({
   items,
@@ -33,6 +34,11 @@ export default function ItemsList({
   onAdd,
   stock,
   onStockChange,
+  supplierId,
+  onSupplierChange,
+  sortBy,
+  sortOrder,
+  onSortChange,
 }) {
   const formatPLN = (v) =>
     new Intl.NumberFormat("pl-PL", {
@@ -42,6 +48,7 @@ export default function ItemsList({
 
   const { exportCSV, exportPDF } = useExportItems();
   const categories = useCategories();
+  const suppliers = useSuppliers();
 
   return (
     <PageWrapper>
@@ -61,6 +68,12 @@ export default function ItemsList({
         onCategoryChange={onCategoryChange}
         stock={stock}
         onStockChange={onStockChange}
+        supplierId={supplierId}
+        suppliers={suppliers}
+        onSupplierChange={onSupplierChange}
+        sortBy={sortBy}
+        sortOrder={sortOrder}
+        onSortChange={onSortChange}
       />
 
       <TableWrapper>

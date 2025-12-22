@@ -40,20 +40,27 @@ const Item = styled.li`
   }
 `;
 
-export default function CategoryFilter({ categories = [], value, onChange }) {
+export default function EntityFilter({
+  items = [],
+  value,
+  onChange,
+  allLabel = "ALL",
+  width = "200px",
+}) {
   const options = [
-    { value: "", label: "ALL CATEGORIES" },
-    ...categories.map((c) => ({
-      value: c.id,
-      label: c.name,
+    { value: "", label: allLabel },
+    ...items.map((i) => ({
+      value: i.id,
+      label: i.name,
     })),
   ];
+
   return (
     <NeonSelect
       options={options}
       value={value}
       onChange={onChange}
-      width="200px"
+      width={width}
       size="sm"
     />
   );

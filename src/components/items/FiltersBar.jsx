@@ -1,9 +1,9 @@
 // src/components/items/FiltersBar.jsx
 import styled from "styled-components";
 import ItemsSearchBar from "./ItemsSearchBar";
-import CategoryFilter from "./CategoryFilter";
+import EntityFilter from "./EntityFilter";
 import StockFilter from "./StockFilter";
-// import StockFilter from "./StockFilter"; // później
+import SortBar from "./SortBar";
 
 const Bar = styled.div`
   display: flex;
@@ -25,17 +25,35 @@ export default function FiltersBar({
   onCategoryChange,
   stock,
   onStockChange,
+  supplierId,
+  suppliers,
+  onSupplierChange,
+  sortBy,
+  sortOrder,
+  onSortChange,
 }) {
   return (
     <Bar>
       <ItemsSearchBar value={query} onChange={onQueryChange} />
 
-      <CategoryFilter
+      <EntityFilter
+        items={categories}
         value={categoryId}
         onChange={onCategoryChange}
-        categories={categories}
+        allLabel="ALL CATEGORIES"
+      />
+      <EntityFilter
+        items={suppliers}
+        value={supplierId}
+        onChange={onSupplierChange}
+        allLabel="ALL SUPPLIERS"
       />
 
+      <SortBar
+        sortBy={sortBy}
+        sortOrder={sortOrder}
+        onSortChange={onSortChange}
+      />
       <StockFilter value={stock} onChange={onStockChange} />
     </Bar>
   );
