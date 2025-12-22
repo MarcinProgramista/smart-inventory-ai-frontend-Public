@@ -15,6 +15,7 @@ import Pagination from "../shared/Pagination";
 import useCategories from "../../hooks/useCategories";
 import CategoryFilter from "./CategoryFilter";
 import FiltersBar from "./FiltersBar";
+import StockBadge from "./StockBadge";
 
 export default function ItemsList({
   items,
@@ -70,6 +71,7 @@ export default function ItemsList({
               <Th>Category</Th>
               <Th>Quantity</Th>
               <Th>Min</Th>
+              <Th>Status</Th>
               <Th>Supplier</Th>
               <Th $right>Netto</Th>
               <Th $right>Brutto</Th>
@@ -85,6 +87,13 @@ export default function ItemsList({
                 <Td>{item.quantity}</Td>
                 <Td>{item.min_quantity}</Td>
                 <Td>{item.supplier_name || "-"}</Td>
+                <Td>
+                  <StockBadge
+                    quantity={item.quantity}
+                    min={item.min_quantity}
+                  />
+                </Td>
+
                 <Td $right>{formatPLN(item.price)}</Td>
                 <Td $right>{formatPLN(item.price * 1.23)}</Td>
                 <Td>
