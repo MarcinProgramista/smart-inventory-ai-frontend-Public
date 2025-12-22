@@ -30,6 +30,8 @@ export default function ItemsList({
   onDelete,
   onEdit,
   onAdd,
+  stock,
+  onStockChange,
 }) {
   const formatPLN = (v) =>
     new Intl.NumberFormat("pl-PL", {
@@ -56,7 +58,10 @@ export default function ItemsList({
         onQueryChange={onQueryChange}
         categoryId={categoryId}
         onCategoryChange={onCategoryChange}
+        stock={stock}
+        onStockChange={onStockChange}
       />
+
       <TableWrapper>
         <Table>
           <thead>

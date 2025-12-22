@@ -2,6 +2,7 @@
 import styled from "styled-components";
 import ItemsSearchBar from "./ItemsSearchBar";
 import CategoryFilter from "./CategoryFilter";
+import StockFilter from "./StockFilter";
 // import StockFilter from "./StockFilter"; // później
 
 const Bar = styled.div`
@@ -22,6 +23,8 @@ export default function FiltersBar({
   onQueryChange,
   categoryId,
   onCategoryChange,
+  stock,
+  onStockChange,
 }) {
   return (
     <Bar>
@@ -33,8 +36,7 @@ export default function FiltersBar({
         categories={categories}
       />
 
-      {/* 🔜 */}
-      {/* <StockFilter value={stock} onChange={onStockChange} /> */}
+      <StockFilter value={stock} onChange={onStockChange} />
     </Bar>
   );
 }

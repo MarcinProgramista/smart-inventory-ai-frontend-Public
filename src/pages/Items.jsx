@@ -16,7 +16,7 @@ export default function Items() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const { items, total, fetchItems } = useFetchItems(showToast);
-
+  const [stock, setStock] = useState("");
   const [page, setPage] = useState(1);
   const limit = 5;
 
@@ -41,6 +41,7 @@ export default function Items() {
       limit,
       q: query,
       categoryId,
+      stock,
     });
   }, [auth?.id, page, query, categoryId]);
 
@@ -77,6 +78,10 @@ export default function Items() {
         onAdd={openModal}
         onEdit={openEditModal}
         onDelete={handleDelete}
+        onStockChange={(v) => {
+          setPage(1);
+          setStock(v);
+        }}
       />
 
       <AddItemModal
