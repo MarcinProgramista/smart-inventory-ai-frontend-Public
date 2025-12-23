@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useContext, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import ItemsList from "../components/items/ItemsList";
@@ -16,15 +16,39 @@ export default function Items() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const { items, total, fetchItems } = useFetchItems(showToast);
-  const [stock, setStock] = useState("");
-  const [page, setPage] = useState(1);
   const limit = 5;
 
-  const [query, setQuery] = useState("");
-  const [categoryId, setCategoryId] = useState("");
-  const [supplierId, setSupplierId] = useState("");
-  const [sortBy, setSortBy] = useState("name");
-  const [sortOrder, setSortOrder] = useState("asc");
+  // ===============================
+  // URL helpers
+  // ===============================
+  const getParam = (key, def = "") => searchParams.get(key) ?? def;
+
+  const setParam = (key, value) => {
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev);
+
+      if (value === "" || value == null) {
+        next.delete(key);
+      } else {
+        next.set(key, value);
+      }
+
+      next.set("page", 1);
+      return next;
+    });
+  };
+
+  // ===============================
+  // Params from URL
+  // ===============================
+  const query = getParam("q");
+  const categoryId = getParam("category");
+  const supplierId = getParam("supplier");
+  const stock = getParam("stock");
+  const sort = getParam("sort", "name");
+  const order = getParam("order", "asc");
+  const page = Number(getParam("page", 1));
+
   const drawerOpen = searchParams.get("add") === "true";
 
   const openModal = () => setSearchParams({ add: "true" });
@@ -35,6 +59,9 @@ export default function Items() {
     showToast,
   });
 
+  // ===============================
+  // FETCH
+  // ===============================
   useEffect(() => {
     if (!auth?.id) return;
 
@@ -43,32 +70,21 @@ export default function Items() {
       limit,
       q: query,
       categoryId,
-      stock,
       supplierId,
-      sort: sortBy,
-      order: sortOrder,
+      stock,
+      sort,
+      order,
     });
-  }, [auth?.id, page, query, categoryId, stock, supplierId, sortBy, sortOrder]);
+  }, [auth?.id, page, query, categoryId, supplierId, stock, sort, order]);
 
+  // ===============================
+  // Handlers
+  // ===============================
   const openEditModal = (item) => setEditingItem(item);
 
   const handleDelete = async (id) => {
     await deleteItem(id);
-    fetchItems(auth.id, { page, limit, q: query, categoryId });
-  };
-
-  const handleQueryChange = (v) => {
-    setPage(1);
-    setQuery(v);
-  };
-  const handleSortChange = (by, order) => {
-    setPage(1);
-    setSortBy(by);
-    setSortOrder(order);
-  };
-  const handleCategoryChange = (id) => {
-    setPage(1);
-    setCategoryId(id);
+    fetchItems(auth.id, { page, limit, q: query });
   };
 
   return (
@@ -80,26 +96,23 @@ export default function Items() {
         total={total}
         query={query}
         categoryId={categoryId}
-        onQueryChange={handleQueryChange}
-        onCategoryChange={handleCategoryChange}
-        onPrev={() => setPage((p) => Math.max(1, p - 1))}
-        onNext={() => setPage((p) => p + 1)}
+        supplierId={supplierId}
+        stock={stock}
+        sortBy={sort}
+        sortOrder={order}
+        onQueryChange={(v) => setParam("q", v)}
+        onCategoryChange={(v) => setParam("category", v)}
+        onSupplierChange={(v) => setParam("supplier", v)}
+        onStockChange={(v) => setParam("stock", v)}
+        onSortChange={(by, ord) => {
+          setParam("sort", by);
+          setParam("order", ord);
+        }}
+        onPrev={() => setParam("page", page - 1)}
+        onNext={() => setParam("page", page + 1)}
         onAdd={openModal}
         onEdit={openEditModal}
         onDelete={handleDelete}
-        onStockChange={(v) => {
-          setPage(1);
-          setStock(v);
-        }}
-        stock={stock}
-        supplierId={supplierId}
-        onSupplierChange={(v) => {
-          setPage(1);
-          setSupplierId(v);
-        }}
-        sortBy={sortBy}
-        sortOrder={sortOrder}
-        onSortChange={handleSortChange}
       />
 
       <AddItemModal
@@ -107,7 +120,7 @@ export default function Items() {
         onClose={closeModal}
         onSubmit={async (payload) => {
           await addItem(payload);
-          fetchItems(auth.id, { page, limit, q: query, categoryId });
+          fetchItems(auth.id, { page, limit, q: query });
         }}
       />
 
@@ -118,7 +131,7 @@ export default function Items() {
         onSubmit={async (payload) => {
           await editItem(editingItem.id, payload);
           setEditingItem(null);
-          fetchItems(auth.id, { page, limit, q: query, categoryId });
+          fetchItems(auth.id, { page, limit, q: query });
         }}
       />
     </>
