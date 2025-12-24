@@ -130,8 +130,23 @@ export default function ItemsList({
 
               <Th>Status</Th>
 
-              <Th $right>Netto</Th>
-              <Th $right>Brutto</Th>
+              <Th
+                $right
+                onClick={() => toggleSort("price")}
+                style={{ cursor: "pointer" }}
+              >
+                Netto <SortIcon active={sortBy === "price"} order={sortOrder} />
+              </Th>
+
+              <Th
+                $right
+                onClick={() => toggleSort("price")}
+                style={{ cursor: "pointer" }}
+              >
+                Brutto{" "}
+                <SortIcon active={sortBy === "price"} order={sortOrder} />
+              </Th>
+
               <Th>Actions</Th>
             </Tr>
           </thead>
