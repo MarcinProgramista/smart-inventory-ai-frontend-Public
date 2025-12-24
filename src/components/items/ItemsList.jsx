@@ -98,7 +98,13 @@ export default function ItemsList({
               >
                 Name <SortIcon active={sortBy === "name"} order={sortOrder} />
               </Th>
-              <Th>Category</Th>
+              <Th
+                onClick={() => toggleSort("category")}
+                style={{ cursor: "pointer" }}
+              >
+                Category{" "}
+                <SortIcon active={sortBy === "category"} order={sortOrder} />
+              </Th>
               <Th
                 onClick={() => toggleSort("quantity")}
                 style={{ cursor: "pointer" }}
