@@ -1,6 +1,6 @@
 import { Pencil, Trash2 } from "lucide-react";
 import ListHeader from "../shared/header/ListHeader";
-import ItemsSearchBar from "./ItemsSearchBar";
+import { ChevronUp, ChevronDown } from "lucide-react";
 import useExportItems from "../../hooks/useExportItems";
 import {
   TableWrapper,
@@ -18,6 +18,11 @@ import FiltersBar from "./FiltersBar";
 import StockBadge from "./StockBadge";
 import useSuppliers from "../../hooks/useSuppliers";
 
+function SortIcon({ active, order }) {
+  if (!active) return null;
+
+  return order === "asc" ? <ChevronUp size={14} /> : <ChevronDown size={14} />;
+}
 export default function ItemsList({
   items,
   page,
@@ -49,6 +54,13 @@ export default function ItemsList({
   const { exportCSV, exportPDF } = useExportItems();
   const categories = useCategories();
   const suppliers = useSuppliers();
+  const toggleSort = (field) => {
+    if (sortBy === field) {
+      onSortChange(field, sortOrder === "asc" ? "desc" : "asc");
+    } else {
+      onSortChange(field, "asc");
+    }
+  };
 
   return (
     <PageWrapper>
@@ -80,9 +92,21 @@ export default function ItemsList({
         <Table>
           <thead>
             <Tr>
-              <Th>Name</Th>
+              <Th
+                onClick={() => toggleSort("name")}
+                style={{ cursor: "pointer" }}
+              >
+                Name <SortIcon active={sortBy === "name"} order={sortOrder} />
+              </Th>
               <Th>Category</Th>
-              <Th>Quantity</Th>
+              <Th
+                onClick={() => toggleSort("quantity")}
+                style={{ cursor: "pointer" }}
+              >
+                Quantity{" "}
+                <SortIcon active={sortBy === "quantity"} order={sortOrder} />
+              </Th>
+
               <Th>Min</Th>
               <Th>Status</Th>
               <Th>Supplier</Th>

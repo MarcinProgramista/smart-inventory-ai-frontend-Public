@@ -23,7 +23,8 @@ export default function Items() {
   // ===============================
   const getParam = (key, def = "") => searchParams.get(key) ?? def;
 
-  const setParam = (key, value) => {
+  // 🔥 DLA FILTRÓW I SORTU → reset page
+  const setFilterParam = (key, value) => {
     setSearchParams((prev) => {
       const next = new URLSearchParams(prev);
 
@@ -38,6 +39,26 @@ export default function Items() {
     });
   };
 
+  // 🔥 TYLKO SORT (MUSI BYĆ W JEDNYM SET)
+  const setSortParams = (by, order) => {
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev);
+      next.set("sort", by);
+      next.set("order", order);
+      next.set("page", 1);
+      return next;
+    });
+  };
+
+  // 🔥 TYLKO PAGINACJA (bez resetu)
+  const setPageParam = (value) => {
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev);
+      next.set("page", value);
+      return next;
+    });
+  };
+
   // ===============================
   // Params from URL
   // ===============================
@@ -45,8 +66,8 @@ export default function Items() {
   const categoryId = getParam("category");
   const supplierId = getParam("supplier");
   const stock = getParam("stock");
-  const sort = getParam("sort", "name");
-  const order = getParam("order", "asc");
+  const sortBy = getParam("sort", "name");
+  const sortOrder = getParam("order", "asc");
   const page = Number(getParam("page", 1));
 
   const drawerOpen = searchParams.get("add") === "true";
@@ -72,10 +93,10 @@ export default function Items() {
       categoryId,
       supplierId,
       stock,
-      sort,
-      order,
+      sort: sortBy,
+      order: sortOrder,
     });
-  }, [auth?.id, page, query, categoryId, supplierId, stock, sort, order]);
+  }, [auth?.id, page, query, categoryId, supplierId, stock, sortBy, sortOrder]);
 
   // ===============================
   // Handlers
@@ -87,6 +108,9 @@ export default function Items() {
     fetchItems(auth.id, { page, limit, q: query });
   };
 
+  // ===============================
+  // RENDER
+  // ===============================
   return (
     <>
       <ItemsList
@@ -98,18 +122,15 @@ export default function Items() {
         categoryId={categoryId}
         supplierId={supplierId}
         stock={stock}
-        sortBy={sort}
-        sortOrder={order}
-        onQueryChange={(v) => setParam("q", v)}
-        onCategoryChange={(v) => setParam("category", v)}
-        onSupplierChange={(v) => setParam("supplier", v)}
-        onStockChange={(v) => setParam("stock", v)}
-        onSortChange={(by, ord) => {
-          setParam("sort", by);
-          setParam("order", ord);
-        }}
-        onPrev={() => setParam("page", page - 1)}
-        onNext={() => setParam("page", page + 1)}
+        sortBy={sortBy}
+        sortOrder={sortOrder}
+        onQueryChange={(v) => setFilterParam("q", v)}
+        onCategoryChange={(v) => setFilterParam("category", v)}
+        onSupplierChange={(v) => setFilterParam("supplier", v)}
+        onStockChange={(v) => setFilterParam("stock", v)}
+        onSortChange={(by, ord) => setSortParams(by, ord)}
+        onPrev={() => setPageParam(page - 1)}
+        onNext={() => setPageParam(page + 1)}
         onAdd={openModal}
         onEdit={openEditModal}
         onDelete={handleDelete}
