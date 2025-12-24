@@ -128,7 +128,13 @@ export default function ItemsList({
                 <SortIcon active={sortBy === "supplier"} order={sortOrder} />
               </Th>
 
-              <Th>Status</Th>
+              <Th
+                onClick={() => toggleSort("status")}
+                style={{ cursor: "pointer" }}
+              >
+                Status{" "}
+                <SortIcon active={sortBy === "status"} order={sortOrder} />
+              </Th>
 
               <Th
                 $right
@@ -160,10 +166,7 @@ export default function ItemsList({
                 <Td>{item.min_quantity}</Td>
                 <Td>{item.supplier_name || "-"}</Td>
                 <Td>
-                  <StockBadge
-                    quantity={item.quantity}
-                    min={item.min_quantity}
-                  />
+                  <StockBadge status={item.stock_status} />
                 </Td>
 
                 <Td $right>{formatPLN(item.price)}</Td>
