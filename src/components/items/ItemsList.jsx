@@ -113,9 +113,16 @@ export default function ItemsList({
                 <SortIcon active={sortBy === "quantity"} order={sortOrder} />
               </Th>
 
-              <Th>Min</Th>
-              <Th>Status</Th>
+              <Th
+                onClick={() => toggleSort("min")}
+                style={{ cursor: "pointer" }}
+              >
+                Min <SortIcon active={sortBy === "min"} order={sortOrder} />
+              </Th>
+
               <Th>Supplier</Th>
+              <Th>Status</Th>
+
               <Th $right>Netto</Th>
               <Th $right>Brutto</Th>
               <Th>Actions</Th>
