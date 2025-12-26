@@ -10,6 +10,7 @@ import RequireAuth from "./hooks/RequireAuth";
 import Items from "./pages/Items";
 
 import { ToastProvider } from "./context/ToastContext";
+import Contacts from "./components/contacts/Contacts";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route element={<RequireAuth />}>
             <Route path="/home" element={<Home />} />
             <Route path="/items" element={<Items />} />
+            <Route path="/contacts" element={<Contacts />} />
           </Route>
         </Routes>
       </ToastProvider>
