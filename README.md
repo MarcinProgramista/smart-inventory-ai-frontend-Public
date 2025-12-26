@@ -1,16 +1,68 @@
-# React + Vite
+## 📦 Items Module
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+The Items module handles inventory management with support for filtering, sorting, pagination, and CRUD operations.
 
-Currently, two official plugins are available:
+### Key features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- URL-driven filters and pagination
+- Column-based sorting with ascending/descending order
+- Visual stock status filtering with live counters
+- Server-side pagination
+- CSV / PDF export
+- Add, edit and delete items via modal dialogs
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Architecture overview
 
-## Expanding the ESLint configuration
+The module follows a clear separation of concerns:
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- **Items.jsx**  
+  Page-level component responsible for:
+  - synchronizing filters, sorting and pagination with the URL
+  - triggering data fetching
+  - controlling add/edit modals
+
+- **ItemsList.jsx**  
+  Presentational container that renders:
+  - filters and stock legend
+  - sortable table
+  - pagination controls
+
+- **UI components**  
+  (`FiltersBar`, `StockLegend`, `StockBadge`)  
+  Stateless components focused on rendering and user interaction.
+
+- **Hooks**
+  - `useFetchItems` – data fetching and pagination logic
+  - `useItemActions` – add, edit and delete operations
+  - `useExportItems` – CSV and PDF export
+
+---
+
+### Filtering, sorting and pagination
+
+Filtering, sorting and pagination state is stored in the URL using `useSearchParams`.
+
+Rules:
+
+- changing filters or sorting resets the page to `1`
+- pagination does not reset filters
+- the view is shareable and refresh-safe
+
+Stock filtering is handled via a visual legend instead of a dropdown to improve usability and readability.
+
+---
+
+### UX considerations
+
+- visual stock status indicators
+- live counters per stock status
+- predictable pagination behavior
+- clear action buttons per row
+
+---
+
+### Status
+
+The Items module is feature-complete and production-ready.
