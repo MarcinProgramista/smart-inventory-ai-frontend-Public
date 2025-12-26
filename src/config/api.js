@@ -14,6 +14,7 @@ const API_CONFIG = {
     SUPPLIERS: "/api/suppliers",
 
     CONTACTS: "/api/contacts",
+    CONTACTS_SEARCH: "/api/contacts/search",
   },
 };
 
