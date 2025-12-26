@@ -79,8 +79,6 @@ export default function ItemsList({
         onQueryChange={onQueryChange}
         categoryId={categoryId}
         onCategoryChange={onCategoryChange}
-        stock={stock}
-        onStockChange={onStockChange}
         supplierId={supplierId}
         suppliers={suppliers}
         onSupplierChange={onSupplierChange}
