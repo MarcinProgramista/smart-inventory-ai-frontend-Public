@@ -107,6 +107,13 @@ export default function Items() {
     await deleteItem(id);
     fetchItems(auth.id, { page, limit, q: query });
   };
+  const stockCounts = items.reduce(
+    (acc, item) => {
+      acc[item.stock_status] = (acc[item.stock_status] || 0) + 1;
+      return acc;
+    },
+    { out: 0, low: 0, ok: 0, na: 0 }
+  );
 
   // ===============================
   // RENDER
@@ -134,6 +141,7 @@ export default function Items() {
         onAdd={openModal}
         onEdit={openEditModal}
         onDelete={handleDelete}
+        stockCounts={stockCounts}
       />
 
       <AddItemModal

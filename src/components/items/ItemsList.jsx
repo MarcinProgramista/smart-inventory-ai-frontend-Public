@@ -13,7 +13,7 @@ import {
 } from "../shared/table/Table.styles";
 import Pagination from "../shared/Pagination";
 import useCategories from "../../hooks/useCategories";
-import CategoryFilter from "./EntityFilter";
+import StockLegend from "./StockLegend";
 import FiltersBar from "./FiltersBar";
 import StockBadge from "./StockBadge";
 import useSuppliers from "../../hooks/useSuppliers";
@@ -44,6 +44,7 @@ export default function ItemsList({
   sortBy,
   sortOrder,
   onSortChange,
+  stockCounts,
 }) {
   const formatPLN = (v) =>
     new Intl.NumberFormat("pl-PL", {
@@ -87,7 +88,11 @@ export default function ItemsList({
         sortOrder={sortOrder}
         onSortChange={onSortChange}
       />
-
+      <StockLegend
+        value={stock}
+        onChange={onStockChange}
+        counts={stockCounts}
+      />
       <TableWrapper>
         <Table>
           <thead>

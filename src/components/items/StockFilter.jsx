@@ -9,15 +9,27 @@ const Wrapper = styled.div`
 export default function StockFilter({ value, onChange }) {
   return (
     <Wrapper>
-      <NeonButton secondary={value !== ""} onClick={() => onChange("")}>
+      <NeonButton
+        size="sm"
+        secondary={value !== ""}
+        onClick={() => onChange("")}
+      >
         ALL
       </NeonButton>
 
-      <NeonButton secondary={value !== "low"} onClick={() => onChange("low")}>
+      <NeonButton
+        size="sm"
+        secondary={value !== "low"}
+        onClick={() => onChange("low")}
+      >
         LOW
       </NeonButton>
 
-      <NeonButton secondary={value !== "out"} onClick={() => onChange("out")}>
+      <NeonButton
+        size="sm"
+        secondary={value !== "out"}
+        onClick={() => onChange("out")}
+      >
         OUT
       </NeonButton>
     </Wrapper>
