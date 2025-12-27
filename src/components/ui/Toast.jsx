@@ -8,8 +8,8 @@ const slideIn = keyframes`
 
 const ToastWrapper = styled.div`
   position: fixed;
-  bottom: 30px;
-  right: 30px;
+  top: 30px;
+  right: 200px;
   padding: 1rem 1.4rem;
   border-radius: 12px;
   color: #9deaff;
@@ -18,7 +18,7 @@ const ToastWrapper = styled.div`
   border: 1px solid rgba(0, 200, 255, 0.35);
 
   background: ${({ type }) =>
-    type === "success" ? "rgba(0, 255, 180, 0.25" : "rgba(255, 60, 60, 0.25)"};
+    type === "success" ? "rgba(0, 255, 180, 0.25)" : "rgba(255, 60, 60, 0.25)"};
 
   box-shadow: 0 0 15px
     ${({ type }) =>

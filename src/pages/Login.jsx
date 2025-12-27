@@ -7,7 +7,7 @@ import ButtonRow from "../components/layout/ButtonRow";
 import Logo from "../components/ui/Logo";
 import NeonCard from "../components/ui/NeonCard";
 import ParagraphError from "../components/ui/typography/ParagraphError";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Title from "../components/ui/typography/Title";
 import API_CONFIG from "../config/api";
 import Input from "../components/common/Input";
@@ -21,7 +21,6 @@ import FeatureList from "../components/ui/lists/FeatureList";
 const Login = () => {
   const { setAuth } = useAuth();
   const navigate = useNavigate();
-  const location = useLocation();
 
   const userRef = useRef();
   const errRef = useRef();
