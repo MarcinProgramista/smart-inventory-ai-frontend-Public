@@ -3,35 +3,65 @@ import API_CONFIG from "../config/api";
 
 export default function useContactActions({ showToast }) {
   const addContact = async (payload) => {
-    await axios.post(
-      `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.CONTACTS}`,
-      payload,
-      { withCredentials: true }
-    );
+    try {
+      await axios.post(
+        `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.CONTACTS}`,
+        payload,
+        { withCredentials: true }
+      );
 
-    showToast("Contact added");
+      showToast("Contact added");
+    } catch (error) {
+      const message =
+        error.response?.data?.error ||
+        error.response?.data?.message ||
+        "Failed to add contact";
+
+      showToast(message, "error");
+      throw error; // 🔥 ważne
+    }
   };
 
   const editContact = async (id, payload) => {
-    await axios.put(
-      `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.CONTACTS}/${id}`,
-      payload,
-      { withCredentials: true }
-    );
+    try {
+      await axios.put(
+        `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.CONTACTS}/${id}`,
+        payload,
+        { withCredentials: true }
+      );
 
-    showToast("Contact updated");
+      showToast("Contact updated");
+    } catch (error) {
+      const message =
+        error.response?.data?.error ||
+        error.response?.data?.message ||
+        "Failed to update contact";
+
+      showToast(message, "error");
+      throw error; // 🔥 ważne
+    }
   };
 
   const deleteContact = async (contact) => {
-    await axios.delete(
-      `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.CONTACTS}/${contact.id}`,
-      { withCredentials: true }
-    );
+    try {
+      await axios.delete(
+        `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.CONTACTS}/${contact.id}`,
+        { withCredentials: true }
+      );
 
-    showToast(
-      `Deleted contact: ${contact.first_name} ${contact.last_name}`,
-      "error"
-    );
+      showToast(
+        `Deleted contact: ${contact.first_name} ${contact.last_name}`,
+        "error"
+      );
+    } catch (error) {
+      const message =
+        error.response?.data?.error ||
+        error.response?.data?.message ||
+        "Failed to update contact";
+
+      showToast(message, "error");
+      throw error; // 🔥 ważne
+    }
   };
 
   return {
