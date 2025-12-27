@@ -10,7 +10,7 @@ export default function Contacts() {
   const { auth } = useAuth();
   const { showToast } = useContext(ToastContext);
   const [searchParams, setSearchParams] = useSearchParams();
-  const { contacts, fetchContacts } = useFetchContacts();
+  const { contacts, total, fetchContacts } = useFetchContacts();
   const query = searchParams.get("q") ?? "";
   const page = Number(searchParams.get("page") ?? 1);
   const limit = 10;
@@ -44,11 +44,25 @@ export default function Contacts() {
   const handleDelete = async (contact) => {
     showToast(<ContactDetails contact={contact} action="Deleted" />, "error");
   };
+
+  const setPageParam = (value) => {
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev);
+      next.set("page", value);
+      return next;
+    });
+  };
+
   return (
     <>
       <ContactsList
         contacts={contacts}
         query={query}
+        page={page}
+        limit={limit}
+        total={total}
+        onPrev={() => setPageParam(page - 1)}
+        onNext={() => setPageParam(page + 1)}
         onQueryChange={setQueryParams}
         onDelete={handleDelete}
         onEdit={handleEdit}

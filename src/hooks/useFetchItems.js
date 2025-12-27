@@ -3,7 +3,7 @@ import API_CONFIG from "../config/api";
 import { useState } from "react";
 
 // useFetchItems.js
-export default function useFetchItems(showToast) {
+export default function useFetchItems() {
   const [items, setItems] = useState([]);
   const [total, setTotal] = useState(0);
 

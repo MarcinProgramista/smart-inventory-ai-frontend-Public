@@ -10,10 +10,16 @@ import {
 } from "../shared/table/Table.styles";
 import SearchBar from "../shared/search/SearchBar";
 import ListHeader from "../shared/header/ListHeader";
+import Pagination from "../shared/Pagination";
 
 export default function ContactsList({
   contacts,
   query,
+  page,
+  limit,
+  total,
+  onPrev,
+  onNext,
   onQueryChange,
   onEdit,
   onDelete,
@@ -61,6 +67,14 @@ export default function ContactsList({
           </tbody>
         </Table>
       </TableWrapper>
+      <Pagination
+        page={page}
+        totalPages={Math.ceil(total / limit)}
+        canPrev={page > 1}
+        canNext={page < Math.ceil(total / limit)}
+        onPrev={onPrev}
+        onNext={onNext}
+      />
     </PageWrapper>
   );
 }
