@@ -35,7 +35,10 @@ export default function Contacts() {
       return next;
     });
   };
-  const handleEdite = async (contact) => {
+  const handleAdd = async () => {
+    showToast("will be added");
+  };
+  const handleEdit = async (contact) => {
     showToast(<ContactDetails contact={contact} action="Edited:" />);
   };
   const handleDelete = async (contact) => {
@@ -48,7 +51,8 @@ export default function Contacts() {
         query={query}
         onQueryChange={setQueryParams}
         onDelete={handleDelete}
-        onEdit={handleEdite}
+        onEdit={handleEdit}
+        onAdd={handleAdd}
       />
     </>
   );

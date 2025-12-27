@@ -9,6 +9,7 @@ import {
   ActionButton,
 } from "../shared/table/Table.styles";
 import SearchBar from "../shared/search/SearchBar";
+import ListHeader from "../shared/header/ListHeader";
 
 export default function ContactsList({
   contacts,
@@ -16,9 +17,11 @@ export default function ContactsList({
   onQueryChange,
   onEdit,
   onDelete,
+  onAdd,
 }) {
   return (
     <PageWrapper>
+      <ListHeader onAdd={onAdd} heading="Contacts" addTitle="Add Contact" />
       <SearchBar
         value={query}
         onChange={onQueryChange}
