@@ -1,4 +1,4 @@
-import { Pencil, Trash2 } from "lucide-react";
+import { ChevronDown, ChevronUp, Pencil, Trash2 } from "lucide-react";
 import {
   TableWrapper,
   PageWrapper,
@@ -11,7 +11,11 @@ import {
 import SearchBar from "../shared/search/SearchBar";
 import ListHeader from "../shared/header/ListHeader";
 import Pagination from "../shared/Pagination";
+function SortIcon({ active, order }) {
+  if (!active) return null;
 
+  return order === "asc" ? <ChevronUp size={14} /> : <ChevronDown size={14} />;
+}
 export default function ContactsList({
   contacts,
   query,
@@ -24,7 +28,7 @@ export default function ContactsList({
   onEdit,
   onDelete,
   onAdd,
-
+  sortBy,
   sortOrder,
   onSortChange,
 }) {
@@ -49,6 +53,7 @@ export default function ContactsList({
                 }
               >
                 First name
+                <SortIcon active={sortBy === "first_name"} order={sortOrder} />
               </Th>
               <Th
                 onClick={() =>
@@ -58,7 +63,8 @@ export default function ContactsList({
                   )
                 }
               >
-                Last name
+                Last name{" "}
+                <SortIcon active={sortBy === "last_name"} order={sortOrder} />
               </Th>
               <Th
                 onClick={() =>
@@ -66,9 +72,17 @@ export default function ContactsList({
                 }
               >
                 Email
+                <SortIcon active={sortBy === "email"} order={sortOrder} />
               </Th>
               <Th>Phone</Th>
-              <Th>Role</Th>
+              <Th
+                onClick={() =>
+                  onSortChange("role", sortOrder === "asc" ? "desc" : "asc")
+                }
+              >
+                Role
+                <SortIcon active={sortBy === "role"} order={sortOrder} />
+              </Th>
               <Th>Action</Th>
             </Tr>
           </thead>
