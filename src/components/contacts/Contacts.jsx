@@ -1,11 +1,11 @@
 import { useSearchParams } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import useFetchContacts from "../../hooks/useFetchContacts";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import ContactsList from "./ContactsList";
 import ToastContext from "../../context/ToastContext";
-import ContactDetails from "./ContactDetalis";
 import useContactActions from "../../hooks/useContactActions";
+import AddContactDrawer from "./AddContactDrawer";
 
 export default function Contacts() {
   const { auth } = useAuth();
@@ -20,6 +20,9 @@ export default function Contacts() {
   const { addContact, editContact, deleteContact } = useContactActions({
     showToast,
   });
+  const [addOpen, setAddOpen] = useState(false);
+  const openAdd = () => setAddOpen(true);
+  const closeAdd = () => setAddOpen(false);
 
   useEffect(() => {
     if (!auth?.id) return;
@@ -56,21 +59,8 @@ export default function Contacts() {
     });
   };
 
-  const handleAdd = async () => {
-    const payload = {
-      user_id: 3,
-      first_name: "Test",
-      last_name: "Contact",
-      email: `test${Date.now()}@example.com`,
-    };
-    await addContact(payload);
-    fetchContacts(auth.id, {
-      q: query,
-      page,
-      limit,
-      sort: sortBy,
-      order: sortOrder,
-    });
+  const handleAdd = () => {
+    openAdd();
   };
 
   const handleEdit = async (contact) => {
@@ -97,7 +87,7 @@ export default function Contacts() {
       return next;
     });
   };
-
+  console.log("AUTH >>>", auth);
   return (
     <>
       <ContactsList
@@ -115,6 +105,24 @@ export default function Contacts() {
         onDelete={handleDelete}
         onEdit={handleEdit}
         onAdd={handleAdd}
+      />
+      <AddContactDrawer
+        open={addOpen}
+        onClose={closeAdd}
+        onSubmit={async (payload) => {
+          const finalPayload = {
+            first_name: payload.first_name,
+            last_name: payload.last_name,
+            email: payload.email,
+            user_id: Number(auth.id),
+          };
+          console.log(
+            "FINAL PAYLOAD (JSON):",
+            JSON.stringify(finalPayload, null, 2)
+          );
+
+          await addContact(finalPayload);
+        }}
       />
     </>
   );
