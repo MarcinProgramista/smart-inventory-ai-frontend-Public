@@ -1,22 +1,14 @@
 import { useState } from "react";
 import Input from "../common/Input";
 import CreateButton from "../ui/buttons/CreateButton";
-const styles = {
-  overlay: {
-    position: "fixed",
-    inset: 0,
-    background: "rgba(0,0,0,0.4)",
-    display: "flex",
-    justifyContent: "flex-end",
-    zIndex: 1000,
-  },
-  drawer: {
-    width: 300,
-    background: "#111",
-    padding: 16,
-    height: "100%",
-  },
-};
+import {
+  Overlay,
+  Drawer,
+  Title,
+  Form,
+  Footer,
+} from "./AddContactDrawer.styles";
+
 export default function AddContactDrawer({ open, onClose, onSubmit }) {
   const initialForm = {
     first_name: "",
@@ -27,47 +19,66 @@ export default function AddContactDrawer({ open, onClose, onSubmit }) {
   };
 
   const [form, setForm] = useState(initialForm);
+  const [errors, setErrors] = useState({});
 
   if (!open) return null;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
 
-    setForm((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+  const validate = () => {
+    const nextErrors = {};
+
+    if (!form.first_name || form.first_name.trim().length < 2) {
+      nextErrors.first_name = "Min. 2 characters";
+    }
+
+    if (form.email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(form.email)) {
+        nextErrors.email = "Invalid email";
+      }
+    }
+
+    if (form.mobile_phone) {
+      const phoneRegex = /^[0-9]{9,15}$/;
+      if (!phoneRegex.test(form.mobile_phone)) {
+        nextErrors.mobile_phone = "9–15 digits only";
+      }
+    }
+
+    if (!form.email && !form.mobile_phone) {
+      nextErrors.email = "Email or phone required";
+    }
+
+    setErrors(nextErrors);
+    return Object.keys(nextErrors).length === 0;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!form.first_name.trim()) {
-      alert("First name is required");
-      return;
-    }
-
-    if (!form.email.trim() && !form.mobile_phone.trim()) {
-      alert("Email or phone is required");
-      return;
-    }
+    if (!validate()) return;
 
     await onSubmit(form);
-    setForm(initialForm); // 🔥 reset
+    setForm(initialForm);
+    setErrors({});
     onClose();
   };
 
   return (
-    <div style={styles.overlay}>
-      <div style={styles.drawer}>
-        <h3>Add Contact</h3>
+    <Overlay onClick={onClose}>
+      <Drawer onClick={(e) => e.stopPropagation()}>
+        <Title>Add contact</Title>
 
-        <form onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit}>
           <Input
             name="first_name"
             placeholder="First name"
             value={form.first_name}
             onChange={handleChange}
+            error={errors.first_name}
           />
 
           <Input
@@ -82,7 +93,9 @@ export default function AddContactDrawer({ open, onClose, onSubmit }) {
             placeholder="Email"
             value={form.email}
             onChange={handleChange}
+            error={errors.email}
           />
+
           <Input
             name="role"
             placeholder="Role"
@@ -95,16 +108,17 @@ export default function AddContactDrawer({ open, onClose, onSubmit }) {
             placeholder="Phone"
             value={form.mobile_phone}
             onChange={handleChange}
+            error={errors.mobile_phone}
           />
 
-          <div style={{ marginTop: "1rem" }}>
-            <CreateButton type="submit">Add</CreateButton>
-            <CreateButton type="button" onClick={onClose}>
+          <Footer>
+            <CreateButton type="button" onClick={onClose} variant="secondary">
               Cancel
             </CreateButton>
-          </div>
-        </form>
-      </div>
-    </div>
+            <CreateButton type="submit">Add</CreateButton>
+          </Footer>
+        </Form>
+      </Drawer>
+    </Overlay>
   );
 }
