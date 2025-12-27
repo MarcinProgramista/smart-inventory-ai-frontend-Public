@@ -4,6 +4,7 @@ import ItemsSearchBar from "./ItemsSearchBar";
 import EntityFilter from "./EntityFilter";
 
 import SortBar from "./SortBar";
+import SearchBar from "../shared/search/SearchBar";
 
 const Bar = styled.div`
   display: flex;
@@ -32,7 +33,7 @@ export default function FiltersBar({
 }) {
   return (
     <Bar>
-      <ItemsSearchBar value={query} onChange={onQueryChange} />
+      <SearchBar value={query} onChange={onQueryChange} />
 
       <EntityFilter
         items={categories}

@@ -8,6 +8,7 @@ import {
   Tr,
   ActionButton,
 } from "../shared/table/Table.styles";
+import SearchBar from "../shared/search/SearchBar";
 
 export default function ContactsList({
   contacts,
@@ -18,13 +19,11 @@ export default function ContactsList({
 }) {
   return (
     <PageWrapper>
-      <input
+      <SearchBar
         value={query}
-        onChange={(e) => onQueryChange(e.target.value)}
+        onChange={onQueryChange}
         placeholder="Search contacts..."
-        style={{ marginBottom: "1rem" }}
       />
-
       <TableWrapper>
         <Table>
           <thead>
