@@ -8,7 +8,7 @@ export default function useFetchContacts() {
 
   const fetchContacts = async (
     userId,
-    { q = "", page = 1, limit = 10 } = {}
+    { q = "", page = 1, limit = 10, sort = "last_name", order = "asc" } = {}
   ) => {
     const res = await axios.get(
       `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.CONTACTS_SEARCH}`,
@@ -18,6 +18,8 @@ export default function useFetchContacts() {
           q,
           page,
           limit,
+          sort,
+          order,
         },
         withCredentials: true,
       }

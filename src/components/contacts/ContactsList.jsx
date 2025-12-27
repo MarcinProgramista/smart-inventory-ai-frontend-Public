@@ -24,6 +24,9 @@ export default function ContactsList({
   onEdit,
   onDelete,
   onAdd,
+  sortBy,
+  sortOrder,
+  onSortChange,
 }) {
   return (
     <PageWrapper>
@@ -37,9 +40,33 @@ export default function ContactsList({
         <Table>
           <thead>
             <Tr>
-              <Th>First name</Th>
-              <Th>Last name</Th>
-              <Th>Email</Th>
+              <Th
+                onClick={() =>
+                  onSortChange(
+                    "first_name",
+                    sortOrder === "asc" ? "desc" : "asc"
+                  )
+                }
+              >
+                First name
+              </Th>
+              <Th
+                onClick={() =>
+                  onSortChange(
+                    "last_name",
+                    sortOrder === "asc" ? "desc" : "asc"
+                  )
+                }
+              >
+                Last name
+              </Th>
+              <Th
+                onClick={() =>
+                  onSortChange("email", sortOrder === "asc" ? "desc" : "asc")
+                }
+              >
+                Email
+              </Th>
               <Th>Phone</Th>
               <Th>Role</Th>
               <Th>Action</Th>

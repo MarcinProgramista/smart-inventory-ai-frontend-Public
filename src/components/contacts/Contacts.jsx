@@ -13,7 +13,9 @@ export default function Contacts() {
   const { contacts, total, fetchContacts } = useFetchContacts();
   const query = searchParams.get("q") ?? "";
   const page = Number(searchParams.get("page") ?? 1);
-  const limit = 10;
+  const limit = 8;
+  const sortBy = searchParams.get("sort") ?? "last_name";
+  const sortOrder = searchParams.get("order") ?? "asc";
 
   useEffect(() => {
     if (!auth?.id) return;
@@ -22,19 +24,34 @@ export default function Contacts() {
       q: query,
       page,
       limit,
+      sort: sortBy,
+      order: sortOrder,
     });
-  }, [auth?.id, query, page]);
+  }, [auth?.id, query, page, sortBy, sortOrder]);
 
   const setQueryParams = (value) => {
     setSearchParams((prev) => {
       const next = new URLSearchParams(prev);
-      if (value) next.set("q", value);
-      else next.delete("q");
+
+      if (value) {
+        next.set("q", value);
+      } else next.delete("q");
 
       next.set("page", 1);
       return next;
     });
   };
+
+  const setSortParams = (by, order) => {
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev);
+      next.set("sort", by);
+      next.set("order", order);
+      next.set("page", 1); // reset page
+      return next;
+    });
+  };
+
   const handleAdd = async () => {
     showToast("will be added");
   };
@@ -61,6 +78,9 @@ export default function Contacts() {
         page={page}
         limit={limit}
         total={total}
+        sortBy={sortBy}
+        sortOrder={sortOrder}
+        onSortChange={setSortParams}
         onPrev={() => setPageParam(page - 1)}
         onNext={() => setPageParam(page + 1)}
         onQueryChange={setQueryParams}
