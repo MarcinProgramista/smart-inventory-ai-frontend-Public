@@ -29,12 +29,7 @@ export default function useContactActions({ showToast }) {
     );
 
     showToast(
-      <>
-        <div>Deleted contact</div>
-        <div>
-          {contact.first_name} {contact.last_name}
-        </div>
-      </>,
+      `Deleted contact: ${contact.first_name} ${contact.last_name}`,
       "error"
     );
   };

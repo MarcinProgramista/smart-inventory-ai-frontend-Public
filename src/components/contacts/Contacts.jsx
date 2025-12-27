@@ -5,6 +5,7 @@ import { useContext, useEffect } from "react";
 import ContactsList from "./ContactsList";
 import ToastContext from "../../context/ToastContext";
 import ContactDetails from "./ContactDetalis";
+import useContactActions from "../../hooks/useContactActions";
 
 export default function Contacts() {
   const { auth } = useAuth();
@@ -16,6 +17,9 @@ export default function Contacts() {
   const limit = 8;
   const sortBy = searchParams.get("sort") ?? "last_name";
   const sortOrder = searchParams.get("order") ?? "asc";
+  const { addContact, editContact, deleteContact } = useContactActions({
+    showToast,
+  });
 
   useEffect(() => {
     if (!auth?.id) return;
@@ -53,13 +57,24 @@ export default function Contacts() {
   };
 
   const handleAdd = async () => {
-    showToast("will be added");
+    await addContact({});
   };
+
   const handleEdit = async (contact) => {
-    showToast(<ContactDetails contact={contact} action="Edited:" />);
+    await editContact(contact.id, contact);
   };
+
   const handleDelete = async (contact) => {
-    showToast(<ContactDetails contact={contact} action="Deleted" />, "error");
+    await deleteContact(contact);
+
+    // 🔥 ODSWIEŻ LISTĘ
+    fetchContacts(auth.id, {
+      q: query,
+      page,
+      limit,
+      sort: sortBy,
+      order: sortOrder,
+    });
   };
 
   const setPageParam = (value) => {
