@@ -1,35 +1,42 @@
 import styled from "styled-components";
+import NeonCardBright from "../ui/NeonCardBright";
 
-export const Overlay = styled.div`
+/* -------------------------- BACKDROP -------------------------- */
+
+const Backdrop = styled.div`
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.55);
-  display: flex;
-  justify-content: flex-end;
-  z-index: 1000;
+  backdrop-filter: blur(6px);
+  z-index: 9998;
+  display: ${(p) => (p.open ? "flex" : "none")};
+  justify-content: center;
+  align-items: center;
 `;
 
-export const Drawer = styled.div`
-  width: 380px;
-  height: 100%;
-  padding: 28px;
+/* -------------------------- MODAL -------------------------- */
 
-  background: linear-gradient(
-    180deg,
-    rgba(10, 25, 35, 0.92),
-    rgba(5, 15, 25, 0.96)
-  );
+const ModalBox = styled(NeonCardBright)`
+  width: 520px;
+  max-width: 95%;
+  padding: 2.4rem;
+  position: relative;
+  overflow: visible !important;
+`;
 
-  backdrop-filter: blur(12px);
-  border-left: 1px solid rgba(0, 180, 255, 0.15);
+const CloseBtn = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: absolute;
+  top: 18px;
+  right: 18px;
 
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-
-  box-shadow:
-    -8px 0 30px rgba(0, 150, 255, 0.15),
-    inset 0 0 0 1px rgba(0, 180, 255, 0.05);
+  svg {
+    width: 26px;
+    height: 26px;
+    stroke: #9deaff;
+  }
 `;
 
 export const Title = styled.h3`

@@ -87,7 +87,7 @@ export default function Contacts() {
       return next;
     });
   };
-  console.log("AUTH >>>", auth);
+
   return (
     <>
       <ContactsList

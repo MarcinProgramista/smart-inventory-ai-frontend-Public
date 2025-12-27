@@ -24,7 +24,7 @@ export default function ContactsList({
   onEdit,
   onDelete,
   onAdd,
-  sortBy,
+
   sortOrder,
   onSortChange,
 }) {

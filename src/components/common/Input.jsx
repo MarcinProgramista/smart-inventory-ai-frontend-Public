@@ -1,24 +1,35 @@
 import styled from "styled-components";
 
-const Input = styled.input`
-  width: 100%;
-  padding: 14px;
-  margin-bottom: 18px;
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+`;
 
-  border-radius: 10px;
-  border: 1px solid rgba(0, 200, 255, 0.25);
-  background: rgba(0, 0, 0, 0.25);
+const StyledInput = styled.input`
+  padding: 12px;
+  border-radius: 8px;
+  background: #0b0b0b;
+  color: #fff;
 
-  color: #c2f7ff;
-  font-size: 16px;
-
-  box-shadow: inset 0 0 15px rgba(0, 150, 255, 0.2);
+  border: ${(p) => (p.$error ? "1px solid #ff4d4f" : "1px solid #333")};
 
   &:focus {
     outline: none;
-    border-color: #00c6ff;
-    box-shadow: 0 0 18px #00c6ff;
+    border-color: ${(p) => (p.$error ? "#ff4d4f" : "#00baff")};
   }
 `;
 
-export default Input;
+const ErrorText = styled.span`
+  color: #ff4d4f;
+  font-size: 12px;
+`;
+
+export default function Input({ error, ...props }) {
+  return (
+    <Wrapper>
+      <StyledInput {...props} $error={!!error} />
+      {error && <ErrorText>{error}</ErrorText>}
+    </Wrapper>
+  );
+}
