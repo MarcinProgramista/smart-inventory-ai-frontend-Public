@@ -57,7 +57,20 @@ export default function Contacts() {
   };
 
   const handleAdd = async () => {
-    await addContact({});
+    const payload = {
+      user_id: 3,
+      first_name: "Test",
+      last_name: "Contact",
+      email: `test${Date.now()}@example.com`,
+    };
+    await addContact(payload);
+    fetchContacts(auth.id, {
+      q: query,
+      page,
+      limit,
+      sort: sortBy,
+      order: sortOrder,
+    });
   };
 
   const handleEdit = async (contact) => {
