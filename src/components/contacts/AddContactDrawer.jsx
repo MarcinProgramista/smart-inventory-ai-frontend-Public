@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import Input from "../common/Input";
 import CreateButton from "../ui/buttons/CreateButton";
-import { Title, Form, Footer } from "./AddContactDrawer.styles";
+import { Form, Footer } from "./AddContactDrawer.styles";
 import NeonCardBright from "../ui/NeonCardBright";
 import Logo from "../ui/Logo";
 
@@ -30,7 +30,12 @@ const ModalBox = styled(NeonCardBright)`
 
 /* ===================== COMPONENT ===================== */
 
-export default function AddContactDrawer({ open, onClose, onSubmit }) {
+export default function AddContactDrawer({
+  open,
+  onClose,
+  onSubmit,
+  initialData = null,
+}) {
   const initialForm = {
     first_name: "",
     last_name: "",
@@ -41,6 +46,21 @@ export default function AddContactDrawer({ open, onClose, onSubmit }) {
 
   const [form, setForm] = useState(initialForm);
   const [errors, setErrors] = useState({});
+  useEffect(() => {
+    if (initialData) {
+      setForm({
+        first_name: initialData.first_name ?? "",
+        last_name: initialData.last_name ?? "",
+        email: initialData.email ?? "",
+        role: initialData.role ?? "",
+        mobile_phone: initialData.mobile_phone ?? "",
+      });
+    } else {
+      setForm(initialForm);
+    }
+
+    setErrors({});
+  }, [initialData, open]);
 
   // 🔒 Jedyny mechanizm widoczności
   if (!open) return null;
@@ -122,13 +142,14 @@ export default function AddContactDrawer({ open, onClose, onSubmit }) {
       }));
     }
   };
+  console.log("DRAWER OPEN", { open, initialData });
 
   /* ===================== RENDER ===================== */
 
   return (
     <Backdrop onClick={onClose}>
       <ModalBox onClick={(e) => e.stopPropagation()}>
-        <Logo>Add contact</Logo>
+        <Logo>{initialData ? "Edit contact" : "Add contact"}</Logo>
 
         <Form onSubmit={handleSubmit}>
           <Input

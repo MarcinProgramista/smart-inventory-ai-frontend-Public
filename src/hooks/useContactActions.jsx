@@ -24,7 +24,7 @@ export default function useContactActions({ showToast }) {
 
   const updateContact = async (id, payload) => {
     try {
-      await axios.put(
+      await axios.patch(
         `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.CONTACTS}/${id}`,
         payload,
         { withCredentials: true }

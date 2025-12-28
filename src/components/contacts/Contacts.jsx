@@ -110,29 +110,34 @@ export default function Contacts() {
         onAdd={handleAdd}
       />
       <AddContactDrawer
-        open={addOpen}
-        onClose={closeAdd}
+        open={addOpen || !!editContact}
+        initialData={editContact}
+        onClose={() => {
+          closeAdd();
+          closeEdit();
+        }}
         onSubmit={async (payload) => {
-          const finalPayload = {
-            first_name: payload.first_name,
-            last_name: payload.last_name,
-            email: payload.email,
-            user_id: Number(auth.id),
-          };
-          try {
-            await addContact(finalPayload);
-          } catch (err) {
-            throw err; // przekazujemy dalej do modala
+          if (editContact) {
+            await updateContact(editContact.id, payload);
+          } else {
+            await addContact({
+              ...payload,
+              user_id: Number(auth.id),
+            });
           }
+
+          fetchContacts(auth.id, {
+            q: query,
+            page,
+            limit,
+            sort: sortBy,
+            order: sortOrder,
+          });
+
+          closeAdd();
+          closeEdit();
         }}
       />
-      {editContact && (
-        <AddContactDrawer
-          open={!!editContact}
-          onClose={closeEdit}
-          onSubmit={() => {}}
-        />
-      )}
     </>
   );
 }
