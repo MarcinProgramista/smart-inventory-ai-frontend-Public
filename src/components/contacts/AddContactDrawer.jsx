@@ -73,26 +73,26 @@ export default function AddContactDrawer({ open, onClose, onSubmit }) {
       nextErrors.first_name = "Min. 2 characters";
     }
 
-    // email format
+    // email OR phone required
+    if (!form.email && !form.mobile_phone) {
+      nextErrors.email = "Email is required";
+      nextErrors.mobile_phone = "Phone is required";
+    }
+
+    // email format (TYLKO jeśli email istnieje)
     if (form.email) {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(form.email)) {
-        nextErrors.email = "Invalid email";
+      if (!emailRegex.test(form.email.trim())) {
+        nextErrors.email = "Invalid email format";
       }
     }
 
-    // phone format
+    // phone format (TYLKO jeśli phone istnieje)
     if (form.mobile_phone) {
       const phoneRegex = /^[0-9]{9,15}$/;
-      if (!phoneRegex.test(form.mobile_phone)) {
+      if (!phoneRegex.test(form.mobile_phone.trim())) {
         nextErrors.mobile_phone = "9–15 digits only";
       }
-    }
-
-    // 🔥 REQUIRE ONE OF THEM
-    if (!form.email && !form.mobile_phone) {
-      nextErrors.email = "Email is required if phone is empty";
-      nextErrors.mobile_phone = "Phone is required if email is empty";
     }
 
     setErrors(nextErrors);

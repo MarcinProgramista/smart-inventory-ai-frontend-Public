@@ -116,12 +116,12 @@ export default function Contacts() {
             email: payload.email,
             user_id: Number(auth.id),
           };
-          console.log(
-            "FINAL PAYLOAD (JSON):",
-            JSON.stringify(finalPayload, null, 2)
-          );
 
-          await addContact(finalPayload);
+          try {
+            await addContact(finalPayload);
+          } catch (err) {
+            throw err; // przekazujemy dalej do modala
+          }
         }}
       />
     </>
