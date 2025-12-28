@@ -1,9 +1,7 @@
 # SmartInventoryAI 📦🤖
 
-**SmartInventoryAI** is a modern, SaaS-style inventory and warehouse management system.  
-It focuses on real-world frontend architecture, clean UX, and scalable state management.
-
-The project demonstrates how to build a production-ready React application with authentication, URL-driven state, and reusable UI components.
+**SmartInventoryAI** is a fullstack inventory management system built with Node.js, Express, PostgreSQL, and React.
+The project focuses on backend-driven architecture, secure authentication, and a clean frontend client consuming a REST API.
 
 ---
 
@@ -18,6 +16,19 @@ The project demonstrates how to build a production-ready React application with 
 - Fully responsive layout
 
 ---
+
+## 🖥️ Backend Architecture
+
+The backend is built with Node.js, Express, and PostgreSQL.
+
+Key backend features:
+
+- RESTful API architecture
+- JWT-based authentication
+- Role-ready authorization layer
+- Server-side pagination, filtering, and sorting
+- Input validation and error handling
+- PostgreSQL relational data modeling
 
 ## 🖼️ Screenshots
 
@@ -173,13 +184,13 @@ http://localhost:5173/
 
 🎯 Project Goals
 
-Build a production-ready frontend architecture
+Build a production-ready fullstack application
 
-Practice real-world React patterns
+Design a robust Node.js backend with PostgreSQL
 
-Implement URL-driven state management
+Expose a secure REST API consumed by a React client
 
-Focus on usability and maintainability
+Practice backend-first architecture and API-driven frontend development
 
 🛣️ Roadmap
 
