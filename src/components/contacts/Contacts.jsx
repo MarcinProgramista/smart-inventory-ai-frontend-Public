@@ -6,6 +6,8 @@ import ContactsList from "./ContactsList";
 import ToastContext from "../../context/ToastContext";
 import useContactActions from "../../hooks/useContactActions";
 import AddContactDrawer from "./AddContactDrawer";
+import useDebounce from "../../hooks/useDebounce";
+import SearchBar from "../shared/search/SearchBar";
 
 export default function Contacts() {
   const { auth } = useAuth();
@@ -27,18 +29,35 @@ export default function Contacts() {
   const [editContact, setEditContact] = useState(null);
   const openEdit = (contact) => setEditContact(contact);
   const closeEdit = () => setEditContact(null);
+  const [search, setSearch] = useState(query);
+  const debouncedSearch = useDebounce(search, 400);
+
   useEffect(() => {
     if (!auth?.id) return;
 
     fetchContacts(auth.id, {
-      q: query,
+      q: debouncedSearch,
       page,
       limit,
       sort: sortBy,
       order: sortOrder,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [auth?.id, query, page, sortBy, sortOrder]);
+  }, [auth?.id, debouncedSearch, page, sortBy, sortOrder]);
+  useEffect(() => {
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev);
+
+      if (debouncedSearch) {
+        next.set("q", debouncedSearch);
+      } else {
+        next.delete("q");
+      }
+
+      next.set("page", 1);
+      return next;
+    });
+  }, [debouncedSearch, setSearchParams]);
 
   const setQueryParams = (value) => {
     setSearchParams((prev) => {
@@ -94,6 +113,12 @@ export default function Contacts() {
 
   return (
     <>
+      <SearchBar
+        value={search}
+        onChange={setSearch}
+        placeholder="Search contacts..."
+      />
+
       <ContactsList
         contacts={contacts}
         query={query}

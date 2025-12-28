@@ -38,7 +38,7 @@ export default function ContactsList({
   total,
   onPrev,
   onNext,
-  onQueryChange,
+
   onEdit,
   onDelete,
   onAdd,
@@ -70,11 +70,7 @@ export default function ContactsList({
   return (
     <PageWrapper>
       <ListHeader onAdd={onAdd} heading="Contacts" addTitle="Add Contact" />
-      <SearchBar
-        value={query}
-        onChange={onQueryChange}
-        placeholder="Search contacts..."
-      />
+
       {isEmpty ? (
         <EmptyState>
           {isSearching ? (
