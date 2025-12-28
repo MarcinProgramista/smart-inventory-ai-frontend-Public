@@ -46,6 +46,27 @@ export default function AddContactDrawer({
 
   const [form, setForm] = useState(initialForm);
   const [errors, setErrors] = useState({});
+
+  const formatPhone = (value, withPrefix = false) => {
+    if (!value) return withPrefix ? "+48 " : "";
+
+    let digits = value.replace(/\D/g, "");
+
+    // jeśli zaczyna się od 48 → usuń do state
+    if (digits.startsWith("48")) {
+      digits = digits.slice(2);
+    }
+
+    digits = digits.slice(0, 9);
+
+    const parts = [];
+    if (digits.length > 0) parts.push(digits.slice(0, 3));
+    if (digits.length > 3) parts.push(digits.slice(3, 6));
+    if (digits.length > 6) parts.push(digits.slice(6, 9));
+
+    return (withPrefix ? "+48 " : "") + parts.join("-");
+  };
+
   useEffect(() => {
     if (initialData) {
       setForm({
@@ -71,12 +92,36 @@ export default function AddContactDrawer({
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    setForm((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    // ================= PHONE =================
+    if (name === "mobile_phone") {
+      // pozwalamy na cyfry i +
+      let raw = value.replace(/[^\d+]/g, "");
 
-    // 🔥 remove error for this field while typing
+      // wyciągamy same cyfry
+      let digits = raw.replace(/\D/g, "");
+
+      // jeśli user wpisał +48 → usuwamy 48 ze state
+      if (digits.startsWith("48")) {
+        digits = digits.slice(2);
+      }
+
+      // max 9 cyfr
+      digits = digits.slice(0, 9);
+
+      setForm((prev) => ({
+        ...prev,
+        mobile_phone: digits,
+      }));
+    }
+    // ================= OTHER FIELDS =================
+    else {
+      setForm((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
+
+    // ================= CLEAR ERROR ON TYPE =================
     setErrors((prev) => {
       if (!prev[name]) return prev;
 
@@ -184,8 +229,8 @@ export default function AddContactDrawer({
 
           <Input
             name="mobile_phone"
-            placeholder="Phone"
-            value={form.mobile_phone}
+            placeholder="+48 ___-___-___"
+            value={formatPhone(form.mobile_phone, true)}
             onChange={handleChange}
             error={errors.mobile_phone}
           />
