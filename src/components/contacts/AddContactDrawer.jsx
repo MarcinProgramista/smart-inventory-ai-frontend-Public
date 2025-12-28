@@ -6,7 +6,17 @@ import { Form, Footer } from "./AddContactDrawer.styles";
 import NeonCardBright from "../ui/NeonCardBright";
 import Logo from "../ui/Logo";
 
-/* ===================== BACKDROP ===================== */
+/* ===================== CONSTANTS ===================== */
+
+const EMPTY_FORM = {
+  first_name: "",
+  last_name: "",
+  email: "",
+  role: "",
+  mobile_phone: "",
+};
+
+/* ===================== STYLES ===================== */
 
 const Backdrop = styled.div`
   position: fixed;
@@ -18,8 +28,6 @@ const Backdrop = styled.div`
   justify-content: center;
   align-items: center;
 `;
-
-/* ===================== MODAL ===================== */
 
 const ModalBox = styled(NeonCardBright)`
   width: 520px;
@@ -36,23 +44,37 @@ export default function AddContactDrawer({
   onSubmit,
   initialData = null,
 }) {
-  const initialForm = {
-    first_name: "",
-    last_name: "",
-    email: "",
-    role: "",
-    mobile_phone: "",
-  };
-
-  const [form, setForm] = useState(initialForm);
+  const [form, setForm] = useState(EMPTY_FORM);
   const [errors, setErrors] = useState({});
+  const [submitting, setSubmitting] = useState(false);
+
+  /* ===================== EFFECT: PREFILL ===================== */
+
+  useEffect(() => {
+    if (initialData) {
+      setForm({
+        first_name: initialData.first_name ?? "",
+        last_name: initialData.last_name ?? "",
+        email: initialData.email ?? "",
+        role: initialData.role ?? "",
+        mobile_phone: initialData.mobile_phone ?? "",
+      });
+    } else {
+      setForm(EMPTY_FORM);
+    }
+
+    setErrors({});
+  }, [initialData, open]);
+
+  if (!open) return null;
+
+  /* ===================== HELPERS ===================== */
 
   const formatPhone = (value, withPrefix = false) => {
     if (!value) return withPrefix ? "+48 " : "";
 
     let digits = value.replace(/\D/g, "");
 
-    // jeśli zaczyna się od 48 → usuń do state
     if (digits.startsWith("48")) {
       digits = digits.slice(2);
     }
@@ -67,64 +89,33 @@ export default function AddContactDrawer({
     return (withPrefix ? "+48 " : "") + parts.join("-");
   };
 
-  useEffect(() => {
-    if (initialData) {
-      setForm({
-        first_name: initialData.first_name ?? "",
-        last_name: initialData.last_name ?? "",
-        email: initialData.email ?? "",
-        role: initialData.role ?? "",
-        mobile_phone: initialData.mobile_phone ?? "",
-      });
-    } else {
-      setForm(initialForm);
-    }
-
-    setErrors({});
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initialData, open]);
-
-  // 🔒 Jedyny mechanizm widoczności
-  if (!open) return null;
-
   /* ===================== HANDLERS ===================== */
 
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    // ================= PHONE =================
     if (name === "mobile_phone") {
-      // pozwalamy na cyfry i +
-      let raw = value.replace(/[^\d+]/g, "");
+      let digits = value.replace(/\D/g, "");
 
-      // wyciągamy same cyfry
-      let digits = raw.replace(/\D/g, "");
-
-      // jeśli user wpisał +48 → usuwamy 48 ze state
       if (digits.startsWith("48")) {
         digits = digits.slice(2);
       }
 
-      // max 9 cyfr
       digits = digits.slice(0, 9);
 
       setForm((prev) => ({
         ...prev,
         mobile_phone: digits,
       }));
-    }
-    // ================= OTHER FIELDS =================
-    else {
+    } else {
       setForm((prev) => ({
         ...prev,
         [name]: value,
       }));
     }
 
-    // ================= CLEAR ERROR ON TYPE =================
     setErrors((prev) => {
       if (!prev[name]) return prev;
-
       const next = { ...prev };
       delete next[name];
       return next;
@@ -134,18 +125,15 @@ export default function AddContactDrawer({
   const validate = () => {
     const nextErrors = {};
 
-    // first name
     if (!form.first_name || form.first_name.trim().length < 2) {
       nextErrors.first_name = "Min. 2 characters";
     }
 
-    // email OR phone required
     if (!form.email && !form.mobile_phone) {
       nextErrors.email = "Email is required";
       nextErrors.mobile_phone = "Phone is required";
     }
 
-    // email format (TYLKO jeśli email istnieje)
     if (form.email) {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(form.email.trim())) {
@@ -153,11 +141,9 @@ export default function AddContactDrawer({
       }
     }
 
-    // phone format (TYLKO jeśli phone istnieje)
     if (form.mobile_phone) {
-      const phoneRegex = /^[0-9]{9,15}$/;
-      if (!phoneRegex.test(form.mobile_phone.trim())) {
-        nextErrors.mobile_phone = "9–15 digits only";
+      if (!/^[0-9]{9}$/.test(form.mobile_phone)) {
+        nextErrors.mobile_phone = "9 digits required";
       }
     }
 
@@ -170,9 +156,10 @@ export default function AddContactDrawer({
     if (!validate()) return;
 
     try {
+      setSubmitting(true);
       await onSubmit(form);
 
-      setForm(initialForm);
+      setForm(EMPTY_FORM);
       setErrors({});
       onClose();
     } catch (err) {
@@ -181,11 +168,12 @@ export default function AddContactDrawer({
         err?.response?.data?.message ||
         "Something went wrong";
 
-      // 🔥 backendowy błąd pod email
       setErrors((prev) => ({
         ...prev,
         email: message,
       }));
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -236,11 +224,16 @@ export default function AddContactDrawer({
           />
 
           <Footer>
-            <CreateButton type="button" $variant="secondary" onClick={onClose}>
+            <CreateButton
+              type="button"
+              $variant="secondary"
+              onClick={onClose}
+              disabled={submitting}
+            >
               Cancel
             </CreateButton>
 
-            <CreateButton type="submit">
+            <CreateButton type="submit" disabled={submitting}>
               {initialData ? "Save changes" : "Add"}
             </CreateButton>
           </Footer>
