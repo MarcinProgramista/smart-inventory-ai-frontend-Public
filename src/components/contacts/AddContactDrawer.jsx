@@ -103,12 +103,24 @@ export default function AddContactDrawer({ open, onClose, onSubmit }) {
     e.preventDefault();
     if (!validate()) return;
 
-    await onSubmit(form);
+    try {
+      await onSubmit(form);
 
-    // 🔄 reset + close
-    setForm(initialForm);
-    setErrors({});
-    onClose();
+      setForm(initialForm);
+      setErrors({});
+      onClose();
+    } catch (err) {
+      const message =
+        err?.response?.data?.error ||
+        err?.response?.data?.message ||
+        "Something went wrong";
+
+      // 🔥 backendowy błąd pod email
+      setErrors((prev) => ({
+        ...prev,
+        email: message,
+      }));
+    }
   };
 
   /* ===================== RENDER ===================== */
