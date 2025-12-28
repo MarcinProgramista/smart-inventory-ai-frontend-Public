@@ -17,13 +17,16 @@ export default function Contacts() {
   const limit = 8;
   const sortBy = searchParams.get("sort") ?? "last_name";
   const sortOrder = searchParams.get("order") ?? "asc";
-  const { addContact, editContact, deleteContact } = useContactActions({
+  const { addContact, updateContact, deleteContact } = useContactActions({
     showToast,
   });
+
   const [addOpen, setAddOpen] = useState(false);
   const openAdd = () => setAddOpen(true);
   const closeAdd = () => setAddOpen(false);
-
+  const [editContact, setEditContact] = useState(null);
+  const openEdit = (contact) => setEditContact(contact);
+  const closeEdit = () => setEditContact(null);
   useEffect(() => {
     if (!auth?.id) return;
 
@@ -64,7 +67,7 @@ export default function Contacts() {
   };
 
   const handleEdit = async (contact) => {
-    await editContact(contact.id, contact);
+    openEdit(contact);
   };
 
   const handleDelete = async (contact) => {
@@ -116,7 +119,6 @@ export default function Contacts() {
             email: payload.email,
             user_id: Number(auth.id),
           };
-
           try {
             await addContact(finalPayload);
           } catch (err) {
@@ -124,6 +126,13 @@ export default function Contacts() {
           }
         }}
       />
+      {editContact && (
+        <AddContactDrawer
+          open={!!editContact}
+          onClose={closeEdit}
+          onSubmit={() => {}}
+        />
+      )}
     </>
   );
 }

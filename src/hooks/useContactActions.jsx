@@ -22,7 +22,7 @@ export default function useContactActions({ showToast }) {
     }
   };
 
-  const editContact = async (id, payload) => {
+  const updateContact = async (id, payload) => {
     try {
       await axios.put(
         `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.CONTACTS}/${id}`,
@@ -66,7 +66,7 @@ export default function useContactActions({ showToast }) {
 
   return {
     addContact,
-    editContact,
+    updateContact,
     deleteContact,
   };
 }
