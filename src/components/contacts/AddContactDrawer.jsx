@@ -176,16 +176,6 @@ export default function AddContactDrawer({
       setSubmitting(false);
     }
   };
-  const isDirty =
-    initialData &&
-    JSON.stringify(form) !==
-      JSON.stringify({
-        first_name: initialData.first_name ?? "",
-        last_name: initialData.last_name ?? "",
-        email: initialData.email ?? "",
-        role: initialData.role ?? "",
-        mobile_phone: initialData.mobile_phone ?? "",
-      });
 
   /* ===================== RENDER ===================== */
 
@@ -243,8 +233,8 @@ export default function AddContactDrawer({
               Cancel
             </CreateButton>
 
-            <CreateButton type="submit" disabled={initialData && !isDirty}>
-              {initialData ? "Save changes" : "Add"}
+            <CreateButton type="submit" disabled={submitting}>
+              {submitting ? "Saving..." : initialData ? "Save changes" : "Add"}
             </CreateButton>
           </Footer>
         </Form>
