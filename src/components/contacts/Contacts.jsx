@@ -37,6 +37,7 @@ export default function Contacts() {
       sort: sortBy,
       order: sortOrder,
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth?.id, query, page, sortBy, sortOrder]);
 
   const setQueryParams = (value) => {

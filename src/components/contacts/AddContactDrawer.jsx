@@ -60,6 +60,7 @@ export default function AddContactDrawer({
     }
 
     setErrors({});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialData, open]);
 
   // 🔒 Jedyny mechanizm widoczności
@@ -142,7 +143,6 @@ export default function AddContactDrawer({
       }));
     }
   };
-  console.log("DRAWER OPEN", { open, initialData });
 
   /* ===================== RENDER ===================== */
 
@@ -195,7 +195,9 @@ export default function AddContactDrawer({
               Cancel
             </CreateButton>
 
-            <CreateButton type="submit">Add</CreateButton>
+            <CreateButton type="submit">
+              {initialData ? "Save changes" : "Add"}
+            </CreateButton>
           </Footer>
         </Form>
       </ModalBox>

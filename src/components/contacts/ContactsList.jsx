@@ -48,6 +48,24 @@ export default function ContactsList({
 }) {
   const isEmpty = contacts.length === 0;
   const isSearching = query && query.length > 0;
+  const formatPhone = (phone) => {
+    if (!phone) return "-";
+
+    // usuwamy wszystko oprócz cyfr
+    let digits = phone.replace(/\D/g, "");
+
+    // obsługa +48 / 48
+    if (digits.startsWith("48") && digits.length === 11) {
+      digits = digits.slice(2);
+    }
+
+    // standard PL: 9 cyfr
+    if (digits.length === 9) {
+      return `${digits.slice(0, 3)}-${digits.slice(3, 6)}-${digits.slice(6)}`;
+    }
+
+    return phone; // fallback – nic nie psujemy
+  };
 
   return (
     <PageWrapper>
@@ -125,7 +143,8 @@ export default function ContactsList({
                   <Td>{c.first_name}</Td>
                   <Td>{c.last_name}</Td>
                   <Td>{c.email || "-"}</Td>
-                  <Td>{c.mobile_phone || "-"}</Td>
+                  <Td>{formatPhone(c.mobile_phone)}</Td>
+
                   <Td>{c.role || "-"}</Td>
                   <Td>
                     <ActionButton onClick={() => onEdit(c)}>
