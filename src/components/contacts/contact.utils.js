@@ -27,3 +27,30 @@ export function formatPhone(phone, options = {}) {
 
   return withPrefix ? `+48 ${formatted}` : formatted;
 }
+
+// src/utils/contact.utils.js
+
+export function normalizePhone(phone) {
+  if (!phone) return null;
+
+  // zostawiamy tylko cyfry
+  let digits = phone.replace(/\D/g, "");
+
+  // jeśli przyszło +48 / 48 → obcinamy
+  if (digits.startsWith("48")) {
+    digits = digits.slice(2);
+  }
+
+  // bierzemy max 9 cyfr (PL)
+  return digits.slice(0, 9);
+}
+
+export function normalizeContactPayload(form) {
+  return {
+    first_name: form.first_name?.trim() || "",
+    last_name: form.last_name?.trim() || "",
+    email: form.email?.trim().toLowerCase() || null,
+    role: form.role?.trim() || null,
+    mobile_phone: normalizePhone(form.mobile_phone),
+  };
+}

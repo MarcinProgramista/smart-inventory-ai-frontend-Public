@@ -8,6 +8,7 @@ import useContactActions from "../../hooks/useContactActions";
 import AddContactDrawer from "./AddContactDrawer";
 import useDebounce from "../../hooks/useDebounce";
 import SearchBar from "../shared/search/SearchBar";
+import { normalizeContactPayload } from "./contact.utils";
 
 export default function Contacts() {
   const { auth } = useAuth();
@@ -147,7 +148,7 @@ export default function Contacts() {
             await updateContact(editContact.id, payload);
           } else {
             await addContact({
-              ...payload,
+              ...normalizeContactPayload(payload),
               user_id: Number(auth.id),
             });
           }
