@@ -12,6 +12,7 @@ import ListHeader from "../shared/header/ListHeader";
 import Pagination from "../shared/Pagination";
 import styled from "styled-components";
 import { formatPhone } from "./contact.utils";
+import { exportContactsToCSV } from "./export.utils";
 
 const EmptyState = styled.div`
   padding: 3rem;
@@ -51,7 +52,12 @@ export default function ContactsList({
 
   return (
     <PageWrapper>
-      <ListHeader onAdd={onAdd} heading="Contacts" addTitle="Add Contact" />
+      <ListHeader
+        onAdd={onAdd}
+        heading="Contacts"
+        onExportCSV={() => exportContactsToCSV(contacts)}
+        addTitle="Add Contact"
+      />
 
       {isEmpty ? (
         <EmptyState>

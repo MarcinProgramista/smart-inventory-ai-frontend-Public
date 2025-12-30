@@ -48,6 +48,7 @@ export default function Contacts() {
       sort: sortBy,
       order: sortOrder,
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth?.id, debouncedSearch, page, sortBy, sortOrder]);
 
   /* ===================== HANDLERS ===================== */
