@@ -70,27 +70,6 @@ export default function AddContactDrawer({
 
   if (!open) return null;
 
-  /* ===================== HELPERS ===================== */
-
-  const formatPhone = (value, withPrefix = false) => {
-    if (!value) return withPrefix ? "+48 " : "";
-
-    let digits = value.replace(/\D/g, "");
-
-    if (digits.startsWith("48")) {
-      digits = digits.slice(2);
-    }
-
-    digits = digits.slice(0, 9);
-
-    const parts = [];
-    if (digits.length > 0) parts.push(digits.slice(0, 3));
-    if (digits.length > 3) parts.push(digits.slice(3, 6));
-    if (digits.length > 6) parts.push(digits.slice(6, 9));
-
-    return (withPrefix ? "+48 " : "") + parts.join("-");
-  };
-
   /* ===================== HANDLERS ===================== */
 
   const handleChange = (e) => {
