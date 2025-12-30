@@ -54,3 +54,33 @@ export function normalizeContactPayload(form) {
     mobile_phone: normalizePhone(form.mobile_phone),
   };
 }
+
+export function validateContact(form) {
+  const errors = {};
+
+  if (!form.first_name || form.first_name.trim().length < 2) {
+    errors.first_name = "Min. 2 characters";
+  }
+
+  if (!form.email && !form.phone) {
+    errors.email = "At least one contact method is required";
+    errors.mobile_phone = "At least one contact method is required";
+  }
+  // EMAIL FORMAT
+  if (form.email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(form.email.trim())) {
+      errors.email = "Invalid email format";
+    }
+  }
+
+  // PHONE FORMAT (PL)
+  if (form.mobile_phone) {
+    const digits = normalizePhone(form.mobile_phone);
+    if (!digits || digits.length !== 9) {
+      errors.mobile_phone = "9 digits required";
+    }
+  }
+
+  return errors;
+}

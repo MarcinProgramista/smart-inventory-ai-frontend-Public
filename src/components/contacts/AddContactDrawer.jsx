@@ -5,6 +5,7 @@ import CreateButton from "../ui/buttons/CreateButton";
 import { Form, Footer } from "./AddContactDrawer.styles";
 import NeonCardBright from "../ui/NeonCardBright";
 import Logo from "../ui/Logo";
+import { validateContact } from "./contact.utils";
 
 /* ===================== CONSTANTS ===================== */
 
@@ -122,38 +123,14 @@ export default function AddContactDrawer({
     });
   };
 
-  const validate = () => {
-    const nextErrors = {};
-
-    if (!form.first_name || form.first_name.trim().length < 2) {
-      nextErrors.first_name = "Min. 2 characters";
-    }
-
-    if (!form.email && !form.mobile_phone) {
-      nextErrors.email = "Email is required";
-      nextErrors.mobile_phone = "Phone is required";
-    }
-
-    if (form.email) {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(form.email.trim())) {
-        nextErrors.email = "Invalid email format";
-      }
-    }
-
-    if (form.mobile_phone) {
-      if (!/^[0-9]{9}$/.test(form.mobile_phone)) {
-        nextErrors.mobile_phone = "9 digits required";
-      }
-    }
-
-    setErrors(nextErrors);
-    return Object.keys(nextErrors).length === 0;
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validate()) return;
+    const validationErrors = validateContact(form);
+
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
 
     try {
       setSubmitting(true);
