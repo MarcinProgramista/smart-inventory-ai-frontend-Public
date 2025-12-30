@@ -6,6 +6,7 @@ import { Form, Footer } from "./AddContactDrawer.styles";
 import NeonCardBright from "../ui/NeonCardBright";
 import Logo from "../ui/Logo";
 import { validateContact } from "./contact.utils";
+import { normalizePhone, formatPhone } from "./contact.utils";
 
 /* ===================== CONSTANTS ===================== */
 
@@ -96,17 +97,9 @@ export default function AddContactDrawer({
     const { name, value } = e.target;
 
     if (name === "mobile_phone") {
-      let digits = value.replace(/\D/g, "");
-
-      if (digits.startsWith("48")) {
-        digits = digits.slice(2);
-      }
-
-      digits = digits.slice(0, 9);
-
       setForm((prev) => ({
         ...prev,
-        mobile_phone: digits,
+        mobile_phone: normalizePhone(value),
       }));
     } else {
       setForm((prev) => ({

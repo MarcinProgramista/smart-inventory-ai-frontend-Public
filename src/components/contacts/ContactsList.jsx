@@ -8,7 +8,6 @@ import {
   Tr,
   ActionButton,
 } from "../shared/table/Table.styles";
-import SearchBar from "../shared/search/SearchBar";
 import ListHeader from "../shared/header/ListHeader";
 import Pagination from "../shared/Pagination";
 import styled from "styled-components";
