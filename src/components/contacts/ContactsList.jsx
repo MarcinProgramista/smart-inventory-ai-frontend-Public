@@ -12,7 +12,7 @@ import ListHeader from "../shared/header/ListHeader";
 import Pagination from "../shared/Pagination";
 import styled from "styled-components";
 import { formatPhone } from "./contact.utils";
-import { exportContactsToCSV } from "./export.utils";
+import { exportContactsToCSV, exportContactsToPDF } from "./export.utils";
 
 const EmptyState = styled.div`
   padding: 3rem;
@@ -56,6 +56,7 @@ export default function ContactsList({
         onAdd={onAdd}
         heading="Contacts"
         onExportCSV={() => exportContactsToCSV(contacts)}
+        onExportPDF={() => exportContactsToPDF(contacts)}
         addTitle="Add Contact"
       />
 
