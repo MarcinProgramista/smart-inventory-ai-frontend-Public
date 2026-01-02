@@ -11,6 +11,7 @@ import Items from "./pages/Items";
 
 import { ToastProvider } from "./context/ToastContext";
 import Contacts from "./components/contacts/Contacts";
+import Suppliers from "./components/suppliers/Suppliers";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
             <Route path="/home" element={<Home />} />
             <Route path="/items" element={<Items />} />
             <Route path="/contacts" element={<Contacts />} />
+            <Route path="/suppliers" element={<Suppliers />} />
           </Route>
         </Routes>
       </ToastProvider>
