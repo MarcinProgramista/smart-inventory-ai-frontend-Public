@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "../api/axios";
+import axios from "axios";
 
 export default function useFetchSuppliers() {
   const [suppliers, setSuppliers] = useState([]);
