@@ -30,7 +30,13 @@ export default function Suppliers() {
   return (
     <>
       <SearchBar value={search} onChange={setSearch} />
-      <SuppliersList suppliers={suppliers} total={total} />
+      <SuppliersList
+        suppliers={suppliers}
+        total={total}
+        page={page}
+        limit={limit}
+        onAdd={() => console.log("Add supplier")}
+      />
     </>
   );
 }

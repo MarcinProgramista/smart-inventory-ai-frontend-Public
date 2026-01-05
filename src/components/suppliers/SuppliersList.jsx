@@ -1,6 +1,14 @@
 import styled from "styled-components";
 import ListHeader from "../shared/header/ListHeader";
-import { Table, TableWrapper, Td, Th, Tr } from "../shared/table/Table.styles";
+import {
+  PageWrapper,
+  Table,
+  TableWrapper,
+  Td,
+  Th,
+  Tr,
+} from "../shared/table/Table.styles";
+import Pagination from "../shared/Pagination";
 const EmptyState = styled.div`
   padding: 3rem;
   text-align: center;
@@ -9,7 +17,7 @@ const EmptyState = styled.div`
 export default function SuppliersList({ onAdd, suppliers = [] }) {
   const isEmpty = suppliers.length === 0;
   return (
-    <>
+    <PageWrapper>
       <ListHeader heading="Suppliers" onAdd={onAdd} addTitle="Add Supplier" />
       {isEmpty ? (
         <EmptyState>
@@ -43,6 +51,6 @@ export default function SuppliersList({ onAdd, suppliers = [] }) {
           </Table>
         </TableWrapper>
       )}
-    </>
+    </PageWrapper>
   );
 }
