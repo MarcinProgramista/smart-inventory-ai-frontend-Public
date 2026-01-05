@@ -9,7 +9,7 @@ import SuppliersList from "./SuppliersList";
 export default function Suppliers() {
   const { auth } = useAuth();
 
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const page = Number(searchParams.get("page") ?? 1);
   const limit = 8;
 
@@ -26,7 +26,16 @@ export default function Suppliers() {
       limit,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [(auth?.id, debouncedSearch, page, limit)]);
+  }, [auth?.id, debouncedSearch, page, limit]);
+
+  const setPage = (value) => {
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev);
+      next.set("page", value);
+      return next;
+    });
+  };
+
   return (
     <>
       <SearchBar value={search} onChange={setSearch} />
@@ -35,6 +44,8 @@ export default function Suppliers() {
         total={total}
         page={page}
         limit={limit}
+        onPrev={() => setPage(page - 1)}
+        onNext={() => setPage(page + 1)}
         onAdd={() => console.log("Add supplier")}
       />
     </>

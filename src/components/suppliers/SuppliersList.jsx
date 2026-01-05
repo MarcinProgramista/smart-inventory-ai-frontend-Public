@@ -14,7 +14,15 @@ const EmptyState = styled.div`
   text-align: center;
   opacity: 0.7;
 `;
-export default function SuppliersList({ onAdd, suppliers = [] }) {
+export default function SuppliersList({
+  onAdd,
+  suppliers,
+  page,
+  limit,
+  total,
+  onNext,
+  onPrev,
+}) {
   const isEmpty = suppliers.length === 0;
   return (
     <PageWrapper>
@@ -51,6 +59,14 @@ export default function SuppliersList({ onAdd, suppliers = [] }) {
           </Table>
         </TableWrapper>
       )}
+      <Pagination
+        page={page}
+        totalPages={Math.ceil(total / limit)}
+        canPrev={page > 1}
+        canNext={page < Math.ceil(total / limit)}
+        onPrev={onPrev}
+        onNext={onNext}
+      />
     </PageWrapper>
   );
 }

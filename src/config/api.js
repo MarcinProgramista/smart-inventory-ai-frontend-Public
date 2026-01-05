@@ -11,7 +11,7 @@ const API_CONFIG = {
     SEARCH: "/api/items/search",
 
     CATEGORIES: "/api/categories",
-    SUPPLIERS: "/api/suppliers",
+    SUPPLIERS_SEARCH: "/api/suppliers/search",
 
     CONTACTS: "/api/contacts",
     CONTACTS_SEARCH: "/api/contacts/search",
