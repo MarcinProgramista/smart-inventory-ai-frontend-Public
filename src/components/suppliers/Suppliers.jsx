@@ -16,7 +16,7 @@ export default function Suppliers() {
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebounce(search, 400);
 
-  const { suppliers, total, fetchSuppliers } = useFetchSuppliers();
+  const { suppliers, total, loading, fetchSuppliers } = useFetchSuppliers();
 
   useEffect(() => {
     if (!auth?.id) return;
@@ -44,6 +44,7 @@ export default function Suppliers() {
         total={total}
         page={page}
         limit={limit}
+        loading={loading}
         onPrev={() => setPage(page - 1)}
         onNext={() => setPage(page + 1)}
         onAdd={() => console.log("Add supplier")}

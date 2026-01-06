@@ -21,8 +21,19 @@ export default function SuppliersList({
   limit,
   total,
   onNext,
+  loading,
   onPrev,
 }) {
+  if (loading) {
+    return (
+      <PageWrapper>
+        <ListHeader heading="Suppliers" onAdd={onAdd} addTitle="Add Supplier" />
+        <EmptyState>Loading suppliers…</EmptyState>
+      </PageWrapper>
+    );
+  }
+  console.log(total, limit);
+
   const isEmpty = suppliers.length === 0;
   return (
     <PageWrapper>
